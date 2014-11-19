@@ -1,0 +1,30 @@
+[
+    {
+        "bannerId": "4",
+        "position": "1",
+        "name": "属于夏天的好音乐",
+        "desc": "属于夏天的好音乐",
+        "picUrl": "http://img.cache.itlily.com/tdb/channel/bb/a5/1368186073.jpg"
+    },
+    {
+        "bannerId": 1,
+        "position": 2,
+        "name": "遇见你是我最美的意外",
+        "desc": "遇见你是我最美的意外",
+        "picUrl": "http://img.cache.itlily.com/tdb/channel/81/e5/1380513097.jpg"
+    },
+    {
+        "bannerId": 1,
+        "position": 3,
+        "name": "午后时光",
+        "desc": "午后时光",
+        "picUrl": "http://img.cache.itlily.com/tdb/channel/de/3f/1379496628.png"
+    },
+    {
+        "bannerId": 1,
+        "position": 2,
+        "name": "属于你的我的初恋",
+        "desc": "属于你的我的初恋",
+        "picUrl": "http://img.cache.itlily.com/tdb/channel/09/58/1378451852.jpg"
+    }
+]

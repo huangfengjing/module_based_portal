@@ -1,0 +1,155 @@
+{
+    "totalNum": 73,
+    "cateItems": [
+        {
+            "id": 1,
+            "text": "服装"
+        },
+        {
+            "id": 2,
+            "text": "美容"
+        },
+        {
+            "id": 3,
+            "text": "电器"
+        },
+        {
+            "id": 4,
+            "text": "数码"
+        },
+        {
+            "id": 5,
+            "text": "珠宝"
+        },
+        {
+            "id": 6,
+            "text": "箱包"
+        },
+        {
+            "id": 7,
+            "text": "户外"
+        }
+    ],
+    "items": [
+        {
+            "picUrl": "http://img01.taobaocdn.com/bao/uploaded/i1/T1IrPpFk4oXXXXXXXX_!!0-item_pic.jpg_160x160xz",
+            "title": "春复古文艺森林民族风刺绣水洗翻领少女高中学生长袖牛仔衬衫衬衣",
+            "count": 1,
+            "stock": 7,
+            "skuInfo": "蓝色,S",
+            "totalFee": 147,
+            "price": 387,
+            "skuId": 3983,
+            "saleCount": 74,
+            "commentCount": 3984
+        },
+        {
+            "picUrl": "http://img01.taobaocdn.com/bao/uploaded/i1/T15.J1FzFXXXXXXXXX_!!0-item_pic.jpg_160x160xz",
+            "title": "伊芙丽 2013冬装新款镂空打底衫 圆领套头长袖针织衫",
+            "count": 2,
+            "stock": 70,
+            "skuInfo": "白色,M",
+            "totalFee": 274,
+            "price": 24,
+            "skuId": 3183,
+            "saleCount": 174,
+            "commentCount": 384
+        },
+        {
+            "picUrl": "http://img01.taobaocdn.com/bao/uploaded/i1/T1IrPpFk4oXXXXXXXX_!!0-item_pic.jpg_160x160xz",
+            "title": "春复古文艺森林民族风刺绣水洗翻领少女高中学生长袖牛仔衬衫衬衣",
+            "count": 1,
+            "stock": 7,
+            "skuInfo": "蓝色,S",
+            "totalFee": 147,
+            "price": 387,
+            "skuId": 3983,
+            "saleCount": 74,
+            "commentCount": 3984
+        },
+        {
+            "picUrl": "http://img01.taobaocdn.com/bao/uploaded/i1/T15.J1FzFXXXXXXXXX_!!0-item_pic.jpg_160x160xz",
+            "title": "伊芙丽 2013冬装新款镂空打底衫 圆领套头长袖针织衫",
+            "count": 2,
+            "stock": 70,
+            "skuInfo": "白色,M",
+            "totalFee": 274,
+            "price": 24,
+            "skuId": 3183,
+            "saleCount": 174,
+            "commentCount": 384
+        },
+        {
+            "picUrl": "http://img01.taobaocdn.com/bao/uploaded/i1/T1IrPpFk4oXXXXXXXX_!!0-item_pic.jpg_160x160xz",
+            "title": "春复古文艺森林民族风刺绣水洗翻领少女高中学生长袖牛仔衬衫衬衣",
+            "count": 1,
+            "stock": 7,
+            "skuInfo": "蓝色,S",
+            "totalFee": 147,
+            "price": 387,
+            "skuId": 3983,
+            "saleCount": 74,
+            "commentCount": 3984
+        },
+        {
+            "picUrl": "http://img01.taobaocdn.com/bao/uploaded/i1/T15.J1FzFXXXXXXXXX_!!0-item_pic.jpg_160x160xz",
+            "title": "伊芙丽 2013冬装新款镂空打底衫 圆领套头长袖针织衫",
+            "count": 2,
+            "stock": 70,
+            "skuInfo": "白色,M",
+            "totalFee": 274,
+            "price": 24,
+            "skuId": 3183,
+            "saleCount": 174,
+            "commentCount": 384
+        },
+        {
+            "picUrl": "http://img01.taobaocdn.com/bao/uploaded/i1/T1IrPpFk4oXXXXXXXX_!!0-item_pic.jpg_160x160xz",
+            "title": "春复古文艺森林民族风刺绣水洗翻领少女高中学生长袖牛仔衬衫衬衣",
+            "count": 1,
+            "stock": 7,
+            "skuInfo": "蓝色,S",
+            "totalFee": 147,
+            "price": 387,
+            "skuId": 3983,
+            "saleCount": 74,
+            "commentCount": 3984
+        },
+        {
+            "picUrl": "http://img01.taobaocdn.com/bao/uploaded/i1/T15.J1FzFXXXXXXXXX_!!0-item_pic.jpg_160x160xz",
+            "title": "伊芙丽 2013冬装新款镂空打底衫 圆领套头长袖针织衫",
+            "count": 2,
+            "stock": 70,
+            "skuInfo": "白色,M",
+            "totalFee": 274,
+            "price": 24,
+            "skuId": 3183,
+            "saleCount": 174,
+            "commentCount": 384
+        },
+        {
+            "picUrl": "http://img01.taobaocdn.com/bao/uploaded/i1/T1IrPpFk4oXXXXXXXX_!!0-item_pic.jpg_160x160xz",
+            "title": "春复古文艺森林民族风刺绣水洗翻领少女高中学生长袖牛仔衬衫衬衣",
+            "count": 1,
+            "stock": 7,
+            "skuInfo": "蓝色,S",
+            "totalFee": 147,
+            "price": 387,
+            "skuId": 3983,
+            "saleCount": 74,
+            "commentCount": 3984
+        },
+        {
+            "picUrl": "http://img01.taobaocdn.com/bao/uploaded/i1/T15.J1FzFXXXXXXXXX_!!0-item_pic.jpg_160x160xz",
+            "title": "伊芙丽 2013冬装新款镂空打底衫 圆领套头长袖针织衫",
+            "count": 2,
+            "stock": 70,
+            "skuInfo": "白色,M",
+            "totalFee": 274,
+            "price": 24,
+            "skuId": 3183,
+            "saleCount": 174,
+            "commentCount": 384
+        }
+    ]
+}

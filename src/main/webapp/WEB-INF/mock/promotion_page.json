@@ -1,0 +1,231 @@
+[
+
+    {
+        "type": "gallery",
+        "margins": {
+            "left": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0
+        },
+        "paddings": {
+            "left": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0
+        },
+        "data": {
+            "height": "160dp",
+            "bannerList": [
+                {
+                    "bannerId": 1,
+                    "position": 2,
+                    "name": "遇见你是我最美的意外",
+                    "desc": "遇见你是我最美的意外",
+                    "link": "com.doleje.shop.promotion.PromotionActivity",
+                    "picUrl": "http://img.cache.itlily.com/tdb/channel/81/e5/1380513097.jpg"
+                },
+                {
+                    "bannerId": "4",
+                    "position": "1",
+                    "name": "属于夏天的好音乐",
+                    "desc": "属于夏天的好音乐",
+                    "link": "com.doleje.shop.promotion.PromotionActivity",
+                    "picUrl": "http://img.cache.itlily.com/tdb/channel/bb/a5/1368186073.jpg"
+                },
+                {
+                    "bannerId": 1,
+                    "position": 3,
+                    "name": "午后时光",
+                    "desc": "午后时光",
+                    "link": "com.doleje.shop.promotion.PromotionActivity",
+                    "picUrl": "http://img.cache.itlily.com/tdb/channel/de/3f/1379496628.png"
+                }
+            ]
+        }
+    },
+    {
+        "type": "title",
+        "bgColor": "#00000000",
+        "data": {
+            "text": "测试一下标题模块"
+        }
+    },
+    {
+        "type": "bannerGroup",
+        "data": {
+            "itemHeight": "100dp",
+            "bannerList": [
+                {
+                    "bannerId": "4",
+                    "position": "4",
+                    "name": "鞋靴名厂直销",
+                    "picUrl": "http://img.cache.itlily.com/tdb/channel/c0/d1/1385712129.jpg",
+                    "target": "topic://key=pptopic1551&value鞋靴名厂直销&ver=15"
+                },
+                {
+                    "bannerId": 1,
+                    "position": 1,
+                    "name": "手机管家",
+                    "picUrl": "http://img.cache.itlily.com/tdb/channel/09/4f/1386750290.png",
+                    "target": "webview://title=手机管家&url240790FEC2F400674C45589CB913D0C7EB18335840076ED8941CB3DB925B895F30293CAE1AAD7E80372526917A855755=http://misc.3g.qq.com/g/s?aid=aindex&g_f=17740"
+                }
+            ]
+        }
+    },
+    {
+        "type": "itemList",
+        "paddings": {
+            "left": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0
+        },
+        "data": {
+            "title": "测试商品列表",
+            "moreLink": "更多的链接",
+            "cols": 2,
+            "itemList": [
+                {
+                    "picUrl": "http://img01.taobaocdn.com/bao/uploaded/i1/T1IrPpFk4oXXXXXXXX_!!0-item_pic.jpg_100x100xz",
+                    "title": "春复古文艺森林民族风刺绣水洗翻领少女高中学生长袖牛仔衬衫衬衣",
+                    "count": 1,
+                    "stock": 7,
+                    "skuInfo": "蓝色,S",
+                    "totalFee": 147,
+                    "price": 387,
+                    "skuId": 3983
+                },
+                {
+                    "picUrl": "http://img01.taobaocdn.com/bao/uploaded/i1/T15.J1FzFXXXXXXXXX_!!0-item_pic.jpg_100x100xz",
+                    "title": "伊芙丽 2013冬装新款镂空打底衫 圆领套头长袖针织衫",
+                    "count": 2,
+                    "stock": 70,
+                    "skuInfo": "白色,M",
+                    "totalFee": 274,
+                    "price": 24,
+                    "skuId": 3183
+                },
+                {
+                    "picUrl": "http://img01.taobaocdn.com/bao/uploaded/i1/T1IrPpFk4oXXXXXXXX_!!0-item_pic.jpg_100x100xz",
+                    "title": "春复古文艺森林民族风刺绣水洗翻领少女高中学生长袖牛仔衬衫衬衣",
+                    "count": 1,
+                    "stock": 7,
+                    "skuInfo": "蓝色,S",
+                    "totalFee": 147,
+                    "price": 387,
+                    "skuId": 3983
+                },
+                {
+                    "picUrl": "http://img01.taobaocdn.com/bao/uploaded/i1/T15.J1FzFXXXXXXXXX_!!0-item_pic.jpg_100x100xz",
+                    "title": "伊芙丽 2013冬装新款镂空打底衫 圆领套头长袖针织衫",
+                    "count": 2,
+                    "stock": 70,
+                    "skuInfo": "白色,M",
+                    "totalFee": 274,
+                    "price": 24,
+                    "skuId": 3183
+                }
+            ]
+        }
+    },
+    {
+        "type": "title",
+        "bgColor": "#00000000",
+        "data": {
+            "text": "3列商品"
+        }
+    },
+    {
+        "type": "itemList",
+        "paddings": {
+            "left": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0
+        },
+        "data": {
+            "title": "测试商品列表",
+            "moreLink": "更多的链接",
+            "cols": 3,
+            "itemList": [
+                {
+                    "picUrl": "http://img01.taobaocdn.com/bao/uploaded/i1/T1IrPpFk4oXXXXXXXX_!!0-item_pic.jpg_100x100xz",
+                    "title": "春复古文艺森林民族风刺绣水洗翻领少女高中学生长袖牛仔衬衫衬衣",
+                    "count": 1,
+                    "stock": 7,
+                    "skuInfo": "蓝色,S",
+                    "totalFee": 147,
+                    "price": 387,
+                    "skuId": 3983
+                },
+                {
+                    "picUrl": "http://img01.taobaocdn.com/bao/uploaded/i1/T15.J1FzFXXXXXXXXX_!!0-item_pic.jpg_100x100xz",
+                    "title": "伊芙丽 2013冬装新款镂空打底衫 圆领套头长袖针织衫",
+                    "count": 2,
+                    "stock": 70,
+                    "skuInfo": "白色,M",
+                    "totalFee": 274,
+                    "price": 24,
+                    "skuId": 3183
+                },
+                {
+                    "picUrl": "http://img01.taobaocdn.com/bao/uploaded/i1/T1IrPpFk4oXXXXXXXX_!!0-item_pic.jpg_100x100xz",
+                    "title": "春复古文艺森林民族风刺绣水洗翻领少女高中学生长袖牛仔衬衫衬衣",
+                    "count": 1,
+                    "stock": 7,
+                    "skuInfo": "蓝色,S",
+                    "totalFee": 147,
+                    "price": 387,
+                    "skuId": 3983
+                },
+                {
+                    "picUrl": "http://img01.taobaocdn.com/bao/uploaded/i1/T15.J1FzFXXXXXXXXX_!!0-item_pic.jpg_100x100xz",
+                    "title": "伊芙丽 2013冬装新款镂空打底衫 圆领套头长袖针织衫",
+                    "count": 2,
+                    "stock": 70,
+                    "skuInfo": "白色,M",
+                    "totalFee": 274,
+                    "price": 24,
+                    "skuId": 3183
+                },
+                {
+                    "picUrl": "http://img01.taobaocdn.com/bao/uploaded/i1/T1IrPpFk4oXXXXXXXX_!!0-item_pic.jpg_100x100xz",
+                    "title": "春复古文艺森林民族风刺绣水洗翻领少女高中学生长袖牛仔衬衫衬衣",
+                    "count": 1,
+                    "stock": 7,
+                    "skuInfo": "蓝色,S",
+                    "totalFee": 147,
+                    "price": 387,
+                    "skuId": 3983
+                },
+                {
+                    "picUrl": "http://img01.taobaocdn.com/bao/uploaded/i1/T15.J1FzFXXXXXXXXX_!!0-item_pic.jpg_100x100xz",
+                    "title": "伊芙丽 2013冬装新款镂空打底衫 圆领套头长袖针织衫",
+                    "count": 2,
+                    "stock": 70,
+                    "skuInfo": "白色,M",
+                    "totalFee": 274,
+                    "price": 24,
+                    "skuId": 3183
+                }
+            ]
+        }
+    },
+    {
+        "type": "bannerGroup",
+        "data": {
+            "itemHeight": "100dp",
+            "bannerList": [
+                {
+                    "bannerId": "4",
+                    "position": "4",
+                    "name": "鞋靴名厂直销",
+                    "desc": "一个人的天荒地老，期待明天会更好",
+                    "picUrl": "http://img.cache.itlily.com/tdb/channel/06/61/1382088825.jpg",
+                    "target": "topic://key=pptopic1551&value鞋靴名厂直销&ver=15"
+                }
+            ]
+        }
+    }
+]

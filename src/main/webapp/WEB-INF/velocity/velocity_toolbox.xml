@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<!-- Like Pull-MVC to expose some util classes to vm -->
+
+<toolbox>
+    <tool>
+        <key>link</key>
+        <scope>request</scope>
+        <class>org.apache.velocity.tools.generic.LinkTool</class>
+    </tool>
+    <tool>
+        <key>stringUtils</key>
+        <scope>application</scope>
+        <class>org.apache.commons.lang.StringUtils</class>
+    </tool>
+</toolbox>

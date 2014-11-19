@@ -1,0 +1,32 @@
+<div class="page" style="width: 1220px; margin: 0 auto;">
+    <div class="layout_box" data-prototype-id="79" data-inst-id="98">
+        <div class="column_box width25p" data-inst-id="7">
+            <div class="module_box" data-prototype-id="1" data-inst-id="28">
+                <div class="module_box_hd">测试模块1.1</div>
+                <div class="module_box_bd">我是模块内容 1 - 1</div>
+            </div>
+        </div>
+        <div class="column_box width25p" data-inst-id="11">
+            <div class="module_box" data-prototype-id="2" data-inst-id="48">
+                <div class="module_box_hd">测试模块2.1</div>
+                <div class="module_box_bd">我是模块内容 2 - 1</div>
+            </div>
+            <div class="module_box" data-prototype-id="3" data-inst-id="27">
+                <div class="module_box_hd">测试模块2.2</div>
+                <div class="module_box_bd">我是模块内容 2 - 2</div>
+            </div>
+            <div class="module_box" data-prototype-id="7" data-inst-id="96">
+                <div class="module_box_hd">测试模块2.3</div>
+                <div class="module_box_bd">我是模块内容 2 - 3</div>
+            </div>
+        </div>
+        <div class="item_add_wrap column_add_wrap"><a href="#" class="j-add-column"><div class="item_add_content">新增一列</div></a></div>
+    </div>
+</div>
+<form id="j-page-form" action="/shop/design/save-page.html" method="post">
+    <input type="hidden" name="pageId" value="1" id="j-page-dbId">
+    <input type="hidden" name="pageLayout" id="j-page-layout-holder">
+    <input type="hidden" name="delModules" id="j-del-modules-holder">
+    <input type="hidden" name="isHeaderChanged" value="false" id="j-header-changed-holder">
+    <input type="hidden" name="isFooterChanged" value="false" id="j-footer-changed-holder">
+</form>

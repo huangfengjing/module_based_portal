@@ -1,0 +1,22 @@
+[
+    {
+        "couponId": 1,
+        "couponTitle": "轻舞飞扬",
+        "couponRange": "全场通用",
+        "amount": 10,
+        "status": "available",
+        "startTime": "2014-02-14 00:00:00",
+        "expireTime": "2014-03-08 23:59:59",
+        "minCost": 50
+    },
+    {
+        "couponId": 1,
+        "couponTitle": "微信专享",
+        "couponRange": "微信公众店",
+        "amount": 100,
+        "status": "expired",
+        "startTime": "2014-02-14 00:00:00",
+        "expireTime": "2014-03-08 23:59:59",
+        "minCost": 101
+    }
+]

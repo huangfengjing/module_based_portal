@@ -1,0 +1,4 @@
+<div class="layout_box"#{if}($env.mode == 'design') data-prototype-id="0" data-inst-id="0"#{end}>
+    ${layout_content}
+</div>
+
