@@ -1,2 +1,3 @@
 #* @implicitly included *#
+#* @vtlvariable name="link" type="org.apache.velocity.tools.generic.LinkTool" *#
 #* @vtlvariable name="stringUtils" type="org.apache.commons.lang.StringUtils" *#

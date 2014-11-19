@@ -1,0 +1,28 @@
+<ehcache>
+
+    <!-- Sets the path to the directory where cache .data files are created -->
+    <diskStore path="java.io.tmpdir"/>
+
+    <!-- Default cache configuration. These will applied to caches programmatically created through -->
+    <!-- Option argument: timeToLiveSeconds="0", not valid when timeToIdleSeconds is set to 0 -->
+    <defaultCache
+            maxElementsInMemory="10000"
+            eternal="false"
+            overflowToDisk="true"
+            timeToIdleSeconds="0"
+            diskPersistent="false"
+            diskExpiryThreadIntervalSeconds="120"/>
+
+    <!--  default cache -->
+    <cache name="_PORTAL_CACHE"
+           maxElementsInMemory="10000"
+           eternal="true"
+           overflowToDisk="true"/>
+
+    <!-- CMS cache -->
+    <cache name="cmsCache"
+           maxElementsInMemory="10000"
+           eternal="true"
+           overflowToDisk="true"/>
+
+</ehcache>

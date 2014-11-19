@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-autowire="byName"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context">
+
+    <!-- enable annotation configuration -->
+    <context:annotation-config/>
+
+    <!-- Auto scan and inject bean definition -->
+    <context:component-scan base-package="com.alibaba.ydt.portal"/>
+
+    <!-- enable spring mvc annotation -->
+    <mvc:annotation-driven>
+        <mvc:return-value-handlers>
+            <bean class="com.alibaba.ydt.portal.web.mvc.AjaxReturnValueHandler"/>
+        </mvc:return-value-handlers>
+    </mvc:annotation-driven>
+    <mvc:interceptors>
+        <bean class="com.alibaba.ydt.portal.web.mvc.EnhancedHandlerInterceptor"/>
+    </mvc:interceptors>
+
+    <!-- Velocity Engine -->
+    <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+        <property name="resourceLoaderPath">
+            <value>/,velocity/</value>
+            <!-- often the resources placed under WEB-INF/velocity to prevent directly visiting -->
+        </property>
+        <property name="velocityProperties">
+            <props>
+                <!--<prop key="file.resource.loader.class">org.apache.velocity.runtime.resource.loader.FileResourceLoader</prop>-->
+                <prop key="input.encoding">UTF-8</prop>
+                <prop key="output.encoding">UTF-8</prop>
+                <prop key="contentType">text/html;charset=UTF-8</prop>
+                <prop key="directive.foreach.counter.name">velocityCount</prop>
+                <!-- velocityCount -->
+                <prop key="directive.foreach.counter.initial.value">1</prop>
+                <!-- start count -->
+                <prop key="file.resource.loader.modificationCheckInterval">2</prop>
+                <prop key="velocimacro.library">macro.vm</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- Velocity Configuration -->
+    <bean id="velocityConfigurer" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+        <property name="velocityEngine" ref="velocityEngine"/>
+    </bean>
+
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <!-- default content type -->
+        <property name="defaultContentType" value="text/html"/>
+        <property name="mediaTypes">
+            <map>
+                <entry key="jsp" value="text/html"/>
+                <entry key="json" value="application/json"/>
+                <entry key="xml" value="application/xml"/>
+            </map>
+        </property>
+        <property name="viewResolvers">
+            <list>
+                <ref bean="velocityViewResolver" />
+
+                <!-- Jsp View Resolver -->
+                <!-- Please add .jsp suffix to the viewer name, if a jsp render needed -->
+                <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+                      p:viewClass="org.springframework.web.servlet.view.JstlView"
+                      p:prefix="/WEB-INF/pages/"/>
+            </list>
+        </property>
+        <property name="defaultViews">
+            <list>
+                <!-- for application/json -->
+                <!-- for application/xml -->
+                <!-- comments XML convert, need OXM support -->
+                <!--<bean class="com.isnowing.web.spring.mvc.FusionAdaptMarshallingView" >-->
+                <!--<property name="marshaller">-->
+                <!--<bean class="org.springframework.oxm.xstream.XStreamMarshaller" />-->
+                <!--</property>-->
+                <!--</bean>-->
+            </list>
+        </property>
+    </bean>
+
+    <bean id="velocityViewResolver" class="com.alibaba.ydt.portal.web.mvc.MultipleVelocityLayoutViewResolver"
+          p:layoutUrl="layout.vm"
+          p:exposeRequestAttributes="true"
+          p:exposeSessionAttributes="true"
+          p:exposeSpringMacroHelpers="true"
+          p:requestContextAttribute="rc"
+          p:prefix=""
+          p:suffix=".vm"
+          p:toolboxConfigLocation="/WEB-INF/velocity_toolbox.xml"
+          p:contentType="text/html;charset=UTF-8">
+        <property name="mappings">
+            <map>
+                <entry key="admin/*" value="layout/admin/admin_layout.vm"/>
+                <entry key="cms/*" value="layout/cms/cms_page_layout.vm"/>
+                <entry key="*" value="layout/default_layout.vm"/>
+            </map>
+        </property>
+    </bean>
+
+    <!-- BeanName based View Resolver -->
+    <bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
+        <property name="order" value="1"/>
+    </bean>
+
+    <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <!-- <prop key="org.springframework.dao.DataAccessException">index</prop> -->
+            </props>
+        </property>
+    </bean>
+
+</beans>

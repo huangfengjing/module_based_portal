@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head>
+    <title>测试页面</title>
+    <link href="$link.relative('/static/css/reset.css')" rel="stylesheet" type="text/css" />
+    <link href="$link.relative('/static/css/portlet.css')" rel="stylesheet" type="text/css" />
+    <link href="$link.relative('/static/css/design.css')" rel="stylesheet" type="text/css" />
+    <script src="$link.relative('/static/js/jquery.1.7.min.js')"></script>
+    <script src="$link.relative('/static/js/jquery.dragsort-0.5.1.js')"></script>
+    <script src="$link.relative('/static/js/design.js')"></script>
+</head>
+<body>
+    #parse('/include/header.vm')
+    $screen_content
+    #parse('/include/footer.vm')
+</body>
+</html>
