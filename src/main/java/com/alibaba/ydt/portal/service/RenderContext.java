@@ -21,15 +21,29 @@ public class RenderContext extends HashMap<String, Object> implements Cloneable 
 
     private Log logger = LogFactory.getLog(getClass());
 
-    public static final String PAGE_KEY = "cmsPage";
     public static final String PAGE_HEADER_CONTENT_KEY = "cms_header";
     public static final String PAGE_BODY_CONTENT_KEY = "cms_body";
     public static final String PAGE_FOOTER_CONTENT_KEY = "cms_footer";
 
-    public static final String MODULE_PROTOTYPE_KEY = "prototype";
-    public static final String MODULE_INSTANCE_KEY = "instance";
-    public static final String MODULE_INSTANCE_ID_KEY = "instanceId";
-    public static final String MODULE_PARAMS_KEY = "params";
+    public static final String PAGE_INSTANCE_KEY = "pageInstance";
+    public static final String PAGE_PROTOTYPE_KEY = "pagePrototype";
+    public static final String PAGE_PARAMS_KEY = "pageParams";
+
+    public static final String LAYOUT_PROTOTYPE_KEY = "layoutPrototype";
+    public static final String LAYOUT_INSTANCE_KEY = "layoutInstance";
+    public static final String LAYOUT_PARAMS_KEY = "layoutParams";
+
+    public static final String COLUMN_PROTOTYPE_KEY = "columnPrototype";
+    public static final String COLUMN_INSTANCE_KEY = "columnInstance";
+    public static final String COLUMN_PARAMS_KEY = "columnParams";
+
+    public static final String MODULE_PROTOTYPE_KEY = "modulePrototype";
+    public static final String MODULE_INSTANCE_KEY = "moduleInstance";
+    public static final String MODULE_PARAMS_KEY = "moduleParams";
+
+    public static final String CMS_LAYOUT_LIST_KEY = "_cms_layouts";
+    public static final String CMS_COLUMN_LIST_KEY = "_cms_columns";
+    public static final String CMS_MODULE_LIST_KEY = "_cms_modules";
 
     public static final String RENDER_REQUEST_KEY = "request";
     public static final String RENDER_RESPONSE_KEY = "response";
@@ -42,13 +56,30 @@ public class RenderContext extends HashMap<String, Object> implements Cloneable 
         add(PAGE_HEADER_CONTENT_KEY);
         add(PAGE_BODY_CONTENT_KEY);
         add(PAGE_FOOTER_CONTENT_KEY);
-        add(PAGE_KEY);
+
+        add(PAGE_INSTANCE_KEY);
+        add(PAGE_PROTOTYPE_KEY);
+        add(PAGE_PARAMS_KEY);
+
+        add(LAYOUT_PROTOTYPE_KEY);
+        add(LAYOUT_INSTANCE_KEY);
+        add(LAYOUT_PARAMS_KEY);
+
+        add(COLUMN_PROTOTYPE_KEY);
+        add(COLUMN_INSTANCE_KEY);
+        add(COLUMN_PARAMS_KEY);
+
         add(MODULE_PROTOTYPE_KEY);
         add(MODULE_INSTANCE_KEY);
-        add(MODULE_INSTANCE_ID_KEY);
+        add(MODULE_PARAMS_KEY);
+
         add(RENDER_REQUEST_KEY);
         add(RENDER_RESPONSE_KEY);
         add(RENDER_SERVLET_CONTEXT_KEY);
+
+        add(CMS_LAYOUT_LIST_KEY);
+        add(CMS_COLUMN_LIST_KEY);
+        add(CMS_MODULE_LIST_KEY);
     }};
 
     public RenderContext() {
@@ -150,6 +181,11 @@ public class RenderContext extends HashMap<String, Object> implements Cloneable 
     final public void clear() {
         super.clear();
         init();
+    }
+
+    @Override
+    public RenderContext clone() {
+        return (RenderContext) super.clone();
     }
 
     /**

@@ -1,9 +1,14 @@
 package com.alibaba.ydt.portal.domain;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.ydt.portal.domain.common.BaseModel;
+import com.alibaba.ydt.portal.domain.common.ParameterSupportModel;
+import com.alibaba.ydt.portal.web.util.CmsUtils;
 
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 页面
@@ -11,7 +16,7 @@ import java.util.List;
  * @author <a href="mailto:huangfengjing@gmail.com>Ivan</a>
  * @since on 2012-12-17
  */
-public class CmsPageInstance extends BaseModel {
+public class CmsPageInstance extends ParameterSupportModel {
 
     /**
      * 对应的原型 ID
@@ -55,13 +60,11 @@ public class CmsPageInstance extends BaseModel {
 
     public void setPageXmlContent(String pageXmlContent) {
         this.pageXmlContent = pageXmlContent;
+        this.layouts = CmsUtils.parsePage(pageXmlContent).getLayouts();
     }
 
+    @Transient
     public List<CmsLayoutInstance> getLayouts() {
         return layouts;
-    }
-
-    public void setLayouts(List<CmsLayoutInstance> layouts) {
-        this.layouts = layouts;
     }
 }

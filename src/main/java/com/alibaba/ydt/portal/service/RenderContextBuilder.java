@@ -1,12 +1,11 @@
 package com.alibaba.ydt.portal.service;
 
-import com.alibaba.ydt.portal.domain.CmsModuleInstance;
-import com.alibaba.ydt.portal.domain.CmsModulePrototype;
-import com.alibaba.ydt.portal.domain.CmsPageInstance;
+import com.alibaba.ydt.portal.domain.*;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,6 +23,11 @@ public class RenderContextBuilder {
         RenderContextBuilder builder = new RenderContextBuilder();
         builder.renderContext = new RenderContext();
         return builder;
+    }
+
+    public RenderContextBuilder cloneFrom(RenderContext original) {
+        this.renderContext = original.clone();
+        return this;
     }
 
     public RenderContextBuilder setMode(RenderContext.RenderMode mode) {
@@ -46,23 +50,78 @@ public class RenderContextBuilder {
         return this;
     }
 
-    public RenderContextBuilder setCmsPage(CmsPageInstance page) {
-        renderContext.put(RenderContext.PAGE_KEY, page);
+    public RenderContextBuilder setPagePrototype(CmsPagePrototype prototype) {
+        renderContext.put(RenderContext.PAGE_PROTOTYPE_KEY, prototype);
         return this;
     }
 
-    public RenderContextBuilder setModInstance(CmsModuleInstance mod) {
+    public RenderContextBuilder setPageInstance(CmsPageInstance page) {
+        renderContext.put(RenderContext.PAGE_INSTANCE_KEY, page);
+        return this;
+    }
+
+    public RenderContextBuilder setPageParams(Map<String, Object> params) {
+        renderContext.put(RenderContext.PAGE_PARAMS_KEY, params);
+        return this;
+    }
+
+    public RenderContextBuilder setLayoutPrototype(CmsLayoutPrototype prototype) {
+        renderContext.put(RenderContext.LAYOUT_PROTOTYPE_KEY, prototype);
+        return this;
+    }
+
+    public RenderContextBuilder setLayoutInstance(CmsLayoutInstance layout) {
+        renderContext.put(RenderContext.LAYOUT_INSTANCE_KEY, layout);
+        return this;
+    }
+
+    public RenderContextBuilder setLayoutParams(Map<String, Object> params) {
+        renderContext.put(RenderContext.LAYOUT_PARAMS_KEY, params);
+        return this;
+    }
+
+    public RenderContextBuilder setColumnPrototype(CmsColumnPrototype prototype) {
+        renderContext.put(RenderContext.COLUMN_PROTOTYPE_KEY, prototype);
+        return this;
+    }
+
+    public RenderContextBuilder setColumnInstance(CmsColumnInstance column) {
+        renderContext.put(RenderContext.COLUMN_INSTANCE_KEY, column);
+        return this;
+    }
+
+    public RenderContextBuilder setColumnParams(Map<String, Object> params) {
+        renderContext.put(RenderContext.COLUMN_PARAMS_KEY, params);
+        return this;
+    }
+
+    public RenderContextBuilder setModuleInstance(CmsModuleInstance mod) {
         renderContext.put(RenderContext.MODULE_INSTANCE_KEY, mod);
         return this;
     }
 
-    public RenderContextBuilder setModPrototype(CmsModulePrototype prototype) {
+    public RenderContextBuilder setModulePrototype(CmsModulePrototype prototype) {
         renderContext.put(RenderContext.MODULE_PROTOTYPE_KEY, prototype);
         return this;
     }
 
-    public RenderContextBuilder setModInstanceId(long instanceId) {
-        renderContext.put(RenderContext.MODULE_INSTANCE_ID_KEY, instanceId);
+    public RenderContextBuilder setModuleParams(Map<String, Object> params) {
+        renderContext.put(RenderContext.MODULE_PARAMS_KEY, params);
+        return this;
+    }
+
+    public RenderContextBuilder setPageLayoutList(List<String> layoutContents) {
+        renderContext.put(RenderContext.CMS_LAYOUT_LIST_KEY, layoutContents);
+        return this;
+    }
+
+    public RenderContextBuilder setLayoutColumnList(List<String> columnContents) {
+        renderContext.put(RenderContext.CMS_COLUMN_LIST_KEY, columnContents);
+        return this;
+    }
+
+    public RenderContextBuilder setColumnModuleList(List<String> moduleContents) {
+        renderContext.put(RenderContext.CMS_LAYOUT_LIST_KEY, moduleContents);
         return this;
     }
 
@@ -85,6 +144,15 @@ public class RenderContextBuilder {
         if(null != params && !params.isEmpty()) {
             for(String key : params.keySet()) {
                 addParam(key, params.get(key));
+            }
+        }
+        return this;
+    }
+
+    public RenderContextBuilder addParams(List<ParameterValuePair> params) {
+        if(null != params && !params.isEmpty()) {
+            for(ParameterValuePair param : params) {
+                addParam(param.getName(), param.getValue());
             }
         }
         return this;
