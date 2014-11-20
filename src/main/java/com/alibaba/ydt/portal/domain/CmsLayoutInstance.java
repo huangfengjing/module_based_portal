@@ -1,18 +1,11 @@
 package com.alibaba.ydt.portal.domain;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.ydt.portal.domain.common.BaseModel;
 import com.alibaba.ydt.portal.domain.common.ParameterSupportModel;
-import com.alibaba.ydt.portal.web.util.CmsUtils;
-import com.alibaba.ydt.portal.web.util.JsonUtils;
-import org.apache.commons.lang.StringUtils;
+import com.alibaba.ydt.portal.util.CmsUtils;
+import com.alibaba.ydt.portal.util.JsonUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -33,7 +26,7 @@ public class CmsLayoutInstance extends ParameterSupportModel {
     /**
      * 布局名称
      */
-    private String name;
+    private String title;
 
     /**
      * 布局所包含的列
@@ -48,12 +41,12 @@ public class CmsLayoutInstance extends ParameterSupportModel {
         this.prototypeId = prototypeId;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public List<CmsColumnInstance> getColumns() {

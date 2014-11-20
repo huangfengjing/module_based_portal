@@ -1,9 +1,9 @@
-package com.alibaba.ydt.portal.web.util;
+package com.alibaba.ydt.portal.util;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.ydt.portal.domain.*;
-import org.apache.commons.lang.*;
+import com.alibaba.ydt.portal.domain.CmsColumnInstance;
+import com.alibaba.ydt.portal.domain.CmsLayoutInstance;
+import com.alibaba.ydt.portal.domain.CmsModuleInstance;
+import com.alibaba.ydt.portal.domain.CmsPageInstance;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
@@ -13,8 +13,6 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -148,32 +146,5 @@ public abstract class CmsUtils {
         }
         doc.setRootElement(pageElem);
         return doc.asXML();
-    }
-
-    /**
-     * 解析参数
-     * @param params4Store 字符串格式的参数
-     * @return 键值对参数列表
-     */
-    public static List<ParameterValuePair> parseParameters(String params4Store) {
-        if(org.apache.commons.lang.StringUtils.isBlank(params4Store)) {
-            return Collections.emptyList();
-        }
-        JSONObject params = JSONObject.parseObject(params4Store);
-        List<ParameterValuePair> parameters = new ArrayList<ParameterValuePair>();
-        for (Object paramKey : params.keySet()) {
-            ParameterValuePair parameter = new ParameterValuePair();
-            parameter.setName(paramKey.toString());
-            Object valueObject = params.get(paramKey.toString());
-            if (valueObject instanceof JSONObject) {
-                parameter.setValue(JsonUtils.processObject((JSONObject) valueObject));
-            } else if (valueObject instanceof JSONArray) {
-                parameter.setValue(JsonUtils.processArray((JSONArray) valueObject));
-            } else {
-                parameter.setValue(valueObject);
-            }
-            parameters.add(parameter);
-        }
-        return parameters;
     }
 }

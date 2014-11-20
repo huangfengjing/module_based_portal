@@ -1,6 +1,6 @@
 package com.alibaba.ydt.portal.web.mvc;
 
-import com.alibaba.ydt.portal.web.util.ReflectionUtils;
+import com.alibaba.ydt.portal.util.ReflectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanUtils;

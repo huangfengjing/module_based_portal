@@ -1,6 +1,6 @@
 package com.alibaba.ydt.portal.web.mvc;
 
-import com.alibaba.ydt.portal.web.util.StringUtils;
+import com.alibaba.ydt.portal.util.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.servlet.view.AbstractUrlBasedView;

@@ -1,12 +1,10 @@
 package com.alibaba.ydt.portal.service;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * <p>
@@ -17,7 +15,7 @@ import java.util.Set;
  * @author <a href="mailto:huangfengjing@gmail.com">Ivan</a>
  * @version 1.0
  */
-public class RenderContext extends HashMap<String, Object> implements Cloneable {
+public class RenderContext extends HashMap<String, Object> implements Map<String, Object>, Cloneable {
 
     private Log logger = LogFactory.getLog(getClass());
 
@@ -41,15 +39,18 @@ public class RenderContext extends HashMap<String, Object> implements Cloneable 
     public static final String MODULE_INSTANCE_KEY = "moduleInstance";
     public static final String MODULE_PARAMS_KEY = "moduleParams";
 
+    public static final String RENDER_REQUEST_KEY = "request";
+    public static final String RENDER_RESPONSE_KEY = "response";
+    public static final String RENDER_SERVLET_CONTEXT_KEY = "servletContext";
+
+    public static final String RENDER_MOD_KEY = "renderMode";
+    public static final String RENDER_ENV_KEY = "env";
+
     public static final String CMS_LAYOUT_LIST_KEY = "_cms_layouts";
     public static final String CMS_COLUMN_LIST_KEY = "_cms_columns";
     public static final String CMS_MODULE_LIST_KEY = "_cms_modules";
 
-    public static final String RENDER_REQUEST_KEY = "request";
-    public static final String RENDER_RESPONSE_KEY = "response";
-    public static final String RENDER_SERVLET_CONTEXT_KEY = "servletContext";
-    public static final String RENDER_MOD_KEY = "mode";
-    public static final String RENDER_ENV_KEY = "env";
+    public static final String TOOL_BOX_INJECTED = "_toolbox_injected";
 
     // 特殊保留的 KEY 值，参数或者环境变量不应该使用这些 KEY
     private Set<String> SPECIAL_KEY_SET = new HashSet<String>() {{
@@ -77,9 +78,14 @@ public class RenderContext extends HashMap<String, Object> implements Cloneable 
         add(RENDER_RESPONSE_KEY);
         add(RENDER_SERVLET_CONTEXT_KEY);
 
+        add(RENDER_MOD_KEY);
+        add(RENDER_ENV_KEY);
+
         add(CMS_LAYOUT_LIST_KEY);
         add(CMS_COLUMN_LIST_KEY);
         add(CMS_MODULE_LIST_KEY);
+
+        add(TOOL_BOX_INJECTED);
     }};
 
     public RenderContext() {
@@ -161,20 +167,10 @@ public class RenderContext extends HashMap<String, Object> implements Cloneable 
 
     @Override
     final public Object remove(Object key) {
-        throw new UnsupportedOperationException("请不要直接删除上下文中的数据，使用 removeParam 或者 removeEnv 代替");
-    }
-
-    @Override
-    final public Object put(String key, Object value) {
-        if(!SPECIAL_KEY_SET.contains(key)) {
-            throw new UnsupportedOperationException("请不要直接在上下文中添加数据，使用 addParam 或者 addEnv 代替");
+        if(null != key && SPECIAL_KEY_SET.contains(key.toString())) {
+            throw new UnsupportedOperationException("请不要直接删除保留数据，使用 removeParam 或者 removeEnv 代替，key=" + key);
         }
-        return super.put(key, value);
-    }
-
-    @Override
-    final public void putAll(Map<? extends String, ?> m) {
-        throw new UnsupportedOperationException("请不要直接在上下文中添加数据，使用 addParam 或者 addEnv 代替");
+        return super.remove(key);
     }
 
     @Override

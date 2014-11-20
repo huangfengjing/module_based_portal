@@ -2,7 +2,7 @@ package com.alibaba.ydt.portal.domain.common;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.ydt.portal.domain.ParameterValuePair;
-import com.alibaba.ydt.portal.web.util.CmsUtils;
+import com.alibaba.ydt.portal.util.CmsUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -30,7 +30,7 @@ abstract public class ParameterSupportModel extends BaseModel {
     }
 
     public List<ParameterValuePair> getParameters() {
-        return CmsUtils.parseParameters(params4Store);
+        return JSON.parseArray(params4Store, ParameterValuePair.class);
     }
 
     public void setParamsWithList(List<ParameterValuePair> paramList) {

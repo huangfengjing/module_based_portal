@@ -1,4 +1,4 @@
-package com.alibaba.ydt.portal.web.util;
+package com.alibaba.ydt.portal.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;

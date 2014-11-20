@@ -1,6 +1,6 @@
 package com.alibaba.ydt.portal.domain.common;
 
-import com.alibaba.ydt.portal.web.util.FeatureUtils;
+import com.alibaba.ydt.portal.util.FeatureUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import java.io.Serializable;

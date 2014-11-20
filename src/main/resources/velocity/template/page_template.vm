@@ -1,0 +1,5 @@
+<div class="page_box"#{if}($renderMode == 'design') data-proto-id="${pagePrototype.dbId}" data-inst-id="${pageInstance.dbId}"#{end}>
+#foreach($cmsLayout in $_cms_layouts)
+$cmsLayout
+#end
+</div>

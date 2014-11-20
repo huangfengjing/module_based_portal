@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.alibaba.ydt.portal.web.util;
+package com.alibaba.ydt.portal.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

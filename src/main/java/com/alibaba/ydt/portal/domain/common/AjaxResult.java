@@ -1,7 +1,7 @@
 package com.alibaba.ydt.portal.domain.common;
 
-import com.alibaba.ydt.portal.web.util.JsonUtils;
-import com.alibaba.ydt.portal.web.util.StringUtils;
+import com.alibaba.ydt.portal.util.JsonUtils;
+import com.alibaba.ydt.portal.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;

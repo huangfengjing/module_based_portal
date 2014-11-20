@@ -121,7 +121,7 @@ public class RenderContextBuilder {
     }
 
     public RenderContextBuilder setColumnModuleList(List<String> moduleContents) {
-        renderContext.put(RenderContext.CMS_LAYOUT_LIST_KEY, moduleContents);
+        renderContext.put(RenderContext.CMS_MODULE_LIST_KEY, moduleContents);
         return this;
     }
 

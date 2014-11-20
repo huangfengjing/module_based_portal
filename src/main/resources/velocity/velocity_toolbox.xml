@@ -11,6 +11,6 @@
     <tool>
         <key>stringUtils</key>
         <scope>application</scope>
-        <class>com.alibaba.ydt.portal.web.util.StringUtils</class>
+        <class>com.alibaba.ydt.portal.util.StringUtils</class>
     </tool>
 </toolbox>

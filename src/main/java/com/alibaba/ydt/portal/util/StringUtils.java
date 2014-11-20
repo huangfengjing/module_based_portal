@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.alibaba.ydt.portal.web.util;
+package com.alibaba.ydt.portal.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

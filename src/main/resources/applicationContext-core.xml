@@ -16,7 +16,7 @@
     <context:annotation-config/>
 
     <!-- Auto scan and inject bean definition -->
-    <context:component-scan base-package="com.alibaba.ydt">
+    <context:component-scan base-package="com.alibaba.ydt.portal">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
@@ -39,7 +39,6 @@
     </bean>
 
     <!-- ================== CACHE SUPPORT =================== -->
-
     <bean id="ehCacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
         <property name="configLocation" value="classpath:ehcache.xml"/>
     </bean>
@@ -53,5 +52,28 @@
         <property name="maxPoolSize" value="50"/>
         <property name="queueCapacity" value="10000"/>
         <property name="keepAliveSeconds" value="60"/>
+    </bean>
+
+    <!-- Velocity Engine -->
+    <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+        <property name="resourceLoaderPath" value="/,velocity/,classpath:/velocity/"/>
+        <property name="velocityProperties">
+            <props>
+                <!--<prop key="file.resource.loader.class">org.apache.velocity.runtime.resource.loader.FileResourceLoader</prop>-->
+                <prop key="input.encoding">UTF-8</prop>
+                <prop key="output.encoding">UTF-8</prop>
+                <prop key="contentType">text/html;charset=UTF-8</prop>
+                <prop key="directive.foreach.counter.name">velocityCount</prop>
+                <!-- velocityCount -->
+                <prop key="directive.foreach.counter.initial.value">1</prop>
+                <!-- start count -->
+                <prop key="file.resource.loader.modificationCheckInterval">2</prop>
+                <prop key="velocimacro.library">macro.vm</prop>
+            </props>
+        </property>
+    </bean>
+    
+    <bean id="renderEngine" class="com.alibaba.ydt.portal.service.RenderEngine">
+        <property name="toolboxConfigLocation" value="classpath:velocity/velocity_toolbox.xml" />
     </bean>
 </beans>

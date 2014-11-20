@@ -2,10 +2,26 @@ package com.alibaba.ydt.portal.service;
 
 import com.alibaba.ydt.portal.domain.*;
 import com.alibaba.ydt.portal.exception.RenderException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.tools.Scope;
+import org.apache.velocity.tools.Toolbox;
+import org.apache.velocity.tools.ToolboxFactory;
+import org.apache.velocity.tools.config.FileFactoryConfiguration;
+import org.apache.velocity.tools.config.XmlFactoryConfiguration;
+import org.apache.velocity.tools.view.ViewToolContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
+import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Component;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -20,6 +36,9 @@ import java.util.List;
  */
 public class RenderEngine {
 
+    private Log logger = LogFactory.getLog(getClass());
+
+    @Autowired
     private VelocityEngine velocityEngine;
 
     private List<ModuleContextProvider> moduleContextProviders;
@@ -48,6 +67,10 @@ public class RenderEngine {
 
     private CmsModuleInstanceService cmsModuleInstanceService;
 
+    private Resource toolboxConfigLocation;
+    private static ToolboxFactory toolboxFactory = null;
+    private static Toolbox globalToolbox = null;
+
     /**
      * 渲染页面
      * @param pageId 页面实例 ID
@@ -66,104 +89,124 @@ public class RenderEngine {
             if (null == prototype) {
                 throw new RenderException("页面原型未找到");
             }
+
+            if(!context.containsKey(RenderContext.TOOL_BOX_INJECTED)) {
+                injectToolbox(context);
+            }
+
             RenderContextBuilder pageContextBuilder = RenderContextBuilder.newBuilder().cloneFrom(context)
                     .setPageInstance(page).setPagePrototype(prototype);
             List<String> layoutRenderResult = new ArrayList<String>(page.getLayouts().size());
             for (CmsLayoutInstance layout : page.getLayouts()) {
                 RenderContext localContext = RenderContextBuilder.newBuilder().cloneFrom(pageContextBuilder.build()).build();
-                layoutRenderResult.add(renderLayout(layout.getDbId(), localContext));
+                layoutRenderResult.add(renderLayout(layout, localContext));
             }
             pageContextBuilder.setPageLayoutList(layoutRenderResult).addParams(page.getParameters());
             return render(prototype.getTemplate(), pageContextBuilder.build());
         } catch (Exception e) {
             if(null != renderExceptionHandler) {
-                return renderExceptionHandler.handleException(pageId, page, context, new RenderException(e));
+                return renderExceptionHandler.handleException(page, context, new RenderException(e));
             }
+            logger.error("<!-- 页面渲染失败，layoutId=" + pageId + " -->", e);
             return "<!-- 页面渲染失败，layoutId=" + pageId + " -->";
         }
     }
 
     /**
      * 渲染布局
-     * @param layoutId 布局实例 ID
+     * @param layout 布局实例
      * @param context 渲染上下文
      * @return 渲染结果
      * @throws RenderException 渲染异常
      */
-    public String renderLayout(long layoutId, RenderContext context) {
-        CmsLayoutInstance layout = null;
+    public String renderLayout(CmsLayoutInstance layout, RenderContext context) {
         try {
-            layout = cmsLayoutInstanceService.getById(layoutId);
             if (null == layout) {
-                throw new RenderException("布局实例未找到");
+                throw new RenderException("布局实例不存在");
             }
             CmsLayoutPrototype prototype = cmsLayoutPrototypeService.getById(layout.getPrototypeId());
             if (null == prototype) {
                 throw new RenderException("布局原型未找到");
             }
+
+            if(!context.containsKey(RenderContext.TOOL_BOX_INJECTED)) {
+                injectToolbox(context);
+            }
+
             RenderContextBuilder layoutContextBuilder = RenderContextBuilder.newBuilder().cloneFrom(context)
                     .setLayoutInstance(layout).setLayoutPrototype(prototype);
             List<String> columnRenderResult = new ArrayList<String>(layout.getColumns().size());
             for (CmsColumnInstance column : layout.getColumns()) {
                 RenderContext localContext = RenderContextBuilder.newBuilder().cloneFrom(layoutContextBuilder.build()).build();
-                columnRenderResult.add(renderColumn(column.getDbId(), localContext));
+                columnRenderResult.add(renderColumn(column, localContext));
+            }
+            if(null == layout.getParams4Store()) {
+                CmsLayoutInstance inst = cmsLayoutInstanceService.getById(layout.getDbId());
+                layout.setParams4Store(inst.getParams4Store());
             }
             layoutContextBuilder.setLayoutColumnList(columnRenderResult).addParams(layout.getParameters());
             return render(prototype.getTemplate(), layoutContextBuilder.build());
         } catch (Exception e) {
             if(null != renderExceptionHandler) {
-                return renderExceptionHandler.handleException(layoutId, layout, context, new RenderException(e));
+                return renderExceptionHandler.handleException(layout, context, new RenderException(e));
             }
-            return "<!-- 布局渲染失败，layoutId=" + layoutId + " -->";
+            logger.error("<!-- 布局渲染失败，layout=" + layout + " -->", e);
+            return "<!-- 布局渲染失败，layout=" + layout + " -->";
         }
     }
 
     /**
      * 渲染列
-     * @param columnId 列实例 ID
+     * @param column 列实例
      * @param context 渲染上下文
      * @return 渲染结果
      * @throws RenderException 渲染异常
      */
-    public String renderColumn(long columnId, RenderContext context) {
-        CmsColumnInstance column = null;
+    public String renderColumn(CmsColumnInstance column, RenderContext context) {
         try {
-            column = cmsColumnInstanceService.getById(columnId);
             if (null == column) {
-                throw new RenderException("列实例未找到");
+                throw new RenderException("列实例不存在");
             }
             CmsColumnPrototype prototype = cmsColumnPrototypeService.getById(column.getPrototypeId());
             if (null == prototype) {
                 throw new RenderException("列原型未找到");
             }
+
+            if(!context.containsKey(RenderContext.TOOL_BOX_INJECTED)) {
+                injectToolbox(context);
+            }
+
             RenderContextBuilder columnContextBuilder = RenderContextBuilder.newBuilder().cloneFrom(context)
                     .setColumnInstance(column).setColumnPrototype(prototype);
             List<String> moduleRenderResult = new ArrayList<String>(column.getModules().size());
             for (CmsModuleInstance module : column.getModules()) {
                 RenderContext localContext = RenderContextBuilder.newBuilder().cloneFrom(columnContextBuilder.build()).build();
-                moduleRenderResult.add(renderModule(module.getDbId(), localContext));
+                moduleRenderResult.add(renderModule(module, localContext));
             }
-            columnContextBuilder.setLayoutColumnList(moduleRenderResult).addParams(column.getParameters());
+            if(null == column.getParams4Store()) {
+                CmsColumnInstance inst = cmsColumnInstanceService.getById(column.getDbId());
+                column.setParams4Store(inst.getParams4Store());
+            }
+            columnContextBuilder.setColumnModuleList(moduleRenderResult).addParams(column.getParameters());
             return render(prototype.getTemplate(), columnContextBuilder.build());
         } catch (Exception e) {
             if(null != renderExceptionHandler) {
-                return renderExceptionHandler.handleException(columnId, column, context, new RenderException(e));
+                return renderExceptionHandler.handleException(column, context, new RenderException(e));
             }
-            return "<!-- 列渲染失败，columnId=" + columnId + " -->";
+            logger.error("<!-- 列渲染失败，column=" + column + " -->", e);
+            return "<!-- 列渲染失败，column=" + column + " -->";
         }
     }
 
     /**
      * 渲染模块
-     * @param moduleId 模块实例 ID
+     * @param module 模块实例
      * @param context 渲染上下文
      * @return 渲染结果
      * @throws RenderException 渲染异常
      */
-    public String renderModule(long moduleId, RenderContext context) throws RenderException {
-        CmsModuleInstance module = null;
+    public String renderModule(CmsModuleInstance module, RenderContext context) throws RenderException {
         try {
-            module = cmsModuleInstanceService.getById(moduleId);
             if (null == module) {
                 throw new RenderException("没找到模块实例");
             }
@@ -171,14 +214,24 @@ public class RenderEngine {
             if (null == prototype) {
                 throw new RenderException("没找到模块原型");
             }
+
+            if(!context.containsKey(RenderContext.TOOL_BOX_INJECTED)) {
+                injectToolbox(context);
+            }
+
+            if(null == module.getParams4Store()) {
+                CmsModuleInstance inst = cmsModuleInstanceService.getById(module.getDbId());
+                module.setParams4Store(inst.getParams4Store());
+            }
             RenderContextBuilder moduleContextBuilder = RenderContextBuilder.newBuilder().cloneFrom(context)
                     .setModuleInstance(module).setModulePrototype(prototype).addParams(module.getParameters());
             return render(prototype.getTemplate(), moduleContextBuilder.build());
         } catch (Exception e) {
             if(null != renderExceptionHandler) {
-                return renderExceptionHandler.handleException(moduleId, module, context, new RenderException(e));
+                return renderExceptionHandler.handleException(module, context, new RenderException(e));
             }
-            return "<!-- 模块渲染失败，moduleId=" + moduleId + " -->";
+            logger.error("<!-- 模块渲染失败，module=" + module + " -->", e);
+            return "<!-- 模块渲染失败，module=" + module + " -->";
         }
     }
 
@@ -190,7 +243,7 @@ public class RenderEngine {
      * @throws RenderException 渲染异常
      */
     public String renderModuleForm(long moduleId, RenderContext context) throws RenderException {
-        CmsModuleInstance module = null;
+        CmsModuleInstance module;
         try {
             module = cmsModuleInstanceService.getById(moduleId);
             if (null == module) {
@@ -200,10 +253,16 @@ public class RenderEngine {
             if (null == prototype) {
                 return null;
             }
+
+            if(!context.containsKey(RenderContext.TOOL_BOX_INJECTED)) {
+                injectToolbox(context);
+            }
+
             RenderContextBuilder moduleContextBuilder = RenderContextBuilder.newBuilder().cloneFrom(context)
                     .setModuleInstance(module).setModulePrototype(prototype).addParams(module.getParameters());
             return render(prototype.getFormTemplate(), moduleContextBuilder.build());
         } catch (Exception e) {
+            logger.error("<!-- 模块表单渲染失败，moduleId=" + moduleId + " -->", e);
             return "<!-- 模块表单渲染失败，moduleId=" + moduleId + " -->";
         }
     }
@@ -229,5 +288,73 @@ public class RenderEngine {
         } catch (Exception e) {
             throw new RenderException(e);
         }
+    }
+
+    public void setCmsPagePrototypeService(CmsPagePrototypeService cmsPagePrototypeService) {
+        this.cmsPagePrototypeService = cmsPagePrototypeService;
+    }
+
+    public void setCmsPageInstanceService(CmsPageInstanceService cmsPageInstanceService) {
+        this.cmsPageInstanceService = cmsPageInstanceService;
+    }
+
+    public void setCmsLayoutPrototypeService(CmsLayoutPrototypeService cmsLayoutPrototypeService) {
+        this.cmsLayoutPrototypeService = cmsLayoutPrototypeService;
+    }
+
+    public void setCmsLayoutInstanceService(CmsLayoutInstanceService cmsLayoutInstanceService) {
+        this.cmsLayoutInstanceService = cmsLayoutInstanceService;
+    }
+
+    public void setCmsColumnPrototypeService(CmsColumnPrototypeService cmsColumnPrototypeService) {
+        this.cmsColumnPrototypeService = cmsColumnPrototypeService;
+    }
+
+    public void setCmsColumnInstanceService(CmsColumnInstanceService cmsColumnInstanceService) {
+        this.cmsColumnInstanceService = cmsColumnInstanceService;
+    }
+
+    public void setCmsModulePrototypeService(CmsModulePrototypeService cmsModulePrototypeService) {
+        this.cmsModulePrototypeService = cmsModulePrototypeService;
+    }
+
+    public void setCmsModuleInstanceService(CmsModuleInstanceService cmsModuleInstanceService) {
+        this.cmsModuleInstanceService = cmsModuleInstanceService;
+    }
+
+
+    /**
+     * 注入 toolbox 配置
+     * @return 上下文 环境
+     */
+    protected void injectToolbox(RenderContext context) {
+        try {
+            if(null == toolboxFactory && null != toolboxConfigLocation) {
+                FileFactoryConfiguration cfg = new XmlFactoryConfiguration(true);
+                cfg.read(toolboxConfigLocation.getInputStream());
+                toolboxFactory = cfg.createFactory();
+                globalToolbox = toolboxFactory.createToolbox(Scope.APPLICATION);
+            }
+
+            ViewToolContext velocityContext = new ViewToolContext(velocityEngine,
+                    (HttpServletRequest)context.get(RenderContext.RENDER_REQUEST_KEY),
+                    (HttpServletResponse)context.get(RenderContext.RENDER_RESPONSE_KEY),
+                    (ServletContext)context.get(RenderContext.RENDER_SERVLET_CONTEXT_KEY));
+            if(null != globalToolbox) {
+                velocityContext.addToolbox(globalToolbox);
+            }
+            velocityContext.addToolbox(toolboxFactory.createToolbox(Scope.REQUEST));
+            velocityContext.addToolbox(toolboxFactory.createToolbox(Scope.SESSION));
+            for(String key : velocityContext.keySet()) {
+                context.put(key, velocityContext.get(key));
+            }
+            context.put(RenderContext.TOOL_BOX_INJECTED, true);
+        } catch (IOException e) {
+            logger.error("创建 velocity context 失败", e);
+        }
+    }
+
+    public void setToolboxConfigLocation(Resource toolboxConfigLocation) {
+        this.toolboxConfigLocation = toolboxConfigLocation;
     }
 }

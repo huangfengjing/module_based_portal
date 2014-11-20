@@ -28,6 +28,11 @@ public class CmsPagePrototype extends BaseFeatureSupport {
      */
     private String template;
 
+    /**
+     * 表单模板
+     */
+    private String formTemplate;
+
     public String getName() {
         return name;
     }
@@ -50,5 +55,13 @@ public class CmsPagePrototype extends BaseFeatureSupport {
 
     public void setTemplate(String template) {
         this.template = template;
+    }
+
+    public String getFormTemplate() {
+        return formTemplate;
+    }
+
+    public void setFormTemplate(String formTemplate) {
+        this.formTemplate = formTemplate;
     }
 }

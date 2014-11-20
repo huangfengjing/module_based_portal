@@ -11,5 +11,5 @@ import com.alibaba.ydt.portal.exception.RenderException;
  */
 public interface RenderExceptionHandler {
 
-    public String handleException(long instId, Object instance, RenderContext context, RenderException e);
+    public String handleException(Object instance, RenderContext context, RenderException e);
 }

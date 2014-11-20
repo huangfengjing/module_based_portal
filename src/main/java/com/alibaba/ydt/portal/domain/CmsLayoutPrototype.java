@@ -25,11 +25,6 @@ public class CmsLayoutPrototype {
      */
     private String formTemplate;
 
-    public CmsLayoutPrototype(long dbId, String template) {
-        this.dbId = dbId;
-        this.template = template;
-    }
-
     public long getDbId() {
         return dbId;
     }
@@ -53,15 +48,4 @@ public class CmsLayoutPrototype {
     public void setFormTemplate(String formTemplate) {
         this.formTemplate = formTemplate;
     }
-
-    /**
-     * 布局原型
-     */
-    public static final List<CmsLayoutPrototype> LAYOUT_PROTOTYPE_POOL = new ArrayList<CmsLayoutPrototype>() {
-        {
-            new CmsLayoutPrototype(1L, "<div class=\"layout_box\"#{if}($env.mode == 'design') data-prototype-id=\"0\" data-inst-id=\"0\"#{end}>\n" +
-                    CONTENT_PLACEHOLDER +
-                    "</div>");
-        }
-    };
 }

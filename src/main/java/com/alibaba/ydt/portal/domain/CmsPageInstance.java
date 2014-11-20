@@ -1,14 +1,11 @@
 package com.alibaba.ydt.portal.domain;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.ydt.portal.domain.common.BaseModel;
 import com.alibaba.ydt.portal.domain.common.ParameterSupportModel;
-import com.alibaba.ydt.portal.web.util.CmsUtils;
+import com.alibaba.ydt.portal.util.CmsUtils;
 
 import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 页面

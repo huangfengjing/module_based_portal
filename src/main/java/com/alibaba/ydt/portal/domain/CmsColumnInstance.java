@@ -24,7 +24,7 @@ public class CmsColumnInstance extends ParameterSupportModel {
     /**
      * 布局名称
      */
-    private String name;
+    private String title;
 
     /**
      * 布局栏目列表
@@ -39,12 +39,12 @@ public class CmsColumnInstance extends ParameterSupportModel {
         this.prototypeId = prototypeId;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public List<CmsModuleInstance> getModules() {

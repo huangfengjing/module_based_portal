@@ -1,5 +1,0 @@
-<div class="module_box"#{if}($env.mode == 'design') data-prototype-id="${prototype.id}" data-inst-id="${instance.id}"#{end}>
-    <div class="module_box_hd">$stringUtils.defaultIfEmpty($params.title, $prototype.title)</div>
-    <div class="module_box_bd">${params.content}</div>
-</div>
-

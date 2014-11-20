@@ -18,11 +18,24 @@ public class CmsModuleInstance extends ParameterSupportModel {
      */
     private long prototypeId;
 
+    /**
+     * 模块名称
+     */
+    private String title;
+
     public long getPrototypeId() {
         return prototypeId;
     }
 
     public void setPrototypeId(long prototypeId) {
         this.prototypeId = prototypeId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

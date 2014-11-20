@@ -25,16 +25,6 @@ public class CmsColumnPrototype {
      */
     private String formTemplate;
 
-    /**
-     * 参数
-     */
-    private String params4Store;
-
-    public CmsColumnPrototype(long dbId, String template) {
-        this.dbId = dbId;
-        this.template = template;
-    }
-
     public long getDbId() {
         return dbId;
     }
@@ -58,13 +48,4 @@ public class CmsColumnPrototype {
     public void setFormTemplate(String formTemplate) {
         this.formTemplate = formTemplate;
     }
-
-    /**
-     * 当前已有的列原型池
-     */
-    public static final List<CmsColumnPrototype> COLUMN_PROTOTYPE_POOL = new ArrayList<CmsColumnPrototype>(){
-        {
-            add(new CmsColumnPrototype(1L, "<div class=\"column_box width25p\"#{if}($env.mode == 'design') data-inst-id=\"0\"#{end}>" + CONTENT_PLACEHOLDER + "</div>"));
-        }
-    };
 }
