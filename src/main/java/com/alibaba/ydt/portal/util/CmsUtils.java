@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * <p>
- * 类说明
+ * Cms 工具类，用于解析 XML 与对象之间的映射
  * </p>
  * Time: 13-1-4 下午4:44
  *

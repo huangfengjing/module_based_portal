@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<page prototype-id="17" instance-id="24">
-    <layout prototype-id="1" instance-id="22">
-        <column prototype-id="241" instance-id="74">
-            <module prototype-id="41" instance-id="733" />
-            <module prototype-id="42" instance-id="693" />
-            <module prototype-id="43" instance-id="527" />
+<page prototype-id="17" instance-id="1">
+    <layout prototype-id="1" instance-id="1">
+        <column prototype-id="1" instance-id="1">
+            <module prototype-id="1" instance-id="1" />
+            <module prototype-id="2" instance-id="1" />
+            <module prototype-id="1" instance-id="1" />
         </column>
-        <column prototype-id="41" instance-id="76">
-            <module prototype-id="24" instance-id="433" />
-            <module prototype-id="22" instance-id="13" />
-            <module prototype-id="49" instance-id="27" />
-            <module prototype-id="51" instance-id="96" />
-        </column>
-        <column prototype-id="29" instance-id="77">
-            <module prototype-id="41" instance-id="73" />
-            <module prototype-id="43" instance-id="7" />
+        <column prototype-id="1" instance-id="1">
+            <module prototype-id="1" instance-id="1" />
+            <module prototype-id="1" instance-id="1" />
         </column>
     </layout>
 </page>

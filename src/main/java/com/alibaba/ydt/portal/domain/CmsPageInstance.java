@@ -1,6 +1,6 @@
 package com.alibaba.ydt.portal.domain;
 
-import com.alibaba.ydt.portal.domain.common.ParameterSupportModel;
+import com.alibaba.ydt.portal.domain.common.BaseModel;
 import com.alibaba.ydt.portal.util.CmsUtils;
 
 import java.beans.Transient;
@@ -13,7 +13,9 @@ import java.util.List;
  * @author <a href="mailto:huangfengjing@gmail.com>Ivan</a>
  * @since on 2012-12-17
  */
-public class CmsPageInstance extends ParameterSupportModel {
+public class CmsPageInstance extends BaseModel implements ParameterSupportModel {
+
+    public static final String TYPE_TAG = "page";
 
     /**
      * 对应的原型 ID
@@ -63,5 +65,23 @@ public class CmsPageInstance extends ParameterSupportModel {
     @Transient
     public List<CmsLayoutInstance> getLayouts() {
         return layouts;
+    }
+
+    @Override
+    public long getInstanceId() {
+        return dbId;
+    }
+
+    @Override
+    public String getInstanceTypeTag() {
+        return TYPE_TAG;
+    }
+
+    @Override
+    public String toString() {
+        return "CmsPageInstance{" +
+                "prototypeId=" + prototypeId +
+                ", title='" + title + '\'' +
+                '}';
     }
 }

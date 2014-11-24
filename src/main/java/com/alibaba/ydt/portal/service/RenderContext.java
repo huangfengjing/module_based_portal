@@ -1,10 +1,12 @@
 package com.alibaba.ydt.portal.service;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>
@@ -15,6 +17,7 @@ import java.util.*;
  * @author <a href="mailto:huangfengjing@gmail.com">Ivan</a>
  * @version 1.0
  */
+@SuppressWarnings("unchecked")
 public class RenderContext extends HashMap<String, Object> implements Map<String, Object>, Cloneable {
 
     private Log logger = LogFactory.getLog(getClass());
@@ -92,22 +95,19 @@ public class RenderContext extends HashMap<String, Object> implements Map<String
         init();
     }
 
-    public RenderContext(RenderContext subContext) {
-        init();
-        merge(subContext);
-    }
-
     private void init() {
         put(RENDER_MOD_KEY, RenderMode.product);
-        put(MODULE_PARAMS_KEY, new HashMap<String, Object>());
         put(RENDER_ENV_KEY, new HashMap<String, Object>());
+        put(MODULE_PARAMS_KEY, new HashMap<String, Object>());
+        put(COLUMN_PARAMS_KEY, new HashMap<String, Object>());
+        put(LAYOUT_PARAMS_KEY, new HashMap<String, Object>());
+        put(PAGE_PARAMS_KEY, new HashMap<String, Object>());
     }
 
     /**
      * 添加一个属性
      * @param key 属性 KEY
      * @param value 属性值
-     * @return 添加后的上下文环境
      */
     final public void addToEnv(String key, Object value) {
         if(SPECIAL_KEY_SET.contains(key)) {
@@ -129,32 +129,25 @@ public class RenderContext extends HashMap<String, Object> implements Map<String
      * 添加一个参数
      * @param key 参数 KEY
      * @param value 参数值
-     * @return 添加后的上下文环境
      */
-    final public void addToParam(String key, Object value) {
+    final public void addToParam(String instanceParamKey, String key, Object value) {
         if(SPECIAL_KEY_SET.contains(key)) {
             logger.error("添加参数失败，" + key + " 为特殊的保留KEY，请勿使用！");
             return;
         }
-        ((Map<String, Object>) get(MODULE_PARAMS_KEY)).put(key, value);
+        if(containsKey(instanceParamKey)) {
+            ((Map<String, Object>) get(instanceParamKey)).put(key, value);
+        }
     }
 
     /**
      * 删除一个参数
      * @param key 参数 KEY
      */
-    final public void removeParam(String key) {
-        ((Map<String, Object>) get(MODULE_PARAMS_KEY)).remove(key);
-    }
-
-    /**
-     * 合并2个上下文环境
-     * @param context 上下文环境
-     * @return 合并后的上下文环境
-     */
-    final public RenderContext merge(RenderContext context) {
-        putAll(context);
-        return this;
+    final public void removeParam(String instanceParamKey, String key) {
+        if(containsKey(instanceParamKey)) {
+            ((Map<String, Object>) get(instanceParamKey)).remove(key);
+        }
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.alibaba.ydt.portal.domain;
 
-import com.alibaba.ydt.portal.domain.common.ParameterSupportModel;
+import com.alibaba.ydt.portal.domain.common.BaseModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,9 @@ import java.util.List;
  * @author <a href="mailto:huangfengjing@gmail.com">Ivan</a>
  * @version 1.0
  */
-public class CmsColumnInstance extends ParameterSupportModel {
+public class CmsColumnInstance extends BaseModel implements ParameterSupportModel {
+
+    public static final String TYPE_TAG = "column";
 
     /**
      * 原型 ID
@@ -53,5 +55,24 @@ public class CmsColumnInstance extends ParameterSupportModel {
 
     public void setModules(List<CmsModuleInstance> modules) {
         this.modules = modules;
+    }
+
+    @Override
+    public long getInstanceId() {
+        return dbId;
+    }
+
+    @Override
+    public String getInstanceTypeTag() {
+        return TYPE_TAG;
+    }
+
+    @Override
+    public String toString() {
+        return "CmsColumnInstance{" +
+                "prototypeId=" + prototypeId +
+                ", title='" + title + '\'' +
+                ", modules=" + modules +
+                '}';
     }
 }

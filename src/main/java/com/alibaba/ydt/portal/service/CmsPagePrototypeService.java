@@ -9,5 +9,5 @@ import com.alibaba.ydt.portal.domain.CmsPagePrototype;
  * @version 1.0
  *          Created on 14-10-29 下午2:40.
  */
-public interface CmsPagePrototypeService extends BaseDataService<CmsPagePrototype> {
+public interface CmsPagePrototypeService extends DataService<CmsPagePrototype> {
 }

@@ -9,5 +9,5 @@ import com.alibaba.ydt.portal.domain.CmsModuleInstance;
  * @version 1.0
  *          Created on 14-10-29 下午2:40.
  */
-public interface CmsModuleInstanceService extends BaseDataService<CmsModuleInstance> {
+public interface CmsModuleInstanceService extends DataService<CmsModuleInstance> {
 }

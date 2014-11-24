@@ -1,6 +1,6 @@
 package com.alibaba.ydt.portal.domain;
 
-import com.alibaba.ydt.portal.domain.common.ParameterSupportModel;
+import com.alibaba.ydt.portal.domain.common.BaseModel;
 
 /**
  * <p>
@@ -11,7 +11,9 @@ import com.alibaba.ydt.portal.domain.common.ParameterSupportModel;
  * @author <a href="mailto:huangfengjing@gmail.com">Ivan</a>
  * @version 1.0
  */
-public class CmsModuleInstance extends ParameterSupportModel {
+public class CmsModuleInstance extends BaseModel implements ParameterSupportModel {
+
+    public static final String TYPE_TAG = "module";
 
     /**
      * 模块原型 ID
@@ -37,5 +39,23 @@ public class CmsModuleInstance extends ParameterSupportModel {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Override
+    public long getInstanceId() {
+        return dbId;
+    }
+
+    @Override
+    public String getInstanceTypeTag() {
+        return TYPE_TAG;
+    }
+
+    @Override
+    public String toString() {
+        return "CmsModuleInstance{" +
+                "prototypeId=" + prototypeId +
+                ", title='" + title + '\'' +
+                '}';
     }
 }

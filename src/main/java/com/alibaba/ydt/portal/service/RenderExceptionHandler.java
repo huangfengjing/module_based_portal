@@ -1,5 +1,6 @@
 package com.alibaba.ydt.portal.service;
 
+import com.alibaba.ydt.portal.domain.RenderResult;
 import com.alibaba.ydt.portal.exception.RenderException;
 
 /**
@@ -11,5 +12,5 @@ import com.alibaba.ydt.portal.exception.RenderException;
  */
 public interface RenderExceptionHandler {
 
-    public String handleException(Object instance, RenderContext context, RenderException e);
+    public RenderResult handleException(Object instance, RenderContext context, RenderException e);
 }

@@ -9,5 +9,5 @@ import com.alibaba.ydt.portal.domain.CmsLayoutInstance;
  * @version 1.0
  *          Created on 14-10-29 下午2:40.
  */
-public interface CmsLayoutInstanceService extends BaseDataService<CmsLayoutInstance> {
+public interface CmsLayoutInstanceService extends DataService<CmsLayoutInstance> {
 }
