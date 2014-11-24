@@ -325,7 +325,6 @@ public class RenderEngine {
 
     /**
      * 注入 toolbox 配置
-     * @return 上下文 环境
      */
     protected void injectToolbox(RenderContext context) {
         try {
@@ -335,18 +334,20 @@ public class RenderEngine {
                 toolboxFactory = cfg.createFactory();
                 globalToolbox = toolboxFactory.createToolbox(Scope.APPLICATION);
             }
-
-            ViewToolContext velocityContext = new ViewToolContext(velocityEngine,
-                    (HttpServletRequest)context.get(RenderContext.RENDER_REQUEST_KEY),
-                    (HttpServletResponse)context.get(RenderContext.RENDER_RESPONSE_KEY),
-                    (ServletContext)context.get(RenderContext.RENDER_SERVLET_CONTEXT_KEY));
-            if(null != globalToolbox) {
-                velocityContext.addToolbox(globalToolbox);
+            for(String key : globalToolbox.getKeys()) {
+                context.put(key, globalToolbox.get(key));
             }
-            velocityContext.addToolbox(toolboxFactory.createToolbox(Scope.REQUEST));
-            velocityContext.addToolbox(toolboxFactory.createToolbox(Scope.SESSION));
-            for(String key : velocityContext.keySet()) {
-                context.put(key, velocityContext.get(key));
+
+            HttpServletRequest request = (HttpServletRequest)context.get(RenderContext.RENDER_REQUEST_KEY);
+            HttpServletResponse response = (HttpServletResponse)context.get(RenderContext.RENDER_RESPONSE_KEY);
+            ServletContext servletContext = (ServletContext)context.get(RenderContext.RENDER_SERVLET_CONTEXT_KEY);
+            if(null != request && null != response && null != servletContext) {
+                ViewToolContext velocityContext = new ViewToolContext(velocityEngine, request, response, servletContext);
+                velocityContext.addToolbox(toolboxFactory.createToolbox(Scope.REQUEST));
+                velocityContext.addToolbox(toolboxFactory.createToolbox(Scope.SESSION));
+                for (String key : velocityContext.keySet()) {
+                    context.put(key, velocityContext.get(key));
+                }
             }
             context.put(RenderContext.TOOL_BOX_INJECTED, true);
         } catch (IOException e) {

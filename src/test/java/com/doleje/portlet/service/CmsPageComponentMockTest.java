@@ -7,7 +7,7 @@ import mockit.Mocked;
 import mockit.NonStrictExpectations;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.velocity.app.VelocityEngine;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -54,8 +54,8 @@ public class CmsPageComponentMockTest extends BaseTest {
     @Autowired
     private RenderEngine renderEngine;
 
-    @Test
-    public void testMockComponents() throws Exception {
+    @Before
+    public void initMockContext() throws Exception {
 
         // mock page instance service
         new NonStrictExpectations() {
@@ -162,14 +162,37 @@ public class CmsPageComponentMockTest extends BaseTest {
         renderEngine.setCmsColumnInstanceService(cmsColumnInstanceService);
         renderEngine.setCmsModulePrototypeService(cmsModulePrototypeService);
         renderEngine.setCmsModuleInstanceService(cmsModuleInstanceService);
+    }
 
-
+    @Test
+    public void testDesign() throws Exception {
         RenderContext context = RenderContextBuilder.newBuilder().setMode(RenderContext.RenderMode.design)
                 .setRequest(new MockHttpServletRequest())
                 .setResponse(new MockHttpServletResponse())
                 .setServletContext(new MockServletContext()).build();
         String content = renderEngine.renderPage(1L, context);
-        System.out.println(StringUtils.center(" RenderResult ", 80, "="));
+        System.out.println(StringUtils.center(" Design Mode RenderResult ", 80, "="));
+        System.out.println(content);
+        System.out.println(StringUtils.center("=", 80, "="));
+    }
+
+    @Test
+    public void testProduct() throws Exception {
+        RenderContext context = RenderContextBuilder.newBuilder().setMode(RenderContext.RenderMode.product)
+                .setRequest(new MockHttpServletRequest())
+                .setResponse(new MockHttpServletResponse())
+                .setServletContext(new MockServletContext()).build();
+        String content = renderEngine.renderPage(1L, context);
+        System.out.println(StringUtils.center(" Product Mode RenderResult ", 80, "="));
+        System.out.println(content);
+        System.out.println(StringUtils.center("=", 80, "="));
+    }
+
+    @Test
+    public void testGlobalToolbox() throws Exception {
+        RenderContext context = RenderContextBuilder.newBuilder().setMode(RenderContext.RenderMode.product).build();
+        String content = renderEngine.renderPage(1L, context);
+        System.out.println(StringUtils.center(" NoRequest RenderResult ", 80, "="));
         System.out.println(content);
         System.out.println(StringUtils.center("=", 80, "="));
     }
