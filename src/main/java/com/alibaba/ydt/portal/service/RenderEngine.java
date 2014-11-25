@@ -2,6 +2,7 @@ package com.alibaba.ydt.portal.service;
 
 import com.alibaba.ydt.portal.domain.*;
 import com.alibaba.ydt.portal.exception.RenderException;
+import com.alibaba.ydt.portal.util.CmsUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
@@ -12,7 +13,9 @@ import org.apache.velocity.tools.ToolboxFactory;
 import org.apache.velocity.tools.config.FileFactoryConfiguration;
 import org.apache.velocity.tools.config.XmlFactoryConfiguration;
 import org.apache.velocity.tools.view.ViewToolContext;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.core.io.Resource;
 
@@ -31,9 +34,15 @@ import java.util.*;
  * @version 1.0
  *          Created on 14-10-29 下午2:30.
  */
-public class RenderEngine {
+public class RenderEngine implements InitializingBean {
 
     private Log logger = LogFactory.getLog(getClass());
+
+    public static final String RENDER_CACHE_NAME = "_RENDER_CACHE";
+    public static final String RENDER_CACHE_TYPE_FOR_PAGE = "_RENDER_CACHE_TYPE_FOR_PAGE";
+    public static final String RENDER_CACHE_TYPE_FOR_LAYOUT = "_RENDER_CACHE_TYPE_FOR_LAYOUT";
+    public static final String RENDER_CACHE_TYPE_FOR_COLUMN = "_RENDER_CACHE_TYPE_FOR_COLUMN";
+    public static final String RENDER_CACHE_TYPE_FOR_MODULE = "_RENDER_CACHE_TYPE_FOR_MODULE";
 
     @Autowired
     private VelocityEngine velocityEngine;
@@ -45,7 +54,10 @@ public class RenderEngine {
 
     private List<RenderInterceptor> renderInterceptors = new ArrayList<RenderInterceptor>();
 
+    @Autowired
     private CacheManager cacheManager;
+
+    private Cache renderCache;
 
     private RenderExceptionHandler renderExceptionHandler;
 
@@ -80,6 +92,7 @@ public class RenderEngine {
     public RenderResult renderPage(long pageId, RenderContext context) throws RenderException {
         CmsPageInstance page = null;
         try {
+
             page = cmsPageInstanceService.getById(pageId);
             if (null == page) {
                 throw new RenderException("页面实例未找到");
@@ -94,6 +107,18 @@ public class RenderEngine {
             CmsPagePrototype prototype = cmsPagePrototypeService.getById(page.getPrototypeId());
             if (null == prototype) {
                 throw new RenderException("页面原型未找到");
+            }
+
+            // 查看缓存
+            String cacheKey = CmsUtils.generateCacheKey(RENDER_CACHE_TYPE_FOR_PAGE, pageId, context);
+            Cache.ValueWrapper tmp = renderCache.get(cacheKey);
+            if(null != tmp && null != tmp.get()) {
+                RenderResult cached = (RenderResult) tmp.get();
+                long delta = new Date().getTime() - cached.getRenderTime().getTime();
+                if (delta < prototype.getInstanceExpiredSeconds() * 1000) {
+                    cached.setResultType(RenderResult.RESULT_TYPE_FROM_CACHE);
+                    return cached;
+                }
             }
 
             if (!context.containsKey(RenderContext.TOOL_BOX_INJECTED)) {
@@ -114,6 +139,10 @@ public class RenderEngine {
             for(RenderInterceptor interceptor : renderInterceptors) {
                 result = interceptor.after(page, result);
             }
+
+            // put 缓存
+            renderCache.put(cacheKey, result);
+
             return result;
         } catch (Exception e) {
             if (null != renderExceptionHandler) {
@@ -140,6 +169,18 @@ public class RenderEngine {
             CmsLayoutPrototype prototype = cmsLayoutPrototypeService.getById(layout.getPrototypeId());
             if (null == prototype) {
                 throw new RenderException("布局原型未找到");
+            }
+
+            // 查看缓存
+            String cacheKey = CmsUtils.generateCacheKey(RENDER_CACHE_TYPE_FOR_LAYOUT, layout.getDbId(), context);
+            Cache.ValueWrapper tmp = renderCache.get(cacheKey);
+            if(null != tmp && null != tmp.get()) {
+                RenderResult cached = (RenderResult) tmp.get();
+                long delta = new Date().getTime() - cached.getRenderTime().getTime();
+                if (delta < prototype.getInstanceExpiredSeconds() * 1000) {
+                    cached.setResultType(RenderResult.RESULT_TYPE_FROM_CACHE);
+                    return cached;
+                }
             }
 
             if (!context.containsKey(RenderContext.TOOL_BOX_INJECTED)) {
@@ -169,6 +210,10 @@ public class RenderEngine {
             for(RenderInterceptor interceptor : renderInterceptors) {
                 result = interceptor.after(layout, result);
             }
+
+            // put 缓存
+            renderCache.put(cacheKey, result);
+
             return result;
         } catch (Exception e) {
             if (null != renderExceptionHandler) {
@@ -195,6 +240,18 @@ public class RenderEngine {
             CmsColumnPrototype prototype = cmsColumnPrototypeService.getById(column.getPrototypeId());
             if (null == prototype) {
                 throw new RenderException("列原型未找到");
+            }
+
+            // 查看缓存
+            String cacheKey = CmsUtils.generateCacheKey(RENDER_CACHE_TYPE_FOR_COLUMN, column.getDbId(), context);
+            Cache.ValueWrapper tmp = renderCache.get(cacheKey);
+            if(null != tmp && null != tmp.get()) {
+                RenderResult cached = (RenderResult) tmp.get();
+                long delta = new Date().getTime() - cached.getRenderTime().getTime();
+                if (delta < prototype.getInstanceExpiredSeconds() * 1000) {
+                    cached.setResultType(RenderResult.RESULT_TYPE_FROM_CACHE);
+                    return cached;
+                }
             }
 
             if (!context.containsKey(RenderContext.TOOL_BOX_INJECTED)) {
@@ -224,6 +281,10 @@ public class RenderEngine {
             for(RenderInterceptor interceptor : renderInterceptors) {
                 result = interceptor.after(column, result);
             }
+
+            // put 缓存
+            renderCache.put(cacheKey, result);
+
             return result;
         } catch (Exception e) {
             if (null != renderExceptionHandler) {
@@ -252,6 +313,18 @@ public class RenderEngine {
                 throw new RenderException("没找到模块原型");
             }
 
+            // 查看缓存
+            String cacheKey = CmsUtils.generateCacheKey(RENDER_CACHE_TYPE_FOR_MODULE, module.getDbId(), context);
+            Cache.ValueWrapper tmp = renderCache.get(cacheKey);
+            if(null != tmp && null != tmp.get()) {
+                RenderResult cached = (RenderResult) tmp.get();
+                long delta = new Date().getTime() - cached.getRenderTime().getTime();
+                if (delta < prototype.getInstanceExpiredSeconds() * 1000) {
+                    cached.setResultType(RenderResult.RESULT_TYPE_FROM_CACHE);
+                    return cached;
+                }
+            }
+
             if (!context.containsKey(RenderContext.TOOL_BOX_INJECTED)) {
                 injectToolbox(context);
             }
@@ -272,6 +345,10 @@ public class RenderEngine {
             for(RenderInterceptor interceptor : renderInterceptors) {
                 result = interceptor.after(module, result);
             }
+
+            // put 缓存
+            renderCache.put(cacheKey, result);
+
             return result;
         } catch (Exception e) {
             if (null != renderExceptionHandler) {
@@ -457,11 +534,17 @@ public class RenderEngine {
         }
     }
 
+
     public void setContextProviders(List<ContextProvider> contextProviders) {
         this.contextProviders = contextProviders;
     }
 
     public void setRenderInterceptors(List<RenderInterceptor> renderInterceptors) {
         this.renderInterceptors = renderInterceptors;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        renderCache = cacheManager.getCache(RENDER_CACHE_NAME);
     }
 }

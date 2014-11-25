@@ -1,7 +1,5 @@
 package com.alibaba.ydt.portal.domain;
 
-import com.alibaba.ydt.portal.domain.common.BaseFeatureSupport;
-
 /**
  * <p>
  * 页面原型
@@ -11,57 +9,5 @@ import com.alibaba.ydt.portal.domain.common.BaseFeatureSupport;
  * @author <a href="mailto:huangfengjing@gmail.com">Ivan</a>
  * @version 1.0
  */
-public class CmsPagePrototype extends BaseFeatureSupport {
-
-    /**
-     * 原型名称
-     */
-    private String name;
-
-    /**
-     * 原型说明
-     */
-    private String description;
-
-    /**
-     * 原型模板
-     */
-    private String template;
-
-    /**
-     * 表单模板
-     */
-    private String formTemplate;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getTemplate() {
-        return template;
-    }
-
-    public void setTemplate(String template) {
-        this.template = template;
-    }
-
-    public String getFormTemplate() {
-        return formTemplate;
-    }
-
-    public void setFormTemplate(String formTemplate) {
-        this.formTemplate = formTemplate;
-    }
+public class CmsPagePrototype extends BaseCmsPrototype {
 }

@@ -1,51 +1,9 @@
 package com.alibaba.ydt.portal.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * 列原型
  */
-public class CmsColumnPrototype {
+public class CmsColumnPrototype extends BaseCmsPrototype {
 
     public static final String CONTENT_PLACEHOLDER = "${column_content}";
-
-    /**
-     * ID
-     */
-    private long dbId;
-
-    /**
-     * 模板内容
-     */
-    private String template;
-
-    /**
-     * 表单模板
-     */
-    private String formTemplate;
-
-    public long getDbId() {
-        return dbId;
-    }
-
-    public void setDbId(long dbId) {
-        this.dbId = dbId;
-    }
-
-    public String getTemplate() {
-        return template;
-    }
-
-    public void setTemplate(String template) {
-        this.template = template;
-    }
-
-    public String getFormTemplate() {
-        return formTemplate;
-    }
-
-    public void setFormTemplate(String formTemplate) {
-        this.formTemplate = formTemplate;
-    }
 }

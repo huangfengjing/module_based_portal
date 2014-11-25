@@ -20,7 +20,7 @@
            overflowToDisk="true"/>
 
     <!-- CMS cache -->
-    <cache name="cmsCache"
+    <cache name="_RENDER_CACHE"
            maxElementsInMemory="10000"
            eternal="true"
            overflowToDisk="true"/>

@@ -4,6 +4,7 @@ import com.alibaba.ydt.portal.domain.CmsColumnInstance;
 import com.alibaba.ydt.portal.domain.CmsLayoutInstance;
 import com.alibaba.ydt.portal.domain.CmsModuleInstance;
 import com.alibaba.ydt.portal.domain.CmsPageInstance;
+import com.alibaba.ydt.portal.service.RenderContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
@@ -13,6 +14,8 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -146,5 +149,28 @@ public abstract class CmsUtils {
         }
         doc.setRootElement(pageElem);
         return doc.asXML();
+    }
+
+    /**
+     * 生成缓存的 KEY
+     * @param targetType 缓存的对象类型
+     * @param targetId 缓存的实例 ID
+     * @param context 渲染上下文环境
+     * @return 缓存 KEY
+     */
+    public static String generateCacheKey(String targetType, long targetId, RenderContext context) {
+        if(StringUtils.isBlank(targetType) || targetId <= 0 || null == context) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder("_CACHE");
+        sb.append("_").append(targetType).append("_").append(targetId);
+
+        // 参数按健排序，并获取键值的 hash code 作为缓存KEY组成部分
+        List<String> keys = new ArrayList<String>(context.keySet());
+        Collections.sort(keys);
+        for(String key : keys) {
+            sb.append(key.hashCode()).append("=").append(context.get(key).hashCode());
+        }
+        return sb.toString();
     }
 }

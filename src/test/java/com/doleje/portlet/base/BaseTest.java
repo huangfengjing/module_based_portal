@@ -178,7 +178,7 @@ public abstract  class BaseTest extends AbstractJUnit4SpringContextTests {
             try {
                 CmsModulePrototype prototype = new CmsModulePrototype();
                 prototype.setDbId(id);
-                prototype.setTitle("我是模块：" + id);
+                prototype.setName("我是模块：" + id);
                 prototype.setFormTemplate(IOUtils.toString(new ClassPathResource("velocity/template/module_form.vm").getInputStream()));
                 prototype.setTemplate(IOUtils.toString(new ClassPathResource("velocity/template/module_template_" + id + ".vm").getInputStream()));
                 return prototype;
