@@ -3,10 +3,8 @@ package com.alibaba.ydt.portal.service;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
 /**
  * <p>
@@ -18,7 +16,7 @@ import java.util.Set;
  * @version 1.0
  */
 @SuppressWarnings("unchecked")
-public class RenderContext extends HashMap<String, Object> implements Map<String, Object>, Cloneable {
+public class RenderContext extends HashMap<String, Object> implements Map<String, Object>, Cloneable, Serializable {
 
     private Log logger = LogFactory.getLog(getClass());
 
@@ -95,9 +93,15 @@ public class RenderContext extends HashMap<String, Object> implements Map<String
         init();
     }
 
+    public RenderContext(Map<String, Object> map) {
+        if(null != map) {
+            putAll(map);
+        }
+    }
+
     private void init() {
         put(RENDER_MOD_KEY, RenderMode.product);
-        put(RENDER_ENV_KEY, new HashMap<String, Object>());
+        put(RENDER_ENV_KEY, new HashMap<String, String>());
         put(MODULE_PARAMS_KEY, new HashMap<String, Object>());
         put(COLUMN_PARAMS_KEY, new HashMap<String, Object>());
         put(LAYOUT_PARAMS_KEY, new HashMap<String, Object>());
@@ -109,12 +113,12 @@ public class RenderContext extends HashMap<String, Object> implements Map<String
      * @param key 属性 KEY
      * @param value 属性值
      */
-    final public void addToEnv(String key, Object value) {
+    final public void addToEnv(String key, String value) {
         if(SPECIAL_KEY_SET.contains(key)) {
             logger.error("添加环境变量失败，" + key + " 为特殊的保留KEY，请勿使用！");
             return;
         }
-        ((Map<String, Object>) get(RENDER_ENV_KEY)).put(key, value);
+        ((Map<String, String>) get(RENDER_ENV_KEY)).put(key, value);
     }
 
     /**
@@ -174,7 +178,29 @@ public class RenderContext extends HashMap<String, Object> implements Map<String
 
     @Override
     public RenderContext clone() {
-        return (RenderContext) super.clone();
+        Map<String, Object> cloned = new HashMap<String, Object>();
+        for(String key : keySet()) {
+            Object value = get(key);
+            if(value instanceof Serializable) {
+                cloned.put(key, cloneSerializableObject(value));
+            } else {
+                cloned.put(key, value);
+            }
+        }
+        return new RenderContext(cloned);
+    }
+
+    public Object cloneSerializableObject(Object obj) {
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+            oos.writeObject(obj);
+            ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()));
+            return ois.readObject();
+        } catch (Exception e) {
+            logger.error("克隆失败", e);
+            return null;
+        }
     }
 
     /**

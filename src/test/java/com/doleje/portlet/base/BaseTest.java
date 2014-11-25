@@ -2,9 +2,9 @@ package com.doleje.portlet.base;
 
 import com.alibaba.ydt.portal.domain.*;
 import com.alibaba.ydt.portal.service.*;
+import com.google.common.io.Files;
 import mockit.Mocked;
 import mockit.NonStrictExpectations;
-import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -15,6 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +36,7 @@ import java.util.List;
 public abstract  class BaseTest extends AbstractJUnit4SpringContextTests {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
+    public static Charset charset = Charset.forName("UTF-8");
 
     @Mocked
     protected CmsPageInstanceService cmsPageInstanceService;
@@ -76,7 +78,7 @@ public abstract  class BaseTest extends AbstractJUnit4SpringContextTests {
                 CmsPageInstance instance = new CmsPageInstance();
                 instance.setDbId(1L);
                 instance.setPrototypeId(1L);
-                instance.setPageXmlContent(IOUtils.toString(new ClassPathResource("page.xml").getInputStream()));
+                instance.setPageXmlContent(Files.toString(new ClassPathResource("page.xml").getFile(), charset));
                 returns(instance);
             }
         };
@@ -87,8 +89,8 @@ public abstract  class BaseTest extends AbstractJUnit4SpringContextTests {
                 CmsPagePrototype prototype = new CmsPagePrototype();
                 prototype.setDbId(1L);
                 prototype.setName("测试页面");
-                prototype.setFormTemplate(IOUtils.toString(new ClassPathResource("velocity/template/page_form.vm").getInputStream()));
-                prototype.setTemplate(IOUtils.toString(new ClassPathResource("velocity/template/page_template.vm").getInputStream()));
+                prototype.setFormTemplate(Files.toString(new ClassPathResource("velocity/template/page_form.vm").getFile(), charset));
+                prototype.setTemplate(Files.toString(new ClassPathResource("velocity/template/page_template.vm").getFile(), charset));
                 returns(prototype);
             }
         };
@@ -110,8 +112,8 @@ public abstract  class BaseTest extends AbstractJUnit4SpringContextTests {
                 cmsLayoutPrototypeService.getById(1L);
                 CmsLayoutPrototype prototype = new CmsLayoutPrototype();
                 prototype.setDbId(1L);
-                prototype.setFormTemplate(IOUtils.toString(new ClassPathResource("velocity/template/layout_form.vm").getInputStream()));
-                prototype.setTemplate(IOUtils.toString(new ClassPathResource("velocity/template/layout_template.vm").getInputStream()));
+                prototype.setFormTemplate(Files.toString(new ClassPathResource("velocity/template/layout_form.vm").getFile(), charset));
+                prototype.setTemplate(Files.toString(new ClassPathResource("velocity/template/layout_template.vm").getFile(), charset));
                 returns(prototype);
             }
         };
@@ -133,8 +135,8 @@ public abstract  class BaseTest extends AbstractJUnit4SpringContextTests {
                 cmsColumnPrototypeService.getById(1L);
                 CmsColumnPrototype prototype = new CmsColumnPrototype();
                 prototype.setDbId(1L);
-                prototype.setFormTemplate(IOUtils.toString(new ClassPathResource("velocity/template/column_form.vm").getInputStream()));
-                prototype.setTemplate(IOUtils.toString(new ClassPathResource("velocity/template/column_template.vm").getInputStream()));
+                prototype.setFormTemplate(Files.toString(new ClassPathResource("velocity/template/column_form.vm").getFile(), charset));
+                prototype.setTemplate(Files.toString(new ClassPathResource("velocity/template/column_template.vm").getFile(), charset));
                 returns(prototype);
             }
         };
@@ -179,8 +181,9 @@ public abstract  class BaseTest extends AbstractJUnit4SpringContextTests {
                 CmsModulePrototype prototype = new CmsModulePrototype();
                 prototype.setDbId(id);
                 prototype.setName("我是模块：" + id);
-                prototype.setFormTemplate(IOUtils.toString(new ClassPathResource("velocity/template/module_form.vm").getInputStream()));
-                prototype.setTemplate(IOUtils.toString(new ClassPathResource("velocity/template/module_template_" + id + ".vm").getInputStream()));
+                prototype.setFormTemplate(Files.toString(new ClassPathResource("velocity/template/module_form.vm").getFile(), charset));
+                prototype.setTemplate(Files.toString(new ClassPathResource("velocity/template/module_template_" + id + ".vm").getFile(), charset));
+                prototype.setCacheExpiredSeconds("60,20");
                 return prototype;
             } catch (Exception e) {
                 return null;

@@ -4,9 +4,9 @@ import com.alibaba.ydt.portal.domain.CmsLayoutInstance;
 import com.alibaba.ydt.portal.domain.CmsPageInstance;
 import com.alibaba.ydt.portal.service.CmsPageInstanceService;
 import com.doleje.portlet.base.BaseTest;
+import com.google.common.io.Files;
 import mockit.Mocked;
 import mockit.NonStrictExpectations;
-import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.Assert;
@@ -32,7 +32,7 @@ public class CmsPageInstanceServiceMockTest extends BaseTest {
                 CmsPageInstance instance = new CmsPageInstance();
                 instance.setDbId(1L);
                 instance.setPrototypeId(1L);
-                instance.setPageXmlContent(IOUtils.toString(new ClassPathResource("demo_page.xml").getInputStream()));
+                instance.setPageXmlContent(Files.toString(new ClassPathResource("demo_page.xml").getFile(), charset));
                 returns(instance);
             }
         };

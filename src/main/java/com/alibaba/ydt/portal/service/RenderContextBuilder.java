@@ -343,20 +343,20 @@ public class RenderContextBuilder {
      * @param value VALUE
      * @return this
      */
-    public RenderContextBuilder addEnv(String key, Object value) {
+    public RenderContextBuilder addEnv(String key, String value) {
         renderContext.addToEnv(key, value);
         return this;
     }
 
     /**
      * 批量设置环境变量
-     * @param params 变量
+     * @param envs 变量
      * @return this
      */
-    public RenderContextBuilder addEnvs(Map<String, Object> params) {
-        if(null != params && !params.isEmpty()) {
-            for(String key : params.keySet()) {
-                addEnv(key, params.get(key));
+    public RenderContextBuilder addEnvs(Map<String, String> envs) {
+        if(null != envs && !envs.isEmpty()) {
+            for(String key : envs.keySet()) {
+                addEnv(key, envs.get(key));
             }
         }
         return this;

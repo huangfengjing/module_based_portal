@@ -317,12 +317,15 @@ public class RenderEngine implements InitializingBean {
             String cacheKey = CmsUtils.generateCacheKey(RENDER_CACHE_TYPE_FOR_MODULE, module.getDbId(), context);
             Cache.ValueWrapper tmp = renderCache.get(cacheKey);
             if(null != tmp && null != tmp.get()) {
+                logger.info("缓存命中，KEY: " + cacheKey);
                 RenderResult cached = (RenderResult) tmp.get();
                 long delta = new Date().getTime() - cached.getRenderTime().getTime();
                 if (delta < prototype.getInstanceExpiredSeconds() * 1000) {
                     cached.setResultType(RenderResult.RESULT_TYPE_FROM_CACHE);
                     return cached;
                 }
+            } else {
+                logger.info("缓存未命中，KEY: " + cacheKey);
             }
 
             if (!context.containsKey(RenderContext.TOOL_BOX_INJECTED)) {

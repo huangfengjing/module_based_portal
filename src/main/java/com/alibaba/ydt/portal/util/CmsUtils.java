@@ -17,6 +17,7 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -152,7 +153,7 @@ public abstract class CmsUtils {
     }
 
     /**
-     * 生成缓存的 KEY
+     * 生成缓存的 KEY，目前的 KEY 生成仅依赖 RenderContext 里面的 render mode 和 env 数据，其它值将过滤掉
      * @param targetType 缓存的对象类型
      * @param targetId 缓存的实例 ID
      * @param context 渲染上下文环境
@@ -163,14 +164,18 @@ public abstract class CmsUtils {
             return null;
         }
         StringBuilder sb = new StringBuilder("_CACHE");
-        sb.append("_").append(targetType).append("_").append(targetId);
+        sb.append("_").append(targetType)
+                .append(";").append("id=").append(targetId)
+                .append(";").append("mode=").append(context.get(RenderContext.RENDER_MOD_KEY));
 
-        // 参数按健排序，并获取键值的 hash code 作为缓存KEY组成部分
-        List<String> keys = new ArrayList<String>(context.keySet());
+        // 环境变量按 KEY 排序，并获取键值的 hash code 作为缓存KEY组成部分
+        List<String> keys = new ArrayList<String>(((Map<String, String>)context.get(RenderContext.RENDER_ENV_KEY)).keySet());
         Collections.sort(keys);
+        StringBuilder envSb = new StringBuilder();
         for(String key : keys) {
-            sb.append(key.hashCode()).append("=").append(context.get(key).hashCode());
+            envSb.append(key).append("=").append(context.get(key)).append(";");
         }
+        sb.append(";env=").append(envSb.toString().hashCode());
         return sb.toString();
     }
 }
