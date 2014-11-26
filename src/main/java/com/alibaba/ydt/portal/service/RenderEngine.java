@@ -13,6 +13,7 @@ import org.apache.velocity.tools.ToolboxFactory;
 import org.apache.velocity.tools.config.FileFactoryConfiguration;
 import org.apache.velocity.tools.config.XmlFactoryConfiguration;
 import org.apache.velocity.tools.view.ViewToolContext;
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
@@ -317,15 +318,12 @@ public class RenderEngine implements InitializingBean {
             String cacheKey = CmsUtils.generateCacheKey(RENDER_CACHE_TYPE_FOR_MODULE, module.getDbId(), context);
             Cache.ValueWrapper tmp = renderCache.get(cacheKey);
             if(null != tmp && null != tmp.get()) {
-                logger.info("缓存命中，KEY: " + cacheKey);
                 RenderResult cached = (RenderResult) tmp.get();
                 long delta = new Date().getTime() - cached.getRenderTime().getTime();
                 if (delta < prototype.getInstanceExpiredSeconds() * 1000) {
                     cached.setResultType(RenderResult.RESULT_TYPE_FROM_CACHE);
                     return cached;
                 }
-            } else {
-                logger.info("缓存未命中，KEY: " + cacheKey);
             }
 
             if (!context.containsKey(RenderContext.TOOL_BOX_INJECTED)) {
@@ -483,10 +481,6 @@ public class RenderEngine implements InitializingBean {
         }
     }
 
-    public void setToolboxConfigLocation(Resource toolboxConfigLocation) {
-        this.toolboxConfigLocation = toolboxConfigLocation;
-    }
-
     /**
      * 注入所有支持的环境变量供应器生成的参数
      *
@@ -546,8 +540,17 @@ public class RenderEngine implements InitializingBean {
         this.renderInterceptors = renderInterceptors;
     }
 
+    public void setToolboxConfigLocation(Resource toolboxConfigLocation) {
+        this.toolboxConfigLocation = toolboxConfigLocation;
+    }
+
     @Override
     public void afterPropertiesSet() throws Exception {
-        renderCache = cacheManager.getCache(RENDER_CACHE_NAME);
+        if(null != cacheManager) {
+            renderCache = cacheManager.getCache(RENDER_CACHE_NAME);
+            if (null == renderCache) {
+                throw new BeanCreationException("创建 RenderEngine 失败，找不到缓存，请检查缓存配置项！");
+            }
+        }
     }
 }
