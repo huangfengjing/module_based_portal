@@ -1,5 +1,7 @@
 package com.alibaba.ydt.portal.domain;
 
+import com.google.common.base.MoreObjects;
+
 import java.io.Serializable;
 
 /**
@@ -42,5 +44,10 @@ public class ParameterValuePair implements Serializable {
 
     public void setValue(Object value) {
         this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).toString();
     }
 }

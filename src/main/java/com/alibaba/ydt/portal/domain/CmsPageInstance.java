@@ -2,6 +2,7 @@ package com.alibaba.ydt.portal.domain;
 
 import com.alibaba.ydt.portal.domain.common.BaseModel;
 import com.alibaba.ydt.portal.util.CmsUtils;
+import com.google.common.base.MoreObjects;
 
 import java.beans.Transient;
 import java.util.ArrayList;
@@ -79,9 +80,6 @@ public class CmsPageInstance extends BaseModel implements ParameterSupportModel 
 
     @Override
     public String toString() {
-        return "CmsPageInstance{" +
-                "prototypeId=" + prototypeId +
-                ", title='" + title + '\'' +
-                '}';
+        return MoreObjects.toStringHelper(this).toString();
     }
 }

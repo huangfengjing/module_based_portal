@@ -293,12 +293,32 @@ public class RenderContextBuilder {
     }
 
     /**
+     * 添加模块参数
+     * @param param 模块参数
+     * @return this
+     */
+    public RenderContextBuilder addModuleParam(ParameterValuePair param) {
+        renderContext.addToParam(RenderContext.MODULE_PARAMS_KEY, param.getName(), param.getValue());
+        return this;
+    }
+
+    /**
      * 批量设置模块参数
      * @param params 模块参数
      * @return this
      */
     public RenderContextBuilder addModuleParams(List<ParameterValuePair> params) {
         return addParams(RenderContext.MODULE_PARAMS_KEY, params);
+    }
+
+    /**
+     * 添加列参数
+     * @param param 列参数
+     * @return this
+     */
+    public RenderContextBuilder addColumnPram(ParameterValuePair param) {
+        renderContext.addToParam(RenderContext.COLUMN_PARAMS_KEY, param.getName(), param.getValue());
+        return this;
     }
 
     /**
@@ -311,12 +331,32 @@ public class RenderContextBuilder {
     }
 
     /**
+     * 添加布局参数
+     * @param param 布局参数
+     * @return this
+     */
+    public RenderContextBuilder addLayoutParam(ParameterValuePair param) {
+        renderContext.addToParam(RenderContext.LAYOUT_PARAMS_KEY, param.getName(), param.getValue());
+        return this;
+    }
+
+    /**
      * 批量设置布局参数
      * @param params 布局参数
      * @return this
      */
     public RenderContextBuilder addLayoutParams(List<ParameterValuePair> params) {
         return addParams(RenderContext.LAYOUT_PARAMS_KEY, params);
+    }
+
+    /**
+     * 添加页面参数
+     * @param param 页面参数
+     * @return this
+     */
+    public RenderContextBuilder addPagePram(ParameterValuePair param) {
+        renderContext.addToParam(RenderContext.PAGE_PARAMS_KEY, param.getName(), param.getValue());
+        return this;
     }
 
     /**

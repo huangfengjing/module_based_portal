@@ -33,7 +33,7 @@ public class RenderException extends RuntimeException {
      * @param e exception source
      */
     public RenderException(Throwable e) {
-        super("VM渲染失败", e);
+        super(e);
     }
 
     /**

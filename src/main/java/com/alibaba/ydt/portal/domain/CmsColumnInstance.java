@@ -1,6 +1,7 @@
 package com.alibaba.ydt.portal.domain;
 
 import com.alibaba.ydt.portal.domain.common.BaseModel;
+import com.google.common.base.MoreObjects;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,10 +70,6 @@ public class CmsColumnInstance extends BaseModel implements ParameterSupportMode
 
     @Override
     public String toString() {
-        return "CmsColumnInstance{" +
-                "prototypeId=" + prototypeId +
-                ", title='" + title + '\'' +
-                ", modules=" + modules +
-                '}';
+        return MoreObjects.toStringHelper(this).toString();
     }
 }

@@ -540,6 +540,10 @@ public class RenderEngine implements InitializingBean {
         this.renderInterceptors = renderInterceptors;
     }
 
+    public void setRenderExceptionHandler(RenderExceptionHandler renderExceptionHandler) {
+        this.renderExceptionHandler = renderExceptionHandler;
+    }
+
     public void setToolboxConfigLocation(Resource toolboxConfigLocation) {
         this.toolboxConfigLocation = toolboxConfigLocation;
     }

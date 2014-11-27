@@ -16,6 +16,9 @@
 
 package com.alibaba.ydt.portal.domain.common;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -80,5 +83,10 @@ public abstract class BaseModel implements Serializable {
 
     public void setVersion(int version) {
         this.version = version;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).omitNullValues().toString();
     }
 }

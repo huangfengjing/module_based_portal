@@ -1,6 +1,7 @@
 package com.alibaba.ydt.portal.domain;
 
 import com.alibaba.ydt.portal.domain.common.BaseModel;
+import com.google.common.base.MoreObjects;
 
 /**
  * <p>
@@ -53,9 +54,6 @@ public class CmsModuleInstance extends BaseModel implements ParameterSupportMode
 
     @Override
     public String toString() {
-        return "CmsModuleInstance{" +
-                "prototypeId=" + prototypeId +
-                ", title='" + title + '\'' +
-                '}';
+        return MoreObjects.toStringHelper(this).toString();
     }
 }

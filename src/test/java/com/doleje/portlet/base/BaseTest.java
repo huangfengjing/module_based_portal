@@ -82,6 +82,7 @@ public abstract  class BaseTest extends AbstractJUnit4SpringContextTests {
                 returns(instance);
             }
         };
+
         // mock page prototype service
         new NonStrictExpectations() {
             {

@@ -1,6 +1,7 @@
 package com.alibaba.ydt.portal.domain;
 
 import com.alibaba.ydt.portal.domain.common.BaseFeatureSupport;
+import com.google.common.base.MoreObjects;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -105,5 +106,10 @@ public class BaseCmsPrototype extends BaseFeatureSupport {
             return -1;
         }
         return Long.valueOf(tmp[1]);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("id", dbId).add("name", name).add("desc", description).toString();
     }
 }

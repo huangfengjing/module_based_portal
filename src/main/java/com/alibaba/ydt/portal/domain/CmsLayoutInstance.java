@@ -1,6 +1,7 @@
 package com.alibaba.ydt.portal.domain;
 
 import com.alibaba.ydt.portal.domain.common.BaseModel;
+import com.google.common.base.MoreObjects;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,10 +71,6 @@ public class CmsLayoutInstance extends BaseModel implements ParameterSupportMode
 
     @Override
     public String toString() {
-        return "CmsLayoutInstance{" +
-                "prototypeId=" + prototypeId +
-                ", title='" + title + '\'' +
-                ", columns=" + columns +
-                '}';
+        return MoreObjects.toStringHelper(this).omitNullValues().toString();
     }
 }
