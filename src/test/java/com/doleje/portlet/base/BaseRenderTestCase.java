@@ -3,40 +3,25 @@ package com.doleje.portlet.base;
 import com.alibaba.ydt.portal.domain.*;
 import com.alibaba.ydt.portal.service.*;
 import com.google.common.io.Files;
+import mockit.Mock;
+import mockit.MockUp;
 import mockit.Mocked;
 import mockit.NonStrictExpectations;
 import org.junit.Before;
-import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 测试基类
+ * 渲染测试基类
  *
  * @author <a href="mailto:huangfengjing@gmail.com">Ivan</a>
  * @version 1.0
  * Created on 14-11-20 上午11:47.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {
-	"classpath:applicationContext-core.xml"
-})
-/*
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
-@Transactional*/
-public abstract  class BaseTest extends AbstractJUnit4SpringContextTests {
-	protected Logger logger = LoggerFactory.getLogger(getClass());
-
-    public static Charset charset = Charset.forName("UTF-8");
+public abstract  class BaseRenderTestCase extends BaseTestCase {
 
     @Mocked
     protected CmsPageInstanceService cmsPageInstanceService;
@@ -154,13 +139,14 @@ public abstract  class BaseTest extends AbstractJUnit4SpringContextTests {
             }
         };
 
+        cmsParameterService = new MockedCmsParameterService();
         // mock parameter service
-        new NonStrictExpectations() {
-            {
-                cmsParameterService.getParamsByTypeAndInstanceId(CmsModuleInstance.TYPE_TAG, 1);
+        new MockUp<MockedCmsParameterService>() {
+            @Mock
+            public List<ParameterValuePair> getParamsByTypeAndInstanceId(String type, long instanceId) {
                 List<ParameterValuePair> params = new ArrayList<ParameterValuePair>();
                 params.add(new ParameterValuePair("content", "测试内容"));
-                returns(params);
+                return params;
             }
         };
 
@@ -174,6 +160,24 @@ public abstract  class BaseTest extends AbstractJUnit4SpringContextTests {
         renderEngine.setCmsModuleInstanceService(cmsModuleInstanceService);
     }
 
+    public static class MockedCmsParameterService implements CmsParameterService {
+
+        @Override
+        public List<ParameterValuePair> getParamsByTypeAndInstanceId(String type, long instanceId) {
+            return null;
+        }
+
+        @Override
+        public void save(String type, long instanceId, ParameterValuePair parameterValuePair) {
+
+        }
+
+        @Override
+        public void removeParamByTypeAndInstanceId(String type, long instanceId) {
+
+        }
+    }
+
     public static class MockedCmsModulePrototypeService implements CmsModulePrototypeService {
 
         @Override
@@ -184,7 +188,7 @@ public abstract  class BaseTest extends AbstractJUnit4SpringContextTests {
                 prototype.setName("我是模块：" + id);
                 prototype.setFormTemplate(Files.toString(new ClassPathResource("velocity/template/module_form.vm").getFile(), charset));
                 prototype.setTemplate(Files.toString(new ClassPathResource("velocity/template/module_template_" + id + ".vm").getFile(), charset));
-                prototype.setCacheExpiredSeconds("60,20");
+                prototype.setCacheExpiredSeconds("60,10");
                 return prototype;
             } catch (Exception e) {
                 return null;

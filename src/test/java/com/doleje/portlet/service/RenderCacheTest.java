@@ -7,7 +7,7 @@ import com.alibaba.ydt.portal.service.ContextProvider;
 import com.alibaba.ydt.portal.service.RenderContext;
 import com.alibaba.ydt.portal.service.RenderContextBuilder;
 import com.alibaba.ydt.portal.service.UniversalParameterContextProvider;
-import com.doleje.portlet.base.BaseTest;
+import com.doleje.portlet.base.BaseRenderTestCase;
 import com.doleje.portlet.mock.MockHttpServletRequest;
 import com.doleje.portlet.mock.MockHttpServletResponse;
 import com.doleje.portlet.mock.MockServletContext;
@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ import java.util.List;
  * @version 1.0
  *          Created on 14-11-25 下午3:37.
  */
-public class RenderCacheTest extends BaseTest {
+public class RenderCacheTest extends BaseRenderTestCase {
 
 
     @Autowired
@@ -54,6 +55,8 @@ public class RenderCacheTest extends BaseTest {
 
         // 初次渲染
         RenderResult result = renderEngine.renderModule(module, context.clone());
+        Assert.isTrue(result.getResultType() == RenderResult.RESULT_TYPE_NORMAL);
+
         System.out.println("初次渲染");
         System.out.println(StringUtils.center(" From Cache: " + (result.getResultType() == RenderResult.RESULT_TYPE_FROM_CACHE) + " ", 80, "="));
         System.out.println(StringUtils.center(" Product Mode RenderResult ", 80, "="));
@@ -62,6 +65,7 @@ public class RenderCacheTest extends BaseTest {
 
         // 第二次渲染，应该还在缓存期内，从缓存获取
         result = renderEngine.renderModule(module, context.clone());
+        Assert.isTrue(result.getResultType() == RenderResult.RESULT_TYPE_FROM_CACHE);
         System.out.println("第二次渲染，应该还在缓存期内，从缓存获取");
         System.out.println(StringUtils.center(" From Cache: " + (result.getResultType() == RenderResult.RESULT_TYPE_FROM_CACHE) + " ", 80, "="));
         System.out.println(StringUtils.center(" Product Mode RenderResult ", 80, "="));
@@ -69,8 +73,9 @@ public class RenderCacheTest extends BaseTest {
         System.out.println(StringUtils.center("=", 80, "="));
 
         // 第三次渲染，应该是缓存过期，重新渲染了
-        Thread.sleep(20 * 1000);
+        Thread.sleep(10 * 1000);
         result = renderEngine.renderModule(module, context.clone());
+        Assert.isTrue(result.getResultType() == RenderResult.RESULT_TYPE_NORMAL);
         System.out.println("第三次渲染，应该是缓存过期，重新渲染了");
         System.out.println(StringUtils.center(" From Cache: " + (result.getResultType() == RenderResult.RESULT_TYPE_FROM_CACHE) + " ", 80, "="));
         System.out.println(StringUtils.center(" Product Mode RenderResult ", 80, "="));

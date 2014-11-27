@@ -5,16 +5,14 @@ import com.alibaba.ydt.portal.exception.RenderException;
 import com.alibaba.ydt.portal.service.RenderContext;
 import com.alibaba.ydt.portal.service.RenderContextBuilder;
 import com.alibaba.ydt.portal.service.RenderExceptionHandler;
-import com.doleje.portlet.base.BaseTest;
+import com.doleje.portlet.base.BaseRenderTestCase;
 import com.google.common.io.Files;
 import mockit.NonStrictExpectations;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.mock.web.MockServletContext;
+import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
 
@@ -25,7 +23,7 @@ import java.math.BigDecimal;
  * @version 1.0
  *          Created on 14-11-27 上午10:03.
  */
-public class RenderExceptionHandlerTest extends BaseTest {
+public class RenderExceptionHandlerTest extends BaseRenderTestCase {
 
     @Before
     public void changePageDemo() throws Exception {
@@ -62,6 +60,9 @@ public class RenderExceptionHandlerTest extends BaseTest {
         CmsPageInstance page = cmsPageInstanceService.getById(2L);
         CmsModuleInstance module = page.getLayouts().get(0).getColumns().get(0).getModules().get(2);
         RenderResult result = renderEngine.renderModule(module, context);
+
+        Assert.isTrue(result.getResultType() == RenderResult.RESULT_TYPE_HANDLE_ERROR);
+        Assert.isTrue(result.getRenderContent().contains("Render Exception"));
 
         System.out.println(StringUtils.center(" Product Mode RenderResult ", 80, "="));
         System.out.println(result.getRenderContent());

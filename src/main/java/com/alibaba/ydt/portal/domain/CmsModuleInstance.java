@@ -54,6 +54,6 @@ public class CmsModuleInstance extends BaseModel implements ParameterSupportMode
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).toString();
+        return MoreObjects.toStringHelper(this).add("id", dbId).add("prototypeId", prototypeId).add("title", title).toString();
     }
 }

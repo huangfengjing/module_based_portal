@@ -51,8 +51,6 @@ public class RenderEngine implements InitializingBean {
     @Autowired
     private List<ContextProvider> contextProviders = new ArrayList<ContextProvider>();
 
-    private List<ModuleParameterProcessor> moduleParameterProcessors;
-
     private List<RenderInterceptor> renderInterceptors = new ArrayList<RenderInterceptor>();
 
     @Autowired

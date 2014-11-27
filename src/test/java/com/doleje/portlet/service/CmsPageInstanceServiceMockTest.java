@@ -3,7 +3,7 @@ package com.doleje.portlet.service;
 import com.alibaba.ydt.portal.domain.CmsLayoutInstance;
 import com.alibaba.ydt.portal.domain.CmsPageInstance;
 import com.alibaba.ydt.portal.service.CmsPageInstanceService;
-import com.doleje.portlet.base.BaseTest;
+import com.doleje.portlet.base.BaseRenderTestCase;
 import com.google.common.io.Files;
 import mockit.Mocked;
 import mockit.NonStrictExpectations;
@@ -18,7 +18,7 @@ import org.springframework.util.Assert;
  * @version 1.0
  *          Created on 14-11-20 下午2:46.
  */
-public class CmsPageInstanceServiceMockTest extends BaseTest {
+public class CmsPageInstanceServiceMockTest extends BaseRenderTestCase {
 
     @Mocked
     private CmsPageInstanceService cmsPageInstanceService;

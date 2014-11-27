@@ -5,12 +5,13 @@ import com.alibaba.ydt.portal.domain.RenderResult;
 import com.alibaba.ydt.portal.service.RenderContext;
 import com.alibaba.ydt.portal.service.RenderContextBuilder;
 import com.alibaba.ydt.portal.service.RenderInterceptor;
-import com.doleje.portlet.base.BaseTest;
+import com.doleje.portlet.base.BaseRenderTestCase;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockServletContext;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.List;
  * @version 1.0
  *          Created on 14-11-24 下午3:13.
  */
-public class RenderInterceptorTest extends RenderContextProviderTest {
+public class RenderInterceptorBeforeTest extends BaseRenderTestCase {
 
     @Test
     public void testInterceptorBeforeAction() {
@@ -45,38 +46,14 @@ public class RenderInterceptorTest extends RenderContextProviderTest {
                 .setRequest(new MockHttpServletRequest())
                 .setResponse(new MockHttpServletResponse())
                 .setServletContext(new MockServletContext()).build();
-        RenderResult result = renderEngine.renderPage(1L, context);
+
+        CmsModuleInstance module = cmsPageInstanceService.getById(1L).getLayouts().get(0).getColumns().get(0).getModules().get(1);
+        RenderResult result = renderEngine.renderModule(module, context);
+
         System.out.println(StringUtils.center(" Product Mode RenderResult ", 80, "="));
         System.out.println(result.getRenderContent());
         System.out.println(StringUtils.center("=", 80, "="));
-    }
 
-    @Test
-    public void testInterceptorAfterAction() {
-        List<RenderInterceptor> interceptors = new ArrayList<RenderInterceptor>();
-        interceptors.add(new RenderInterceptor() {
-            @Override
-            public boolean before(Object instance, RenderContext context) {
-                return true;
-            }
-
-            @Override
-            public RenderResult after(Object instance, RenderResult result) {
-                if (instance instanceof CmsModuleInstance && ((CmsModuleInstance) instance).getPrototypeId() == 2) {
-                    result.setRenderContent("<!-- 模块原型为 2 的实例，全部都被我拦截并修改渲染内容啦！看我！！ -->");
-                }
-                return result;
-            }
-        });
-        renderEngine.setRenderInterceptors(interceptors);
-
-        RenderContext context = RenderContextBuilder.newBuilder().setMode(RenderContext.RenderMode.product)
-                .setRequest(new MockHttpServletRequest())
-                .setResponse(new MockHttpServletResponse())
-                .setServletContext(new MockServletContext()).build();
-        RenderResult result = renderEngine.renderPage(1L, context);
-        System.out.println(StringUtils.center(" Product Mode RenderResult ", 80, "="));
-        System.out.println(result.getRenderContent());
-        System.out.println(StringUtils.center("=", 80, "="));
+        Assert.isTrue(result.getResultType() == RenderResult.RESULT_TYPE_SKIPPED);
     }
 }

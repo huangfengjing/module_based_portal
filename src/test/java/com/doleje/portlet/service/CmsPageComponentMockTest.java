@@ -3,12 +3,13 @@ package com.doleje.portlet.service;
 import com.alibaba.ydt.portal.domain.RenderResult;
 import com.alibaba.ydt.portal.service.RenderContext;
 import com.alibaba.ydt.portal.service.RenderContextBuilder;
-import com.doleje.portlet.base.BaseTest;
+import com.doleje.portlet.base.BaseRenderTestCase;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockServletContext;
+import org.springframework.util.Assert;
 
 /**
  * 页面各个组件的 MOCK 测试
@@ -17,7 +18,7 @@ import org.springframework.mock.web.MockServletContext;
  * @version 1.0
  *          Created on 14-11-20 下午3:08.
  */
-public class CmsPageComponentMockTest extends BaseTest {
+public class CmsPageComponentMockTest extends BaseRenderTestCase {
 
     @Test
     public void testDesign() throws Exception {
@@ -26,6 +27,11 @@ public class CmsPageComponentMockTest extends BaseTest {
                 .setResponse(new MockHttpServletResponse())
                 .setServletContext(new MockServletContext()).build();
         RenderResult result = renderEngine.renderPage(1L, context);
+
+        Assert.notNull(result);
+        Assert.isTrue(result.getResultType() == RenderResult.RESULT_TYPE_NORMAL);
+        Assert.isTrue(result.getRenderContent().contains("data-proto-id"));
+
         System.out.println(StringUtils.center(" Design Mode RenderResult ", 80, "="));
         System.out.println(result.getRenderContent());
         System.out.println(StringUtils.center("=", 80, "="));
@@ -38,6 +44,11 @@ public class CmsPageComponentMockTest extends BaseTest {
                 .setResponse(new MockHttpServletResponse())
                 .setServletContext(new MockServletContext()).build();
         RenderResult result = renderEngine.renderPage(1L, context);
+
+        Assert.notNull(result);
+        Assert.isTrue(result.getResultType() == RenderResult.RESULT_TYPE_NORMAL);
+        Assert.isTrue(!result.getRenderContent().contains("data-proto-id"));
+
         System.out.println(StringUtils.center(" Product Mode RenderResult ", 80, "="));
         System.out.println(result.getRenderContent());
         System.out.println(StringUtils.center("=", 80, "="));
@@ -47,6 +58,11 @@ public class CmsPageComponentMockTest extends BaseTest {
     public void testGlobalToolbox() throws Exception {
         RenderContext context = RenderContextBuilder.newBuilder().setMode(RenderContext.RenderMode.product).build();
         RenderResult result = renderEngine.renderPage(1L, context);
+
+        Assert.notNull(result);
+        Assert.isTrue(result.getResultType() == RenderResult.RESULT_TYPE_NORMAL);
+        Assert.isTrue(!result.getRenderContent().contains("$stringUtils"));
+
         System.out.println(StringUtils.center(" NoRequest RenderResult ", 80, "="));
         System.out.println(result.getRenderContent());
         System.out.println(StringUtils.center("=", 80, "="));

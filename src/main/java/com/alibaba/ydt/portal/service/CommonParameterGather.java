@@ -6,20 +6,22 @@ import com.alibaba.ydt.portal.domain.ParameterValuePair;
 import com.alibaba.ydt.portal.util.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.ServletRequestUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
- * 通用的参数处理器
+ * 通用的参数收集器
  *
  * @author <a href="mailto:huangfengjing@gmail.com">Ivan</a>
  * @version 1.0
  *          Created on 14-10-29 下午2:37.
  */
 @SuppressWarnings("unchecked")
-public class CommonModuleParameterProcessor implements ModuleParameterProcessor {
+@Component("commonParameterGather")
+public class CommonParameterGather implements ParameterGather {
 
     private Log logger = LogFactory.getLog(getClass());
 
@@ -33,7 +35,7 @@ public class CommonModuleParameterProcessor implements ModuleParameterProcessor 
     };
 
     @Override
-    public List<ParameterValuePair> processParams(CmsModulePrototype prototype, CmsModuleInstance instance, HttpServletRequest request) {
+    public List<ParameterValuePair> gatherParams(CmsModulePrototype prototype, CmsModuleInstance instance, HttpServletRequest request) {
         Map<String, Object> paramContainer = new HashMap<String, Object>();
         Enumeration<String> requestNames = request.getParameterNames();
         while (requestNames.hasMoreElements()) {

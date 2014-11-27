@@ -71,6 +71,6 @@ public class CmsLayoutInstance extends BaseModel implements ParameterSupportMode
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).omitNullValues().toString();
+        return MoreObjects.toStringHelper(this).add("id", dbId).add("prototypeId", prototypeId).add("title", title).toString();
     }
 }

@@ -10,14 +10,14 @@ import java.util.List;
 
 /**
  * <p>
- * 模块参数处理器，用于处理比较复杂的模块参数
+ * 模块参数收集器，用于收集请求中的参数信息
  * </p>
  * Time: 12-12-7 下午5:33
  *
  * @author <a href="mailto:huangfengjing@gmail.com">Ivan</a>
  * @version 1.0
  */
-public interface ModuleParameterProcessor extends Ordered {
+public interface ParameterGather extends Ordered {
 
     /**
      * 创建特殊模块的渲染环境
@@ -26,7 +26,7 @@ public interface ModuleParameterProcessor extends Ordered {
      * @param request http 请求
      * @return 模块的渲染环境
      */
-    public List<ParameterValuePair> processParams(CmsModulePrototype prototype, CmsModuleInstance instance, HttpServletRequest request);
+    public List<ParameterValuePair> gatherParams(CmsModulePrototype prototype, CmsModuleInstance instance, HttpServletRequest request);
 
     /**
      * 是否支持该模块

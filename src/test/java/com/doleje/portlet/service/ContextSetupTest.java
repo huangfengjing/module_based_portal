@@ -1,6 +1,6 @@
 package com.doleje.portlet.service;
 
-import com.doleje.portlet.base.BaseTest;
+import com.doleje.portlet.base.BaseRenderTestCase;
 import org.apache.velocity.app.VelocityEngine;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.util.Assert;
  * @version 1.0
  *          Created on 14-11-20 下午1:41.
  */
-public class ContextSetupTest extends BaseTest {
+public class ContextSetupTest extends BaseRenderTestCase {
 
     @Autowired
     private VelocityEngine velocityEngine;

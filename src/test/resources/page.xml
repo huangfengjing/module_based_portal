@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<page prototype-id="17" instance-id="1">
-    <layout prototype-id="1" instance-id="1">
-        <column prototype-id="1" instance-id="1">
+<page prototype-id="17" instance-id="134">
+    <layout prototype-id="1" instance-id="123">
+        <column prototype-id="1" instance-id="21">
             <module prototype-id="1" instance-id="1" />
-            <module prototype-id="2" instance-id="1" />
-            <module prototype-id="1" instance-id="1" />
+            <module prototype-id="2" instance-id="10" />
+            <module prototype-id="1" instance-id="100" />
         </column>
-        <column prototype-id="1" instance-id="1">
-            <module prototype-id="1" instance-id="1" />
-            <module prototype-id="1" instance-id="1" />
+        <column prototype-id="1" instance-id="61">
+            <module prototype-id="1" instance-id="11" />
+            <module prototype-id="1" instance-id="101" />
         </column>
     </layout>
 </page>

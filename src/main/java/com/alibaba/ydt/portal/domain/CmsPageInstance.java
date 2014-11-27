@@ -80,6 +80,6 @@ public class CmsPageInstance extends BaseModel implements ParameterSupportModel 
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).toString();
+        return MoreObjects.toStringHelper(this).add("id", dbId).add("prototypeId", prototypeId).add("title", title).toString();
     }
 }
