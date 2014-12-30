@@ -1,5 +1,7 @@
 package com.alibaba.ydt.portal.service;
 
+import java.util.List;
+
 /**
  * 数据服务基类
  *
@@ -17,10 +19,32 @@ public interface DataService<T> {
     public T getById(Long id);
 
     /**
+     * 根据属性获取对象列表
+     * @param propName 属性名称
+     * @param propVal 属性值
+     * @return 对象列表
+     */
+    public List<T> getByProperty(String propName, Object propVal);
+
+    /**
+     * 根据属性获取对象列表
+     * @param propName 属性名称
+     * @param propVal 属性值
+     * @return 对象列表
+     */
+    public T getUniqueByProperty(String propName, Object propVal);
+
+    /**
      * 删除指定 ID 的数据
      * @param id ID
      */
     public void removeById(Long id);
+
+    /**
+     * 删除指定 ID 的数据
+     * @param id ID
+     */
+    public void removeById(List<Long> id);
 
     /**
      * 保存数据对象

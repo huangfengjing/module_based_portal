@@ -1,10 +1,10 @@
 package com.alibaba.ydt.portal.domain;
 
-import com.alibaba.ydt.portal.domain.common.BaseModel;
 import com.alibaba.ydt.portal.util.CmsUtils;
+import com.alibaba.ydt.portal.util.StringUtils;
 import com.google.common.base.MoreObjects;
 
-import java.beans.Transient;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,28 +14,36 @@ import java.util.List;
  * @author <a href="mailto:huangfengjing@gmail.com>Ivan</a>
  * @since on 2012-12-17
  */
-public class CmsPageInstance extends BaseModel implements ParameterSupportModel {
+@Entity
+@Table(name = "portal_cms_page_instance")
+public class CmsPageInstance extends BaseCmsInstance {
 
     public static final String TYPE_TAG = "page";
 
     /**
-     * 对应的原型 ID
+     * 原型 ID
      */
+    @Basic
+    @Column(name = "PROTOTYPE_ID")
     private long prototypeId;
 
     /**
-     * 标题
+     * 布局名称
      */
+    @Basic
     private String title;
 
     /**
      * 内容
      */
-    private String pageXmlContent;
+    @Basic
+    @Column(name = "XML_CONTENT")
+    private String xmlContent;
 
     /**
      * 页面所包含的布局列表
      */
+    @Transient
     private List<CmsLayoutInstance> layouts = new ArrayList<CmsLayoutInstance>();
 
     public long getPrototypeId() {
@@ -54,23 +62,21 @@ public class CmsPageInstance extends BaseModel implements ParameterSupportModel 
         this.title = title;
     }
 
-    public String getPageXmlContent() {
-        return pageXmlContent;
+    public String getXmlContent() {
+        return xmlContent;
     }
 
-    public void setPageXmlContent(String pageXmlContent) {
-        this.pageXmlContent = pageXmlContent;
-        this.layouts = CmsUtils.parsePage(pageXmlContent).getLayouts();
+    public void setXmlContent(String xmlContent) {
+        this.xmlContent = xmlContent;
+        this.layouts = CmsUtils.parsePage(xmlContent).getLayouts();
     }
 
     @Transient
     public List<CmsLayoutInstance> getLayouts() {
+        if((null == layouts || layouts.isEmpty()) && StringUtils.isNotBlank(xmlContent)) {
+            this.layouts = CmsUtils.parsePage(xmlContent).getLayouts();
+        }
         return layouts;
-    }
-
-    @Override
-    public long getInstanceId() {
-        return dbId;
     }
 
     @Override

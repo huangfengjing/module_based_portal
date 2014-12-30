@@ -1,5 +1,12 @@
 package com.alibaba.ydt.portal.service;
 
+import com.alibaba.ydt.portal.dao.GenericDaoImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.List;
+
 /**
  * 获取数据的基类
  *
@@ -9,19 +16,48 @@ package com.alibaba.ydt.portal.service;
  */
 abstract public class BaseDataService<T> implements DataService<T> {
 
-    /**
-     * 根据 ID 获取指定类型的数据
-     * @param cls 类型
-     * @param id 实例 ID
-     * @param <E> 泛型
-     * @return 实例
-     */
-    static public <E> E getData(Class<E> cls, long id) {
-        // FIXME 以下实例为 MOCK
-        try {
-            return (E) Class.forName(cls.getName()).newInstance();
-        } catch (Exception e) {
-            return null;
+    protected Class<T> entityClass;
+
+    @Autowired
+    protected GenericDaoImpl genericDao;
+
+    public BaseDataService() {
+        this.entityClass = null;
+        Class c = getClass();
+        Type type = c.getGenericSuperclass();
+        if (type instanceof ParameterizedType) {
+            Type[] parameterizedType = ((ParameterizedType) type).getActualTypeArguments();
+            this.entityClass = (Class<T>) parameterizedType[0];
         }
+    }
+
+    @Override
+    public T getById(Long id) {
+        return genericDao.get(entityClass, id);
+    }
+
+    @Override
+    public List<T> getByProperty(String propName, Object propVal) {
+        return genericDao.getByProperty(entityClass, propName, propVal);
+    }
+
+    @Override
+    public T getUniqueByProperty(String propName, Object propVal) {
+        return genericDao.getUniqueByProperty(entityClass, propName, propVal);
+    }
+
+    @Override
+    public void removeById(Long id) {
+        genericDao.remove(entityClass, id);
+    }
+
+    @Override
+    public void removeById(List<Long> idList) {
+        genericDao.removeWithIds(entityClass, idList);
+    }
+
+    @Override
+    public void save(T t) {
+        genericDao.save(t);
     }
 }

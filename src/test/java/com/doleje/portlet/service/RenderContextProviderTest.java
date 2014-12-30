@@ -33,12 +33,6 @@ public class RenderContextProviderTest extends BaseRenderTestCase {
 
     @Before
     public void setupContextProvider() {
-        // 设置通用参数供应器的数据服务
-        for(ContextProvider provider : contextProviders) {
-            if(provider instanceof UniversalParameterContextProvider) {
-                ((UniversalParameterContextProvider) provider).setCmsParameterService(cmsParameterService);
-            }
-        }
         renderEngine.setContextProviders(contextProviders);
     }
 

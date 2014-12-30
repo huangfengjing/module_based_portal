@@ -3,6 +3,7 @@ package com.alibaba.ydt.portal.service;
 import com.alibaba.ydt.portal.domain.*;
 import com.alibaba.ydt.portal.exception.RenderException;
 import com.alibaba.ydt.portal.util.CmsUtils;
+import com.alibaba.ydt.portal.util.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
@@ -58,22 +59,31 @@ public class RenderEngine implements InitializingBean {
 
     private Cache renderCache;
 
+    @Autowired
     private RenderExceptionHandler renderExceptionHandler;
 
+    @Autowired
     private CmsPagePrototypeService cmsPagePrototypeService;
 
+    @Autowired
     private CmsPageInstanceService cmsPageInstanceService;
 
+    @Autowired
     private CmsLayoutPrototypeService cmsLayoutPrototypeService;
 
+    @Autowired
     private CmsLayoutInstanceService cmsLayoutInstanceService;
 
+    @Autowired
     private CmsColumnPrototypeService cmsColumnPrototypeService;
 
+    @Autowired
     private CmsColumnInstanceService cmsColumnInstanceService;
 
+    @Autowired
     private CmsModulePrototypeService cmsModulePrototypeService;
 
+    @Autowired
     private CmsModuleInstanceService cmsModuleInstanceService;
 
     private Resource toolboxConfigLocation;
@@ -169,6 +179,11 @@ public class RenderEngine implements InitializingBean {
             if (null == prototype) {
                 throw new RenderException("布局原型未找到");
             }
+            if(StringUtils.isBlank(layout.getParams4Store())) {
+                List<CmsColumnInstance> cols = layout.getColumns();
+                layout = cmsLayoutInstanceService.getById(layout.getDbId());
+                layout.setColumns(cols);
+            }
 
             // 查看缓存
             String cacheKey = CmsUtils.generateCacheKey(RENDER_CACHE_TYPE_FOR_LAYOUT, layout.getDbId(), context);
@@ -240,6 +255,11 @@ public class RenderEngine implements InitializingBean {
             if (null == prototype) {
                 throw new RenderException("列原型未找到");
             }
+            if(StringUtils.isBlank(column.getParams4Store())) {
+                List<CmsModuleInstance> mods = column.getModules();
+                column = cmsColumnInstanceService.getById(column.getDbId());
+                column.setModules(mods);
+            }
 
             // 查看缓存
             String cacheKey = CmsUtils.generateCacheKey(RENDER_CACHE_TYPE_FOR_COLUMN, column.getDbId(), context);
@@ -310,6 +330,9 @@ public class RenderEngine implements InitializingBean {
             CmsModulePrototype prototype = cmsModulePrototypeService.getById(module.getPrototypeId());
             if (null == prototype) {
                 throw new RenderException("没找到模块原型");
+            }
+            if(StringUtils.isBlank(module.getParams4Store())) {
+                module = cmsModuleInstanceService.getById(module.getDbId());
             }
 
             // 查看缓存

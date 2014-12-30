@@ -1,5 +1,7 @@
 package com.doleje.portlet.base;
 
+import com.alibaba.ydt.portal.service.RenderContext;
+import com.alibaba.ydt.portal.service.RenderContextBuilder;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,4 +28,12 @@ import java.nio.charset.Charset;
 public abstract  class BaseTestCase extends AbstractJUnit4SpringContextTests {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
     public static Charset charset = Charset.forName("UTF-8");
+
+    public RenderContext mockRenderContext() {
+        return RenderContextBuilder.newBuilder().setMode(RenderContext.RenderMode.product)
+                .setRequest(new com.doleje.portlet.mock.MockHttpServletRequest())
+                .setResponse(new com.doleje.portlet.mock.MockHttpServletResponse())
+                .setServletContext(new com.doleje.portlet.mock.MockServletContext())
+                .build();
+    }
 }

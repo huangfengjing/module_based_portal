@@ -9,7 +9,7 @@
     <script src="$link.relative('/static/js/jquery.dragsort-0.5.1.js')"></script>
     <script src="$link.relative('/static/js/design.js')"></script>
 </head>
-<body>
+<body#if($env.renderMode == "design") class="edit_mod" #end>
     #parse('/include/header.vm')
     $screen_content
     #parse('/include/footer.vm')

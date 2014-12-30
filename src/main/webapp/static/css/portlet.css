@@ -19,6 +19,10 @@
 .width100p {
     width: 100%;
 }
+.layout_box {
+    float: left;
+    width: 100%;
+}
 .layout_box, .module_box {
     min-width: 50px;
     min-height: 50px;
@@ -70,4 +74,20 @@
     overflow: hidden;
     position: relative;
     padding: 10px;
+}
+
+.edit_mod .page_box,.edit_mod .layout_box,.edit_mod .column_box {
+    border: 1px dashed #CCCCCC;
+    padding: 10px;
+}
+.edit_mod .page_box {
+    border-color: #004444;
+    float: left;
+    width: 100%;
+}
+.edit_mod .page_layout {
+    border-color: #a0c552;
+}
+.edit_mod .column_box {
+    border-color: #e36c1c;
 }

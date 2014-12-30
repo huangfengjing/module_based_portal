@@ -4,11 +4,8 @@ import com.alibaba.ydt.portal.domain.CmsLayoutInstance;
 import com.alibaba.ydt.portal.domain.CmsPageInstance;
 import com.alibaba.ydt.portal.service.CmsPageInstanceService;
 import com.doleje.portlet.base.BaseRenderTestCase;
-import com.google.common.io.Files;
-import mockit.Mocked;
-import mockit.NonStrictExpectations;
 import org.junit.Test;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 /**
@@ -20,22 +17,11 @@ import org.springframework.util.Assert;
  */
 public class CmsPageInstanceServiceMockTest extends BaseRenderTestCase {
 
-    @Mocked
+    @Autowired
     private CmsPageInstanceService cmsPageInstanceService;
 
     @Test
     public void testGetById() throws Exception {
-
-        new NonStrictExpectations() {
-            {
-                cmsPageInstanceService.getById(1L);
-                CmsPageInstance instance = new CmsPageInstance();
-                instance.setDbId(1L);
-                instance.setPrototypeId(1L);
-                instance.setPageXmlContent(Files.toString(new ClassPathResource("demo_page.xml").getFile(), charset));
-                returns(instance);
-            }
-        };
 
         CmsPageInstance page = cmsPageInstanceService.getById(1L);
         Assert.notNull(page);

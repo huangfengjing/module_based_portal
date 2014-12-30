@@ -1,5 +1,7 @@
 package com.alibaba.ydt.portal.domain;
 
+import java.util.List;
+
 /**
  * 参数支持模型
  *
@@ -20,4 +22,16 @@ public interface ParameterSupportModel {
      * @return 类型标签
      */
     public String getInstanceTypeTag();
+
+    /**
+     * 获取所有的参数
+     * @return 所有的参数
+     */
+    public List<ParameterValuePair> getParameters();
+
+    /**
+     * 设置参数
+     * @param paramList 参数列表
+     */
+    public void setParamsWithList(List<ParameterValuePair> paramList);
 }

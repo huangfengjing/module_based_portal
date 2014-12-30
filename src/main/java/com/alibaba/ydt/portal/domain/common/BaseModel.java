@@ -18,7 +18,10 @@ package com.alibaba.ydt.portal.domain.common;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -29,6 +32,7 @@ import java.util.Date;
  * @author <a href="mailto:huangfengjing@gmail.com>Ivan</a>
  * @since on 2008-12-12
  */
+@MappedSuperclass
 public abstract class BaseModel implements Serializable {
 
     private static final long serialVersionUID = -7902612712563179668L;
@@ -36,21 +40,31 @@ public abstract class BaseModel implements Serializable {
     /**
      * id
      */
+    @Id
+    @Column(name = "ID")
+    @GeneratedValue(generator = "increment_generator")
+    @GenericGenerator(name = "increment_generator", strategy = "increment",
+            parameters = {@Parameter(name = "unsaved-value", value = "0")})
     protected long dbId = 0;
 
     /**
      * version
      */
+    @Basic
     protected int version;
 
     /**
      * create time
      */
+    @Basic
+    @Column(name = "CREATED_ON")
     protected Date createdOn = new Date();
 
     /**
      * last modify time
      */
+    @Basic
+    @Column(name = "LAST_MODIFIED_ON")
     protected Date lastModifiedOn = new Date();
 
     public Date getCreatedOn() {

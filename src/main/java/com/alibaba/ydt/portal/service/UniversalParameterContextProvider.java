@@ -17,15 +17,10 @@ import java.util.List;
 @Component
 public class UniversalParameterContextProvider implements ContextProvider {
 
-    private CmsParameterService cmsParameterService;
-
     @Override
     public RenderContext createContext(Object instance, HttpServletRequest request) {
         if (instance instanceof ParameterSupportModel) {
-            if(null == cmsParameterService) {
-                return null;
-            }
-            List<ParameterValuePair> params = cmsParameterService.getParamsByTypeAndInstanceId(((ParameterSupportModel) instance).getInstanceTypeTag(), ((ParameterSupportModel) instance).getInstanceId());
+            List<ParameterValuePair> params = ((ParameterSupportModel) instance).getParameters();
             RenderContextBuilder builder = RenderContextBuilder.newBuilder();
             if(instance instanceof CmsModuleInstance) {
                 builder.addModuleParams(params);
@@ -44,7 +39,7 @@ public class UniversalParameterContextProvider implements ContextProvider {
     @Override
     public RenderContext createFormContext(Object instance, HttpServletRequest request) {
         if (instance instanceof ParameterSupportModel) {
-            List<ParameterValuePair> params = cmsParameterService.getParamsByTypeAndInstanceId(((ParameterSupportModel) instance).getInstanceTypeTag(), ((ParameterSupportModel) instance).getInstanceId());
+            List<ParameterValuePair> params = ((ParameterSupportModel) instance).getParameters();
             RenderContextBuilder builder = RenderContextBuilder.newBuilder();
             if(instance instanceof CmsModuleInstance) {
                 builder.addModuleParams(params);
@@ -68,9 +63,5 @@ public class UniversalParameterContextProvider implements ContextProvider {
     @Override
     public int getOrder() {
         return Ordered.LOWEST_PRECEDENCE;
-    }
-
-    public void setCmsParameterService(CmsParameterService cmsParameterService) {
-        this.cmsParameterService = cmsParameterService;
     }
 }

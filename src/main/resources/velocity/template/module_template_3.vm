@@ -1,4 +1,0 @@
-<div class="module_box"#{if}($renderMode == 'design') data-proto-id="${modulePrototype.dbId}" data-inst-id="${moduleInstance.dbId}"#{end}>
-    <div class="module_box_hd">我是第 3 个模块哦</div>
-    <div class="module_box_bd">${moduleParams.content}，$moduleParams.amount, 随便测试一下而已 $moduleParams.amount.divide($moduleParams.divisor)</div>
-</div>

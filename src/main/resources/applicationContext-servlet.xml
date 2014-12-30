@@ -4,9 +4,19 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd"
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xmlns:context="http://www.springframework.org/schema/context">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop">
+
+    <!-- enable annotation configuration -->
+    <context:annotation-config/>
+
+    <!-- Auto scan and inject bean definition -->
+    <context:component-scan base-package="com.alibaba.ydt.portal" />
+
+    <!-- Enable @AspectJ support -->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
 
     <!-- enable spring mvc annotation -->
     <mvc:annotation-driven>
@@ -36,7 +46,6 @@
         <property name="viewResolvers">
             <list>
                 <ref bean="velocityViewResolver" />
-
                 <!-- Jsp View Resolver -->
                 <!-- Please add .jsp suffix to the viewer name, if a jsp render needed -->
                 <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
@@ -72,7 +81,7 @@
             <map>
                 <entry key="admin/*" value="layout/admin/admin_layout.vm"/>
                 <entry key="cms/*" value="layout/cms/cms_page_layout.vm"/>
-                <entry key="*" value="layout/default_layout.vm"/>
+                <entry key="*" value="template/layout/default_layout.vm"/>
             </map>
         </property>
     </bean>

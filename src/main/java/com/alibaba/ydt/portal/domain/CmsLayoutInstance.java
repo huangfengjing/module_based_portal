@@ -1,8 +1,8 @@
 package com.alibaba.ydt.portal.domain;
 
-import com.alibaba.ydt.portal.domain.common.BaseModel;
 import com.google.common.base.MoreObjects;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,24 +15,29 @@ import java.util.List;
  * @author <a href="mailto:huangfengjing@gmail.com">Ivan</a>
  * @version 1.0
  */
-public class CmsLayoutInstance extends BaseModel implements ParameterSupportModel {
+@Entity
+@Table(name = "portal_cms_layout_instance")
+public class CmsLayoutInstance extends BaseCmsInstance {
 
     public static final String TYPE_TAG = "layout";
-
 
     /**
      * 原型 ID
      */
+    @Basic
+    @Column(name = "PROTOTYPE_ID")
     private long prototypeId;
 
     /**
      * 布局名称
      */
+    @Basic
     private String title;
 
     /**
      * 布局所包含的列
      */
+    @Transient
     private List<CmsColumnInstance> columns = new ArrayList<CmsColumnInstance>();
 
     public long getPrototypeId() {
@@ -51,17 +56,14 @@ public class CmsLayoutInstance extends BaseModel implements ParameterSupportMode
         this.title = title;
     }
 
+    @Transient
     public List<CmsColumnInstance> getColumns() {
         return columns;
     }
 
+    @Transient
     public void setColumns(List<CmsColumnInstance> columns) {
         this.columns = columns;
-    }
-
-    @Override
-    public long getInstanceId() {
-        return dbId;
     }
 
     @Override

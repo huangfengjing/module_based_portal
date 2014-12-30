@@ -1,4 +1,5 @@
 #* @implicitly included *#
+#* @vtlvariable name="moduleTool" type="com.alibaba.ydt.portal.util.ModuleTool" *#
 #* @vtlvariable name="math" type="java.lang.Math" *#
 #* @vtlvariable name="link" type="org.apache.velocity.tools.generic.LinkTool" *#
 #* @vtlvariable name="stringUtils" type="org.apache.commons.lang.StringUtils" *#

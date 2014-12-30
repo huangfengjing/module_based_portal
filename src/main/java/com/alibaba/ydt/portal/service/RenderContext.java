@@ -159,7 +159,7 @@ public class RenderContext extends HashMap<String, Object> implements Map<String
      * @param mode 渲染模式
      */
     final public void setMode(RenderMode mode) {
-        put(RENDER_MOD_KEY, mode);
+        ((Map<String, Object>) get(RENDER_ENV_KEY)).put(RENDER_MOD_KEY, mode);
     }
 
     @Override

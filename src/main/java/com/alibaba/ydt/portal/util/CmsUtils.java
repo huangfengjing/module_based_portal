@@ -52,6 +52,7 @@ public abstract class CmsUtils {
             }
             return page;
         } catch (DocumentException e) {
+            logger.error("解析布局失败", e);
             return null;
         }
     }

@@ -1,6 +1,7 @@
 package com.alibaba.ydt.portal.service;
 
 import com.alibaba.ydt.portal.domain.CmsColumnInstance;
+import org.springframework.stereotype.Service;
 
 /**
  * 列服务
@@ -9,5 +10,6 @@ import com.alibaba.ydt.portal.domain.CmsColumnInstance;
  * @version 1.0
  *          Created on 14-10-29 下午2:40.
  */
-public interface CmsColumnInstanceService extends DataService<CmsColumnInstance> {
+@Service
+public class CmsColumnInstanceService extends BaseDataService<CmsColumnInstance> {
 }

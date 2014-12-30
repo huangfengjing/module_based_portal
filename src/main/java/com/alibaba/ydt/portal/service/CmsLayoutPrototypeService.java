@@ -1,6 +1,7 @@
 package com.alibaba.ydt.portal.service;
 
 import com.alibaba.ydt.portal.domain.CmsLayoutPrototype;
+import org.springframework.stereotype.Service;
 
 /**
  * 布局原型服务
@@ -9,5 +10,6 @@ import com.alibaba.ydt.portal.domain.CmsLayoutPrototype;
  * @version 1.0
  *          Created on 14-10-29 下午2:40.
  */
-public interface CmsLayoutPrototypeService extends DataService<CmsLayoutPrototype> {
+@Service
+public class CmsLayoutPrototypeService extends BaseDataService<CmsLayoutPrototype> {
 }

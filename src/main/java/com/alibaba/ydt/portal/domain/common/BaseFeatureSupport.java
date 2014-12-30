@@ -3,12 +3,15 @@ package com.alibaba.ydt.portal.domain.common;
 import com.alibaba.ydt.portal.util.FeatureUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import javax.persistence.Basic;
+import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.util.*;
 
 /**
  * Base feature support
  */
+@MappedSuperclass
 public class BaseFeatureSupport extends BaseModel implements Serializable {
 
     public static final String REMOVABLE_FEATURE_KEY = "removable";
@@ -22,6 +25,7 @@ public class BaseFeatureSupport extends BaseModel implements Serializable {
     /**
      * Used for ORM
      */
+    @Basic
     private String features;
 
     /**

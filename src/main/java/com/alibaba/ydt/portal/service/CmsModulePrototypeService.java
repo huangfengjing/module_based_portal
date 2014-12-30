@@ -1,6 +1,7 @@
 package com.alibaba.ydt.portal.service;
 
 import com.alibaba.ydt.portal.domain.CmsModulePrototype;
+import org.springframework.stereotype.Service;
 
 /**
  * 模块原型服务
@@ -9,5 +10,6 @@ import com.alibaba.ydt.portal.domain.CmsModulePrototype;
  * @version 1.0
  *          Created on 14-10-29 下午2:40.
  */
-public interface CmsModulePrototypeService extends DataService<CmsModulePrototype> {
+@Service
+public class CmsModulePrototypeService extends BaseDataService<CmsModulePrototype> {
 }

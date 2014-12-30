@@ -13,4 +13,9 @@
         <scope>application</scope>
         <class>com.alibaba.ydt.portal.util.StringUtils</class>
     </tool>
+    <tool>
+        <key>moduleTool</key>
+        <scope>application</scope>
+        <class>com.alibaba.ydt.portal.util.ModuleTool</class>
+    </tool>
 </toolbox>

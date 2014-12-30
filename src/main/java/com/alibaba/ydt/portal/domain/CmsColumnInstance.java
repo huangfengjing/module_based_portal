@@ -1,8 +1,8 @@
 package com.alibaba.ydt.portal.domain;
 
-import com.alibaba.ydt.portal.domain.common.BaseModel;
 import com.google.common.base.MoreObjects;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,23 +15,29 @@ import java.util.List;
  * @author <a href="mailto:huangfengjing@gmail.com">Ivan</a>
  * @version 1.0
  */
-public class CmsColumnInstance extends BaseModel implements ParameterSupportModel {
+@Entity
+@Table(name = "portal_cms_column_instance")
+public class CmsColumnInstance extends BaseCmsInstance {
 
     public static final String TYPE_TAG = "column";
 
     /**
      * 原型 ID
      */
+    @Basic
+    @Column(name = "PROTOTYPE_ID")
     private long prototypeId;
 
     /**
      * 布局名称
      */
+    @Basic
     private String title;
 
     /**
      * 布局栏目列表
      */
+    @Transient
     private List<CmsModuleInstance> modules = new ArrayList<CmsModuleInstance>();
 
     public long getPrototypeId() {
@@ -50,17 +56,14 @@ public class CmsColumnInstance extends BaseModel implements ParameterSupportMode
         this.title = title;
     }
 
+    @Transient
     public List<CmsModuleInstance> getModules() {
         return modules;
     }
 
+    @Transient
     public void setModules(List<CmsModuleInstance> modules) {
         this.modules = modules;
-    }
-
-    @Override
-    public long getInstanceId() {
-        return dbId;
     }
 
     @Override

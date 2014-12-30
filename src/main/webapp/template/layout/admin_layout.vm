@@ -10,8 +10,8 @@
     <script src="$link.relative('/static/js/design.js')"></script>
 </head>
 <body>
-    #parse('/layout/header.vm')
+    #parse('/include/header.vm')
         $screen_content
-        #parse('/layout/footer.vm')
+        #parse('/include/footer.vm')
 </body>
 </html>

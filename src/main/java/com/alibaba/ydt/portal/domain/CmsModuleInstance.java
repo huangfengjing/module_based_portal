@@ -1,7 +1,11 @@
 package com.alibaba.ydt.portal.domain;
 
-import com.alibaba.ydt.portal.domain.common.BaseModel;
 import com.google.common.base.MoreObjects;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * <p>
@@ -12,18 +16,23 @@ import com.google.common.base.MoreObjects;
  * @author <a href="mailto:huangfengjing@gmail.com">Ivan</a>
  * @version 1.0
  */
-public class CmsModuleInstance extends BaseModel implements ParameterSupportModel {
+@Entity
+@Table(name = "portal_cms_module_instance")
+public class CmsModuleInstance extends BaseCmsInstance {
 
     public static final String TYPE_TAG = "module";
 
     /**
-     * 模块原型 ID
+     * 原型 ID
      */
+    @Basic
+    @Column(name = "PROTOTYPE_ID")
     private long prototypeId;
 
     /**
-     * 模块名称
+     * 布局名称
      */
+    @Basic
     private String title;
 
     public long getPrototypeId() {
@@ -40,11 +49,6 @@ public class CmsModuleInstance extends BaseModel implements ParameterSupportMode
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    @Override
-    public long getInstanceId() {
-        return dbId;
     }
 
     @Override

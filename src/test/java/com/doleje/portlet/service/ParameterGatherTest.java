@@ -3,11 +3,11 @@ package com.doleje.portlet.service;
 import com.alibaba.ydt.portal.domain.CmsModuleInstance;
 import com.alibaba.ydt.portal.domain.CmsModulePrototype;
 import com.alibaba.ydt.portal.domain.ParameterValuePair;
+import com.alibaba.ydt.portal.domain.ParameterValuePair;
 import com.alibaba.ydt.portal.service.ParameterGather;
 import com.alibaba.ydt.portal.util.StringUtils;
 import com.doleje.portlet.base.BaseRenderTestCase;
 import com.doleje.portlet.mock.MockHttpServletRequest;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,6 +35,8 @@ public class ParameterGatherTest extends BaseRenderTestCase {
     @Before
     public void setupRequest() throws Exception {
         request = new MockHttpServletRequest();
+        request.addParameter("moduleId", "1");
+        request.addParameter("pageId", "2");
         request.addParameter("title", "测试用的模块标题");
         request.addParameter("content", "测试用的模块内容");
         request.addParameter("comments", new String[] {"Andy", "Amy", "Joe", "Chandler"});

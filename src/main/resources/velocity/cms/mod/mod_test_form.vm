@@ -1,0 +1,5 @@
+<div class="form_box module_form">
+    <form action="save-module-params.html">
+        <input type="text" name="title" placeholder="请输入标题" value="$moduleParams.title">
+    </form>
+</div>

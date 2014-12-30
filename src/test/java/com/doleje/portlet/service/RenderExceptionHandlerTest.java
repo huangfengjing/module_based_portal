@@ -6,12 +6,10 @@ import com.alibaba.ydt.portal.service.RenderContext;
 import com.alibaba.ydt.portal.service.RenderContextBuilder;
 import com.alibaba.ydt.portal.service.RenderExceptionHandler;
 import com.doleje.portlet.base.BaseRenderTestCase;
-import com.google.common.io.Files;
-import mockit.NonStrictExpectations;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
@@ -27,17 +25,6 @@ public class RenderExceptionHandlerTest extends BaseRenderTestCase {
 
     @Before
     public void changePageDemo() throws Exception {
-        // mock page instance service
-        new NonStrictExpectations() {
-            {
-                cmsPageInstanceService.getById(2L);
-                CmsPageInstance instance = new CmsPageInstance();
-                instance.setDbId(2L);
-                instance.setPrototypeId(1L);
-                instance.setPageXmlContent(Files.toString(new ClassPathResource("page_2.xml").getFile(), charset));
-                returns(instance);
-            }
-        };
 
         renderEngine.setRenderExceptionHandler(new RenderExceptionHandler() {
             @Override
