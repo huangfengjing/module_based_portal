@@ -107,3 +107,65 @@
     background-color: #DADADA;
     color: #666666;
 }
+
+.modal_list_item {
+    padding: 5px;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed #DADADA;
+    height: 70px;
+    overflow: hidden;
+    position: relative;
+}
+
+.modal_list_item .item_img_wrap {
+    width: 64px;
+    height: 64px;
+    float: left;
+}
+
+.modal_list_item .item_img_wrap img {
+    margin: 0 auto;
+}
+
+.modal_list_item .item_desc_wrap {
+    float: left;
+    margin-left: 20px;
+    width: 350px;
+}
+
+.modal_list_item .item_desc_wrap .module_name {
+    color: #393939;
+    display: block;
+    font-size: 14px;
+}
+
+.modal_list_item .item_desc_wrap .module_desc {
+    color: #999999;
+    display: inline-block;
+    height: 40px;
+    line-height: 20px;
+    overflow: hidden;
+    width: 295px;
+}
+
+.modal_list_item .item_desc_wrap .module_add_wrap {
+    float: right;
+    margin-top: -10px;
+    border: none;
+    width: 100px;
+}
+
+.modal .modal_list_item img {
+    float: left;
+}
+
+.modal .modal_list_item .item_desc_wrap .item_name {
+    font-weight: bold;
+    display: block;
+}
+
+.modal .modal_list_item .item_opt_wrap {
+    position: absolute;
+    right: 0;
+    top: 20px;
+}

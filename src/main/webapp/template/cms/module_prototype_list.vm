@@ -3,15 +3,13 @@
     <ul class="modal_list">
         #foreach($module in $cmsModuleList)
         <li class="modal_list_item">
-            <img src="$link.relative($stringUtils.defaultIfEmpty($module.iconLink, "static/shop/images/design/64x64.png"))">
+            <img src="$link.relative($stringUtils.defaultIfEmpty($module.iconLink, "static/images/64x64.png"))">
             <div class="item_desc_wrap">
-                <span class="item_name">$!module.title</span>
+                <span class="item_name">$!module.name</span>
                 <span class="item_desc">$!module.description</span>
             </div>
             <div class="item_opt_wrap">
-                <a href="$link.relative('shop/design/render-module.html').param('prototypeId', $module.dbId)" class="item_add_wrap j-add-module-btn">
-                    <div class="item_add_content"><span>添加</span></div>
-                </a>
+                <a href="$link.relative('shop/design/render-module.html').param('prototypeId', $module.dbId)" class="j-add-module-btn btn btn-green">添加</a>
             </div>
         </li>
         #end

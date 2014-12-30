@@ -43,6 +43,9 @@ public class CmsDesignController extends BaseController {
     @Autowired
     private CmsPagePrototypeService cmsPagePrototypeService;
 
+    @Autowired
+    private CmsModulePrototypeService cmsModulePrototypeService;
+
     /**
      * 浏览前台页面
      *
@@ -94,7 +97,7 @@ public class CmsDesignController extends BaseController {
      */
     @RequestMapping("/module-prototype-list.html")
     public String modulePrototypeList(ModelMap modelMap) {
-        modelMap.put("cmsModuleList", cmsPagePrototypeService.getAll());
+        modelMap.put("cmsModuleList", cmsModulePrototypeService.getAll());
         return "cms/module_prototype_list";
     }
 }

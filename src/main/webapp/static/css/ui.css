@@ -1,3 +1,6 @@
+body, button, input, select, textarea {
+    font: 12px/1.5 Arial, \5b8b\4f53, sans-serif;
+}
 a {
     text-decoration: none;
 }
