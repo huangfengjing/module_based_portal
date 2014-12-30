@@ -1,8 +1,10 @@
 package com.alibaba.ydt.portal.domain.common;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.ydt.portal.util.JsonUtils;
 import com.alibaba.ydt.portal.util.StringUtils;
 
+import java.beans.Transient;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,27 +15,28 @@ import java.util.Map;
  */
 public class AjaxResult {
 
-    public static final String STATUS_KEY  = "status";
-    public static final String MESSAGE_KEY  = "message";
-
-     public static final String STATUS_SUCCESS  = "success";
-     public static final String STATUS_ERROR  = "error";
-     public static final String STATUS_AUTH_ERROR  = "auth";
+    public static final String STATUS_SUCCESS = "success";
+    public static final String STATUS_ERROR = "error";
+    public static final String STATUS_AUTH_ERROR = "auth";
 
     public static final String CONTENT_TYPE_HTML = "html";
     public static final String CONTENT_TYPE_JSON = "json";
 
-     /**
-      * Result message carrier
-      */
-     private Map<String, Object> data = new HashMap<String, Object>();
+    /**
+     * Result message carrier
+     */
+    private Map<String, Object> data = new HashMap<String, Object>();
 
-     /**
+    /**
      * JSON数据，如果客户端设置了该字段，则会直接输入该字段而忽悠其它的数据
      */
     private String rawData;
 
     private String textType;
+
+    private String message;
+
+    private String status;
 
     /**
      * Default constructor
@@ -50,73 +53,87 @@ public class AjaxResult {
 
     /**
      * 成功返回结果
+     *
      * @return 标识成功的 AJAX 返回结果
      */
     public static AjaxResult successResult() {
-        AjaxResult ajaxResult = new AjaxResult(STATUS_KEY, STATUS_SUCCESS);
-        ajaxResult.addData(MESSAGE_KEY,  "操作成功");
+        AjaxResult ajaxResult = new AjaxResult();
+        ajaxResult.status = STATUS_SUCCESS;
+        ajaxResult.message = "操作成功";
         return ajaxResult;
     }
 
     /**
      * 成功返回结果
+     *
      * @param message 成功信息
      * @return 标识成功的 AJAX 返回结果
      */
     public static AjaxResult successResult(String message) {
-        AjaxResult ajaxResult = new AjaxResult(STATUS_KEY, STATUS_SUCCESS);
-        ajaxResult.addData(MESSAGE_KEY,  message);
+        AjaxResult ajaxResult = new AjaxResult();
+        ajaxResult.status = STATUS_SUCCESS;
+        ajaxResult.message = message;
         return ajaxResult;
     }
 
     /**
      * 失败返回结果
+     *
      * @return 标识失败的 AJAX 返回结果
      */
     public static AjaxResult errorResult() {
-        AjaxResult ajaxResult = new AjaxResult(STATUS_KEY, STATUS_ERROR);
-        ajaxResult.addData(MESSAGE_KEY,  "操作失败");
+        AjaxResult ajaxResult = new AjaxResult();
+        ajaxResult.status = STATUS_ERROR;
+        ajaxResult.message = "操作失败";
         return ajaxResult;
     }
 
     /**
      * 失败返回结果
+     *
      * @param message 成功信息
      * @return 标识失败的 AJAX 返回结果
      */
     public static AjaxResult errorResult(String message) {
-        AjaxResult ajaxResult = new AjaxResult(STATUS_KEY, STATUS_ERROR);
-        ajaxResult.addData(MESSAGE_KEY,  message);
+        AjaxResult ajaxResult = new AjaxResult();
+        ajaxResult.status = STATUS_ERROR;
+        ajaxResult.message = message;
         return ajaxResult;
     }
 
     /**
      * 失败返回结果
+     *
      * @return 标识失败的 AJAX 返回结果
      */
     public static AjaxResult authErrorResult() {
-        AjaxResult ajaxResult = new AjaxResult(STATUS_KEY, STATUS_AUTH_ERROR);
-        ajaxResult.addData(MESSAGE_KEY,  "您未登陆或者登陆超时，请先登陆");
+        AjaxResult ajaxResult = new AjaxResult();
+        ajaxResult.status = STATUS_AUTH_ERROR;
+        ajaxResult.message = "您未登陆或者登陆超时，请先登陆";
         return ajaxResult;
     }
 
     /**
      * 失败返回结果
+     *
      * @param message 成功信息
      * @return 标识失败的 AJAX 返回结果
      */
     public static AjaxResult authErrorResult(String message) {
-        AjaxResult ajaxResult = new AjaxResult(STATUS_KEY, STATUS_AUTH_ERROR);
-        ajaxResult.addData(MESSAGE_KEY,  message);
+        AjaxResult ajaxResult = new AjaxResult();
+        ajaxResult.status = STATUS_AUTH_ERROR;
+        ajaxResult.message = message;
         return ajaxResult;
     }
 
     /**
      * 成功返回结果
+     *
      * @return 标识成功的 AJAX 返回结果
      */
     public static AjaxResult rawResult(String rawData) {
-        AjaxResult ajaxResult = new AjaxResult(STATUS_KEY, STATUS_SUCCESS);
+        AjaxResult ajaxResult = new AjaxResult();
+        ajaxResult.status = STATUS_SUCCESS;
         ajaxResult.setRawData(rawData);
         return ajaxResult;
     }
@@ -155,6 +172,7 @@ public class AjaxResult {
         return this;
     }
 
+    @JSONField(serialize=false)
     public String getRawData() {
         return rawData;
     }
@@ -166,13 +184,29 @@ public class AjaxResult {
 
     /**
      * 判断是否为成功结果
+     *
      * @return 如果为成功结果返回 true 否则返回 false
      */
+    @Transient
+    @JSONField(serialize=false)
     public boolean isSuccess() {
-        return STATUS_SUCCESS.equals(data.get(STATUS_KEY));
+        return STATUS_SUCCESS.equals(status);
     }
 
-    public boolean isHTMLContent() {
+    /**
+     * 判断是否为成功结果
+     *
+     * @return 如果为成功结果返回 true 否则返回 false
+     */
+    @Transient
+    @JSONField(serialize=false)
+    public boolean isError() {
+        return !isSuccess();
+    }
+
+    @Transient
+    @JSONField(serialize=false)
+    public boolean isHtml() {
         return CONTENT_TYPE_HTML.equals(textType);
     }
 
@@ -189,9 +223,40 @@ public class AjaxResult {
     @Override
     public String toString() {
 
-        if(StringUtils.isNotBlank(rawData)) {
+        if (StringUtils.isNotBlank(rawData)) {
             return rawData;
         }
-        return JsonUtils.toCompatibleJSONString(data);
+        return JsonUtils.toCompatibleJSONString(this);
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public AjaxResult setMessage(String message) {
+        this.message = message;
+        return this;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public AjaxResult setStatus(String status) {
+        this.status = status;
+        return this;
+    }
+
+    public String getTextType() {
+        return textType;
+    }
+
+    public AjaxResult setRawData(String rawData) {
+        this.rawData = rawData;
+        return this;
+    }
+
+    public Map<String, Object> getData() {
+        return data;
     }
 }

@@ -29,7 +29,7 @@ public class AjaxReturnValueHandler implements HandlerMethodReturnValueHandler {
         AjaxResult ajaxResult = (AjaxResult) returnValue;
         HttpServletResponse response = (HttpServletResponse) webRequest.getNativeResponse();
 
-        if (ajaxResult.isHTMLContent()) {
+        if (ajaxResult.isHtml()) {
             response.setContentType("text/html; charset=UTF-8");
         } else {
             response.setContentType("application/json; charset=UTF-8");

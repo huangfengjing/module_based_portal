@@ -19,6 +19,12 @@ public interface DataService<T> {
     public T getById(Long id);
 
     /**
+     * 获取所有的数据
+     * @return 所有数据对象列表
+     */
+    public List<T> getAll();
+
+    /**
      * 根据属性获取对象列表
      * @param propName 属性名称
      * @param propVal 属性值

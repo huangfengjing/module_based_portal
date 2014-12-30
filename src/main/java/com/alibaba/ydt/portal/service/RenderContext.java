@@ -100,7 +100,6 @@ public class RenderContext extends HashMap<String, Object> implements Map<String
     }
 
     private void init() {
-        put(RENDER_MOD_KEY, RenderMode.product);
         put(RENDER_ENV_KEY, new HashMap<String, String>());
         put(MODULE_PARAMS_KEY, new HashMap<String, Object>());
         put(COLUMN_PARAMS_KEY, new HashMap<String, Object>());

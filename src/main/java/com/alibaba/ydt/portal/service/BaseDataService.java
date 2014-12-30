@@ -37,6 +37,11 @@ abstract public class BaseDataService<T> implements DataService<T> {
     }
 
     @Override
+    public List<T> getAll() {
+        return genericDao.getAll(entityClass);
+    }
+
+    @Override
     public List<T> getByProperty(String propName, Object propVal) {
         return genericDao.getByProperty(entityClass, propName, propVal);
     }

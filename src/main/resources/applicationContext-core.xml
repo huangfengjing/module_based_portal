@@ -59,7 +59,7 @@
 
     <!-- Velocity Engine -->
     <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
-        <property name="resourceLoaderPath" value="/,/template,classpath:/velocity/"/>
+        <property name="resourceLoaderPath" value="/,/fromdb,/template,classpath:/velocity/"/>
         <property name="velocityProperties">
             <props>
                 <!--<prop key="file.resource.loader.class">org.apache.velocity.runtime.resource.loader.FileResourceLoader</prop>-->

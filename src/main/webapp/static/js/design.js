@@ -1,32 +1,6 @@
 $().ready(function () {
 
-    /**
-     * 将 JSON 对象转换为 STRING
-     * @param O JSON 对象
-     * @return {String}
-     */
-    $.json2String = function (O) {
-        //return JSON.stringify(jsonobj);
-        var S = [];
-        var J = "";
-        if (Object.prototype.toString.apply(O) === '[object Array]') {
-            for (var i = 0; i < O.length; i++)
-                S.push($.json2String(O[i]));
-            J = '[' + S.join(',') + ']';
-        } else if (Object.prototype.toString.apply(O) === '[object Date]') {
-            J = "new Date(" + O.getTime() + ")";
-        } else if (Object.prototype.toString.apply(O) === '[object RegExp]' || Object.prototype.toString.apply(O) === '[object Function]') {
-            J = O.toString();
-        } else if (Object.prototype.toString.apply(O) === '[object Object]') {
-            for (var i in O) {
-                O[i] = typeof (O[i]) == 'string' ? '"' + O[i] + '"' : (typeof (O[i]) === 'object' ? $.json2String(O[i]) : O[i]);
-                S.push('"' + i + '"' + ':' + O[i]);
-            }
-            J = '{' + S.join(',') + '}';
-        }
-
-        return J;
-    };
+    var _pageId = $('#j-page-dbId').val();
 
     /**
      * 开启模块编辑功能，目前只是示例，并不真正支持编辑功能
@@ -77,9 +51,14 @@ $().ready(function () {
 
     // 添加新的列
     var currAddColTrigWrap;
+    $('.layout_box').each(function(index, layout) {
+        if(!$(layout).hasClass('column_ignore')) {
+            $(layout).append('<div class="item_settings_wrap column_add_wrap"><a href="#" class="j-add-column"><div class="item_add_content">新增一列</div></a></div>');
+        }
+    });
     $('.j-add-column').click(function() {
         currAddColTrigWrap = $(this).parents(".column_add_wrap");
-        currAddColTrigWrap.before('<div class="column_box width25p" data-inst-id="0"><div class="item_add_wrap"><a href="#" class="j-add-module"><div class="item_add_content">添加模块</div></a></div></div>');
+        currAddColTrigWrap.before('<div class="column_box width25p" data-inst-id="0"><div class="item_settings_wrap"><a href="#" class="j-add-module btn btn-primary mr10">添加模块</a><a href="#" class="j-edit-column btn btn-blue">编辑列</a></div>');
 
         var _cols = $('.column_box');
         _cols.removeClass('width50p');
@@ -106,41 +85,41 @@ $().ready(function () {
     var currAddModTrigWrap;
     $(".column_box").each(function(index, column) {
         if(!$(column).hasClass('column_ignore')) {
-            $(column).append('<div class="item_add_wrap"><a href="#" class="j-add-module"><div class="item_add_content">添加模块</div></a></div>');
+            $(column).append('<div class="item_settings_wrap"><a href="#" class="j-add-module btn btn-primary mr10">添加模块</a><a href="#" class="j-edit-column btn btn-blue">编辑列</a></div>');
         }
     });
 
     $(".j-add-module").live('click', function () {
-        currAddModTrigWrap = $(this).parents(".item_add_wrap");
-//        $.showBox({
-//            title:'新增模块列表',
-//            ajax:Isnowing.base + 'shop/design/module-prototype-list.html',
-//            onLoad:function () {
-//                $(".modal_list_item .j-add-module-btn").click(function () {
-//                    $.showBox({
-//                        title:'正在添加模块',
-//                        icon:'load'
-//                    });
-//                    $.iAjax({
-//                        dataType:'html',
-//                        url:$(this).attr('href'),
-//                        doSuccess:function (data) {
-//                            $.hideBox();
-//                            currAddModTrigWrap.before(data);
-//                            $.layoutChanged(currAddModTrigWrap.parents(".layout_box"));
-//                        }
-//                    });
-//                    return false;
-//                });
-//            }
-//        });
+        currAddModTrigWrap = $(this).parents(".item_settings_wrap");
+        $.showBox({
+            title:'新增模块列表',
+            ajax: '/cms/design/module-prototype-list.html',
+            onLoad:function () {
+                $(".modal_list_item .j-add-module-btn").click(function () {
+                    $.showBox({
+                        title:'正在添加模块',
+                        icon:'load'
+                    });
+                    $.iAjax({
+                        dataType:'html',
+                        url:$(this).attr('href'),
+                        doSuccess:function (data) {
+                            $.hideBox();
+                            currAddModTrigWrap.before(data);
+                            $.layoutChanged(currAddModTrigWrap.parents(".layout_box"));
+                        }
+                    });
+                    return false;
+                });
+            }
+        });
         return false;
     });
 
     // 编辑模块参数
     $.editModuleParams = function(module) {
-        var instanceId = module.attr('data-instanceId');
-        var prototypeId = module.attr('data-prototypeId');
+        var instanceId = module.attr('data-inst-id');
+        var prototypeId = module.attr('data-proto-id');
         if(instanceId == '0') {
             if(window.confirm('该模块为新添加的模块，未保存页面结构前不可编辑，现在保存页面结构吗？')) {
                 $.savePageLayout();
@@ -148,65 +127,64 @@ $().ready(function () {
                 return;
             }
         }
-//        $.showBox({
-//            id: '_module_form_' + instanceId,
-//            title: '编辑模块参数',
-//            width: 760,
-//            ajax: 'shop/design/render-module-form.html?moduleId=' + instanceId + '&pageId=' + $("#j-page-dbId").val(),
-//            onLoad: function() {
-//                var modalBox = $('#_showBox-_module_form_' + instanceId);
-//                var modInstForm = $("#_module_form_" + instanceId);
-//                if(modInstForm.length == 0) {
-//                    $(".modal-footer", modalBox).html('');
-//                    return;
-//                }
-//                $('.module_form_table', modInstForm).resizableTable();
-//                modInstForm.submit(function() {
-//                    var _form = $(this);
-//                    $.iAjax({
-//                        loadingTitle: '保存参数',
-//                        loadingContent: '正在保存模块参数，请稍候……',
-//                        url: _form.attr('action'),
-//                        data: _form.serialize(),
-//                        doSuccess: function(data) {
-////                            module.html($(data.moduleContent).children());
-//                            module.before(data.moduleContent);
-//                            module.remove();
-//                            $.hideBox({
-//                                id: '_module_form_' + instanceId
-//                            });
-//                            // 硬编码刷图片轮播脚本
-//                            if(prototypeId == 14) {
-//                                jQuery(".module_slide_show .module_box_bd").loopSlider({
-//                                    prevBtn: '.sliding_btn_pre',
-//                                    nextBtn: '.sliding_btn_next',
-//                                    className:"on",
-//                                    contentContainer:"ul",
-//                                    contentChildTag:"li",
-//                                    titleContainer:".sliding_control",
-//                                    titleChildTag:"a",
-//                                    auto:true,
-//                                    scrollTime:300,
-//                                    initIndex:1
-//                                });
-//                            }
-//                        },
-//                        doFailure: function(data) {
-//                            $.showBoxTip({
-//                                id: '_module_form_' + instanceId,
-//                                extCls: 'error',
-//                                tipMsg: data.message
-//                            });
-//                        }
-//                    });
-//                    return false;
-//                });
-//            },
-//            ok: '保存',
-//            okCallback: function() {
-//                $("#_module_form_" + instanceId).submit();
-//            }
-//        });
+        $.showBox({
+            id: '_module_form_' + instanceId,
+            title: '编辑模块参数',
+            width: 760,
+            ajax: '/cms/design/render-module-form.html?moduleId=' + instanceId + '&pageId=' + _pageId,
+            onLoad: function() {
+                var modalBox = $('#_showBox-_module_form_' + instanceId);
+                var modInstForm = $("#_module_form_" + instanceId);
+                if(modInstForm.length == 0) {
+                    $(".modal-footer", modalBox).html('');
+                    return;
+                }
+                $('.module_form_table', modInstForm).resizableTable();
+                modInstForm.submit(function() {
+                    var _form = $(this);
+                    $.iAjax({
+                        loadingTitle: '保存参数',
+                        loadingContent: '正在保存模块参数，请稍候……',
+                        url: _form.attr('action'),
+                        data: _form.serialize(),
+                        doSuccess: function(data) {
+                            module.before(data.moduleContent);
+                            module.remove();
+                            $.hideBox({
+                                id: '_module_form_' + instanceId
+                            });
+                            // 硬编码刷图片轮播脚本
+                            if(prototypeId == 14) {
+                                jQuery(".module_slide_show .module_box_bd").loopSlider({
+                                    prevBtn: '.sliding_btn_pre',
+                                    nextBtn: '.sliding_btn_next',
+                                    className:"on",
+                                    contentContainer:"ul",
+                                    contentChildTag:"li",
+                                    titleContainer:".sliding_control",
+                                    titleChildTag:"a",
+                                    auto:true,
+                                    scrollTime:300,
+                                    initIndex:1
+                                });
+                            }
+                        },
+                        doFailure: function(data) {
+                            $.showBoxTip({
+                                id: '_module_form_' + instanceId,
+                                extCls: 'error',
+                                tipMsg: data.message
+                            });
+                        }
+                    });
+                    return false;
+                });
+            },
+            ok: '保存',
+            okCallback: function() {
+                $("#_module_form_" + instanceId).submit();
+            }
+        });
     };
 
     // 页面结构变化
@@ -227,7 +205,7 @@ $().ready(function () {
         }
 
         // 将 添加模块 的按钮移动到底部
-        $('.item_add_wrap').each(function(index, elem) {
+        $('.item_settings_wrap').each(function(index, elem) {
             $(this).appendTo($(this).parents('.column_box'));
         });
     };

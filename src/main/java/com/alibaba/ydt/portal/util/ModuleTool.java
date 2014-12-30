@@ -11,7 +11,7 @@ import java.util.Map;
  * @version 1.0
  *          Created on 14-12-30 下午4:00.
  */
-abstract public class ModuleTool {
+public class ModuleTool {
 
 
     /**

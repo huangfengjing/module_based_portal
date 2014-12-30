@@ -3,15 +3,28 @@
 <head>
     <title>测试页面</title>
     <link href="$link.relative('/static/css/reset.css')" rel="stylesheet" type="text/css" />
+    <link href="$link.relative('/static/css/modal.css')" rel="stylesheet" type="text/css" />
+    <link href="$link.relative('/static/css/ui.css')" rel="stylesheet" type="text/css" />
     <link href="$link.relative('/static/css/portlet.css')" rel="stylesheet" type="text/css" />
     <link href="$link.relative('/static/css/design.css')" rel="stylesheet" type="text/css" />
     <script src="$link.relative('/static/js/jquery.1.7.min.js')"></script>
     <script src="$link.relative('/static/js/jquery.dragsort-0.5.1.js')"></script>
+    <script src="$link.relative('/static/js/jqModal.js')"></script>
+    <script src="$link.relative('/static/js/base.js')"></script>
     <script src="$link.relative('/static/js/design.js')"></script>
 </head>
 <body#if($env.renderMode == "design") class="edit_mod" #end>
     #parse('/include/header.vm')
     $screen_content
     #parse('/include/footer.vm')
+#if($env.renderMode == "design")
+<form id="j-page-form" action="/shop/design/save-page.html" method="post">
+    <input type="hidden" name="pageId" value="1" id="j-page-dbId">
+    <input type="hidden" name="pageLayout" id="j-page-layout-holder">
+    <input type="hidden" name="delModules" id="j-del-modules-holder">
+    <input type="hidden" name="isHeaderChanged" value="false" id="j-header-changed-holder">
+    <input type="hidden" name="isFooterChanged" value="false" id="j-footer-changed-holder">
+</form>
+#end
 </body>
 </html>

@@ -1,5 +1,0 @@
-<div class="layout_box"#{if}($renderMode == 'design') data-proto-id="${layoutPrototype.dbId}" data-inst-id="${layoutInstance.dbId}"#{end}>
-    #foreach($cmsColumn in $_cms_columns)
-    $cmsColumn
-    #end
-</div>

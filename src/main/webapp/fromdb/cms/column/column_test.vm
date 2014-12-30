@@ -1,0 +1,5 @@
+<div class="column_box width25p"#{if}($env.renderMode == 'design') data-proto-id="${columnPrototype.dbId}" data-inst-id="${columnInstance.dbId}"#{end}>
+    #foreach($cmsModule in $_cms_modules)
+    $cmsModule
+    #end
+</div>

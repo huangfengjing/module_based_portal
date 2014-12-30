@@ -42,7 +42,7 @@
     border: dashed 1px gray !important;
 }
 
-.item_add_wrap {
+.item_settings_wrap {
     border: 1px dashed #DADADA;
     padding: 5px;
     clear: both;
@@ -50,7 +50,7 @@
     text-align: center;
 }
 
-.item_add_wrap .item_add_content {
+.item_settings_wrap .item_add_content {
     height: 32px;
     margin: 0 auto;
     width: 100px;

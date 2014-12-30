@@ -50,7 +50,10 @@ public class RenderContextBuilder {
             return this;
         }
         if(context.containsKey(RenderContext.RENDER_MOD_KEY)) {
-            setMode((RenderContext.RenderMode) context.get(RenderContext.RENDER_MOD_KEY));
+            RenderContext.RenderMode mode = (RenderContext.RenderMode) context.get(RenderContext.RENDER_MOD_KEY);
+            if(null != mode) {
+                setMode(mode);
+            }
         }
         if(context.containsKey(RenderContext.RENDER_ENV_KEY)) {
             ((Map<String, Object>)renderContext.get(RenderContext.RENDER_ENV_KEY)).putAll((Map<String, Object>) context.get(RenderContext.RENDER_ENV_KEY));
