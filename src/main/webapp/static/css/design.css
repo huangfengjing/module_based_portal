@@ -33,11 +33,11 @@
     color: #f34844;
 }
 
-.mod_opt_remove {
+.j-remove-module {
     right: 0;
     top: 0;
 }
-.mod_opt_edit {
+.j-edit-module {
     right: 25px;
     top: 0;
     border-right: 1px dashed #fff;

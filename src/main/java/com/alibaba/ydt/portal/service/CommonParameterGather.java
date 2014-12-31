@@ -1,8 +1,6 @@
 package com.alibaba.ydt.portal.service;
 
-import com.alibaba.ydt.portal.domain.CmsModuleInstance;
-import com.alibaba.ydt.portal.domain.CmsModulePrototype;
-import com.alibaba.ydt.portal.domain.ParameterValuePair;
+import com.alibaba.ydt.portal.domain.*;
 import com.alibaba.ydt.portal.util.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,7 +33,7 @@ public class CommonParameterGather implements ParameterGather {
     };
 
     @Override
-    public List<ParameterValuePair> gatherParams(CmsModulePrototype prototype, CmsModuleInstance instance, HttpServletRequest request) {
+    public List<ParameterValuePair> gatherParams(BaseCmsPrototype prototype, BaseCmsInstance instance, HttpServletRequest request) {
         Map<String, Object> paramContainer = new HashMap<String, Object>();
         Enumeration<String> requestNames = request.getParameterNames();
         while (requestNames.hasMoreElements()) {
@@ -54,7 +52,7 @@ public class CommonParameterGather implements ParameterGather {
     }
 
     @Override
-    public boolean support(CmsModulePrototype modulePrototype) {
+    public boolean support(BaseCmsPrototype modulePrototype) {
         return true;
     }
 

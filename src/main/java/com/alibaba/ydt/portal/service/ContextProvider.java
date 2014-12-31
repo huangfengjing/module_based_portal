@@ -1,5 +1,6 @@
 package com.alibaba.ydt.portal.service;
 
+import com.alibaba.ydt.portal.domain.BaseCmsInstance;
 import org.springframework.core.Ordered;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +22,7 @@ public interface ContextProvider extends Ordered {
      * @param request http 请求
      * @return 模块的渲染环境
      */
-    public RenderContext createContext(Object instance, HttpServletRequest request);
+    public RenderContext createContext(BaseCmsInstance instance, HttpServletRequest request);
 
     /**
      * 创建模块表单的渲染环境
@@ -29,12 +30,12 @@ public interface ContextProvider extends Ordered {
      * @param request http 请求
      * @return 模块的渲染环境
      */
-    public RenderContext createFormContext(Object instance, HttpServletRequest request);
+    public RenderContext createFormContext(BaseCmsInstance instance, HttpServletRequest request);
 
     /**
      * 是否支持该模块
      * @param instance 渲染对象实例
      * @return 如果支持，返回 true，否则返回 false
      */
-    public boolean support(Object instance);
+    public boolean support(BaseCmsInstance instance);
 }

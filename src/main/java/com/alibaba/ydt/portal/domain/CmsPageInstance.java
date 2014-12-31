@@ -20,14 +20,6 @@ import java.util.List;
 public class CmsPageInstance extends BaseCmsInstance {
 
     public static final String TYPE_TAG = "page";
-
-    /**
-     * 原型 ID
-     */
-    @Basic
-    @Column(name = "PROTOTYPE_ID")
-    private long prototypeId;
-
     /**
      * 布局名称
      */
@@ -46,14 +38,6 @@ public class CmsPageInstance extends BaseCmsInstance {
      */
     @Transient
     private List<CmsLayoutInstance> layouts = new ArrayList<CmsLayoutInstance>();
-
-    public long getPrototypeId() {
-        return prototypeId;
-    }
-
-    public void setPrototypeId(long prototypeId) {
-        this.prototypeId = prototypeId;
-    }
 
     public String getTitle() {
         return title;

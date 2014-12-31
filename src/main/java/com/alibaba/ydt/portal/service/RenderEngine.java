@@ -388,19 +388,38 @@ public class RenderEngine implements InitializingBean {
     /**
      * 渲染模块表单
      *
-     * @param moduleId 模块实例 ID
+     * @param instanceTypeTag 实例类型
+     * @param instanceId 实例 ID
      * @param context  渲染上下文
      * @return 渲染结果
      * @throws RenderException 渲染异常
      */
-    public String renderModuleForm(long moduleId, RenderContext context) throws RenderException {
-        CmsModuleInstance module;
+    public String renderModuleForm(String instanceTypeTag, long instanceId, RenderContext context) throws RenderException {
+        BaseCmsInstance instance = null;
         try {
-            module = cmsModuleInstanceService.getById(moduleId);
-            if (null == module) {
+            if(CmsPageInstance.TYPE_TAG.equals(instanceTypeTag)) {
+                instance = cmsPageInstanceService.getById(instanceId);
+            } else if (CmsLayoutInstance.TYPE_TAG.equals(instanceTypeTag)) {
+                instance = cmsLayoutInstanceService.getById(instanceId);
+            } else if (CmsColumnInstance.TYPE_TAG.equals(instanceTypeTag)) {
+                instance = cmsColumnInstanceService.getById(instanceId);
+            } else if (CmsModuleInstance.TYPE_TAG.equals(instanceTypeTag)) {
+                instance = cmsModuleInstanceService.getById(instanceId);
+            }
+            if (null == instance) {
                 return null;
             }
-            CmsModulePrototype prototype = cmsModulePrototypeService.getById(module.getPrototypeId());
+
+            BaseCmsPrototype prototype = null;
+            if(CmsPageInstance.TYPE_TAG.equals(instanceTypeTag)) {
+                prototype = cmsPagePrototypeService.getById(instanceId);
+            } else if (CmsLayoutInstance.TYPE_TAG.equals(instanceTypeTag)) {
+                prototype = cmsLayoutPrototypeService.getById(instanceId);
+            } else if (CmsColumnInstance.TYPE_TAG.equals(instanceTypeTag)) {
+                prototype = cmsColumnPrototypeService.getById(instanceId);
+            } else if (CmsModuleInstance.TYPE_TAG.equals(instanceTypeTag)) {
+                prototype = cmsModulePrototypeService.getById(instanceId);
+            }
             if (null == prototype) {
                 return null;
             }
@@ -409,13 +428,21 @@ public class RenderEngine implements InitializingBean {
                 injectToolbox(context);
             }
 
-            RenderContextBuilder moduleContextBuilder = RenderContextBuilder.newBuilder().cloneFrom(context)
-                    .setModuleInstance(module).setModulePrototype(prototype);
-            injectProvidersFormContext(module, (HttpServletRequest) context.get(RenderContext.RENDER_REQUEST_KEY), moduleContextBuilder);
-            return render(prototype.getFormTemplate(), moduleContextBuilder.build());
+            RenderContextBuilder contextBuilder = RenderContextBuilder.newBuilder().cloneFrom(context);
+            if(CmsPageInstance.TYPE_TAG.equals(instanceTypeTag) && instance instanceof CmsPageInstance) {
+                contextBuilder.setPageInstance((CmsPageInstance) instance);
+            } else if (CmsLayoutInstance.TYPE_TAG.equals(instanceTypeTag) && instance instanceof CmsLayoutInstance) {
+                contextBuilder.setLayoutInstance((CmsLayoutInstance) instance);
+            } else if (CmsColumnInstance.TYPE_TAG.equals(instanceTypeTag) && instance instanceof CmsColumnInstance) {
+                contextBuilder.setColumnInstance((CmsColumnInstance) instance);
+            } else if (CmsModuleInstance.TYPE_TAG.equals(instanceTypeTag) && instance instanceof CmsModuleInstance) {
+                contextBuilder.setModuleInstance((CmsModuleInstance) instance);
+            }
+            injectProvidersFormContext(instance, (HttpServletRequest) context.get(RenderContext.RENDER_REQUEST_KEY), contextBuilder);
+            return render(prototype.getFormTemplate(), contextBuilder.build());
         } catch (Exception e) {
-            logger.error("<!-- 模块表单渲染失败，moduleId=" + moduleId + " -->", e);
-            return "<!-- 模块表单渲染失败，moduleId=" + moduleId + " -->";
+            logger.error("<!-- 模块表单渲染失败，instanceTagType=" + instanceTypeTag + "instanceId=" + instanceId + " -->", e);
+            return "<!-- 模块表单渲染失败，instanceTagType=" + instanceTypeTag + "instanceId=" + instanceId + " -->";
         }
     }
 
@@ -513,7 +540,7 @@ public class RenderEngine implements InitializingBean {
      * @param request  请求
      * @param builder  渲染环境 builder
      */
-    public void injectProvidersContext(Object instance, HttpServletRequest request, RenderContextBuilder builder) {
+    public void injectProvidersContext(BaseCmsInstance instance, HttpServletRequest request, RenderContextBuilder builder) {
         if(null == instance) {
             return;
         }
@@ -541,7 +568,7 @@ public class RenderEngine implements InitializingBean {
      * @param request  请求
      * @param builder  渲染环境 builder
      */
-    public void injectProvidersFormContext(Object instance, HttpServletRequest request, RenderContextBuilder builder) {
+    public void injectProvidersFormContext(BaseCmsInstance instance, HttpServletRequest request, RenderContextBuilder builder) {
         List<ContextProvider> supportedProvider = new ArrayList<ContextProvider>();
         for (ContextProvider provider : contextProviders) {
             if (provider.support(instance)) {

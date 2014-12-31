@@ -1,7 +1,7 @@
 package com.alibaba.ydt.portal.service;
 
-import com.alibaba.ydt.portal.domain.CmsModuleInstance;
-import com.alibaba.ydt.portal.domain.CmsModulePrototype;
+import com.alibaba.ydt.portal.domain.BaseCmsInstance;
+import com.alibaba.ydt.portal.domain.BaseCmsPrototype;
 import com.alibaba.ydt.portal.domain.ParameterValuePair;
 import org.springframework.core.Ordered;
 
@@ -26,12 +26,12 @@ public interface ParameterGather extends Ordered {
      * @param request http 请求
      * @return 模块的渲染环境
      */
-    public List<ParameterValuePair> gatherParams(CmsModulePrototype prototype, CmsModuleInstance instance, HttpServletRequest request);
+    public List<ParameterValuePair> gatherParams(BaseCmsPrototype prototype, BaseCmsInstance instance, HttpServletRequest request);
 
     /**
      * 是否支持该模块
      * @param modulePrototype　模块原型
      * @return 如果支持，返回 true，否则返回 false
      */
-    public boolean support(CmsModulePrototype modulePrototype);
+    public boolean support(BaseCmsPrototype modulePrototype);
 }

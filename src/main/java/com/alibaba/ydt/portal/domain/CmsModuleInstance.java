@@ -23,25 +23,10 @@ public class CmsModuleInstance extends BaseCmsInstance {
     public static final String TYPE_TAG = "module";
 
     /**
-     * 原型 ID
-     */
-    @Basic
-    @Column(name = "PROTOTYPE_ID")
-    private long prototypeId;
-
-    /**
      * 布局名称
      */
     @Basic
     private String title;
-
-    public long getPrototypeId() {
-        return prototypeId;
-    }
-
-    public void setPrototypeId(long prototypeId) {
-        this.prototypeId = prototypeId;
-    }
 
     public String getTitle() {
         return title;

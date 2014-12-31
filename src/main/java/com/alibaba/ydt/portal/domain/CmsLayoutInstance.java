@@ -22,13 +22,6 @@ public class CmsLayoutInstance extends BaseCmsInstance {
     public static final String TYPE_TAG = "layout";
 
     /**
-     * 原型 ID
-     */
-    @Basic
-    @Column(name = "PROTOTYPE_ID")
-    private long prototypeId;
-
-    /**
      * 布局名称
      */
     @Basic
@@ -39,14 +32,6 @@ public class CmsLayoutInstance extends BaseCmsInstance {
      */
     @Transient
     private List<CmsColumnInstance> columns = new ArrayList<CmsColumnInstance>();
-
-    public long getPrototypeId() {
-        return prototypeId;
-    }
-
-    public void setPrototypeId(long prototypeId) {
-        this.prototypeId = prototypeId;
-    }
 
     public String getTitle() {
         return title;

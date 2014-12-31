@@ -2,12 +2,8 @@ package com.alibaba.ydt.portal.web.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.ydt.portal.common.SpringUtils;
-import com.alibaba.ydt.portal.domain.CmsColumnInstance;
-import com.alibaba.ydt.portal.domain.CmsLayoutInstance;
-import com.alibaba.ydt.portal.domain.CmsModuleInstance;
-import com.alibaba.ydt.portal.service.RenderContext;
-import com.alibaba.ydt.portal.service.RenderContextBuilder;
-import com.alibaba.ydt.portal.service.RenderEngine;
+import com.alibaba.ydt.portal.domain.*;
+import com.alibaba.ydt.portal.service.*;
 import com.alibaba.ydt.portal.util.StringUtils;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.tools.Scope;
@@ -25,7 +21,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * CMS 控制器基类
@@ -44,6 +39,18 @@ abstract public class BaseController implements ServletContextAware {
     @Autowired
     protected RenderEngine renderEngine;
 
+    @Autowired
+    protected CmsModuleInstanceService cmsModuleInstanceService;
+
+    @Autowired
+    protected CmsPageInstanceService cmsPageInstanceService;
+
+    @Autowired
+    protected CmsLayoutInstanceService cmsLayoutInstanceService;
+
+    @Autowired
+    protected CmsColumnInstanceService cmsColumnInstanceService;
+
     private static ToolboxFactory toolboxFactory = null;
     private static Toolbox globalToolbox = null;
 
@@ -52,7 +59,7 @@ abstract public class BaseController implements ServletContextAware {
     /**
      * 获取通用的上下文
      *
-     * @param request  HTTP 请求
+     * @param request HTTP 请求
      * @return 上下文
      */
     protected RenderContext getCommonContext(HttpServletRequest request, HttpServletResponse response) {
@@ -99,19 +106,19 @@ abstract public class BaseController implements ServletContextAware {
     /**
      * 将 JSON 结构的布局转换为布局对象
      * JSON 结构：{
-     *              "布局原型ID,布局实例ID":
-     *              {
-     *                  "列原型ID,列实例ID":"模块原型ID,模块实例ID|模块原型ID,模块实例ID|模块原型ID,模块实例ID",
-     *                  "列原型ID,列实例ID":"模块原型ID,模块实例ID|模块原型ID,模块实例ID|模块原型ID,模块实例ID"
-     *              }
-     *           }
+     * "布局原型ID,布局实例ID":
+     * {
+     * "列原型ID,列实例ID":"模块原型ID,模块实例ID|模块原型ID,模块实例ID|模块原型ID,模块实例ID",
+     * "列原型ID,列实例ID":"模块原型ID,模块实例ID|模块原型ID,模块实例ID|模块原型ID,模块实例ID"
+     * }
+     * }
      * 实例如下所求：{
-     *              "1,1":
-     *              {
-     *                  "1,1":"1,1|1,1|1,1",
-     *                  "1,2":"1,1|1,1|2,0"
-     *              }
-     *            }
+     * "1,1":
+     * {
+     * "1,1":"1,1|1,1|1,1",
+     * "1,2":"1,1|1,1|2,0"
+     * }
+     * }
      *
      * @param layoutIdentifier 标识
      * @param jsonLayout       布局内容
@@ -120,7 +127,7 @@ abstract public class BaseController implements ServletContextAware {
     protected CmsLayoutInstance parseJsonLayout(String layoutIdentifier, JSONObject jsonLayout) {
         CmsLayoutInstance layout = new CmsLayoutInstance();
         String[] idPairStrArray = layoutIdentifier.split(",");
-        if(!validIdPair(idPairStrArray)) {
+        if (!validIdPair(idPairStrArray)) {
             return null;
         }
         layout.setPrototypeId(Long.valueOf(idPairStrArray[0]));
@@ -129,7 +136,7 @@ abstract public class BaseController implements ServletContextAware {
             CmsColumnInstance column = new CmsColumnInstance();
             String colIdentifier = tmp.toString();
             idPairStrArray = colIdentifier.split(",");
-            if(!validIdPair(idPairStrArray)) {
+            if (!validIdPair(idPairStrArray)) {
                 logger.error("错误的列标识：" + colIdentifier);
                 continue;
             }
@@ -139,7 +146,7 @@ abstract public class BaseController implements ServletContextAware {
             String[] moduleIdentifiers = jsonLayout.getString(colIdentifier).split("\\|");
             for (String moduleIdentifier : moduleIdentifiers) {
                 idPairStrArray = moduleIdentifier.split(",");
-                if(!validIdPair(idPairStrArray)) {
+                if (!validIdPair(idPairStrArray)) {
                     logger.error("错误的列标识：" + moduleIdentifier);
                     continue;
                 }
@@ -154,16 +161,46 @@ abstract public class BaseController implements ServletContextAware {
     }
 
     private boolean validIdPair(String[] idPairStrArray) {
-        if(null == idPairStrArray || idPairStrArray.length != 2) {
+        if (null == idPairStrArray || idPairStrArray.length != 2) {
             return false;
         }
-        if(StringUtils.isBlank(idPairStrArray[0]) || !StringUtils.isNumeric(idPairStrArray[0])) {
-            return Long.valueOf(idPairStrArray[0]) >= 0;
+        if (StringUtils.isBlank(idPairStrArray[0]) || !StringUtils.isNumeric(idPairStrArray[0])) {
+            return Long.valueOf(idPairStrArray[0]) > 0;
         }
-        if(StringUtils.isBlank(idPairStrArray[1]) || !StringUtils.isNumeric(idPairStrArray[1])) {
+        if (StringUtils.isBlank(idPairStrArray[1]) || !StringUtils.isNumeric(idPairStrArray[1])) {
             return Long.valueOf(idPairStrArray[1]) >= 0;
         }
         return true;
+    }
+
+    protected BaseCmsInstance getInstance(String instanceTypeTag, long instanceId) {
+        BaseCmsInstance instance = null;
+        if(CmsPageInstance.TYPE_TAG.equals(instanceTypeTag)) {
+            instance = cmsPageInstanceService.getById(instanceId);
+        } else if (CmsLayoutInstance.TYPE_TAG.equals(instanceTypeTag)) {
+            instance = cmsLayoutInstanceService.getById(instanceId);
+        } else if (CmsColumnInstance.TYPE_TAG.equals(instanceTypeTag)) {
+            instance = cmsColumnInstanceService.getById(instanceId);
+        } else if (CmsModuleInstance.TYPE_TAG.equals(instanceTypeTag)) {
+            instance = cmsModuleInstanceService.getById(instanceId);
+        }
+        return instance;
+    }
+
+    protected boolean isModuleTag(String instanceTypeTag) {
+        return CmsModuleInstance.TYPE_TAG.equals(instanceTypeTag);
+    }
+
+    protected boolean isColumnTag(String instanceTypeTag) {
+        return CmsColumnInstance.TYPE_TAG.equals(instanceTypeTag);
+    }
+
+    protected boolean isLayoutTag(String instanceTypeTag) {
+        return CmsLayoutInstance.TYPE_TAG.equals(instanceTypeTag);
+    }
+
+    protected boolean isPageTag(String instanceTypeTag) {
+        return CmsPageInstance.TYPE_TAG.equals(instanceTypeTag);
     }
 
     @Override

@@ -1,8 +1,6 @@
 package com.doleje.portlet.service;
 
-import com.alibaba.ydt.portal.domain.CmsModuleInstance;
-import com.alibaba.ydt.portal.domain.CmsModulePrototype;
-import com.alibaba.ydt.portal.domain.ParameterValuePair;
+import com.alibaba.ydt.portal.domain.*;
 import com.alibaba.ydt.portal.domain.ParameterValuePair;
 import com.alibaba.ydt.portal.service.ParameterGather;
 import com.alibaba.ydt.portal.util.StringUtils;
@@ -86,14 +84,14 @@ public class ParameterGatherTest extends BaseRenderTestCase {
 
         ParameterGather another = new ParameterGather() {
             @Override
-            public List<ParameterValuePair> gatherParams(CmsModulePrototype prototype, CmsModuleInstance instance, HttpServletRequest request) {
+            public List<ParameterValuePair> gatherParams(BaseCmsPrototype prototype, BaseCmsInstance instance, HttpServletRequest request) {
                 List<ParameterValuePair> pairs = new ArrayList<ParameterValuePair>();
                 pairs.add(new ParameterValuePair("test", "mock"));
                 return pairs;
             }
 
             @Override
-            public boolean support(CmsModulePrototype modulePrototype) {
+            public boolean support(BaseCmsPrototype modulePrototype) {
                 return modulePrototype.getDbId() == 1;
             }
 

@@ -1,5 +1,6 @@
 package com.alibaba.ydt.portal.domain;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -33,5 +34,5 @@ public interface ParameterSupportModel {
      * 设置参数
      * @param paramList 参数列表
      */
-    public void setParamsWithList(List<ParameterValuePair> paramList);
+    public void setParamsWithList(Collection<ParameterValuePair> paramList);
 }

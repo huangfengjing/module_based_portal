@@ -342,7 +342,7 @@ $.showBox = function (opt) {
     if (settings.height > 0) {
         $('.modal-body').height(settings.height);
     }
-    wrap.jqmShow();
+    wrap.jqmShow(settings);
 };
 
 /**

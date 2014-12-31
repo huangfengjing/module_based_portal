@@ -18,9 +18,9 @@ import java.util.List;
 public class UniversalParameterContextProvider implements ContextProvider {
 
     @Override
-    public RenderContext createContext(Object instance, HttpServletRequest request) {
-        if (instance instanceof ParameterSupportModel) {
-            List<ParameterValuePair> params = ((ParameterSupportModel) instance).getParameters();
+    public RenderContext createContext(BaseCmsInstance instance, HttpServletRequest request) {
+        if (null != instance) {
+            List<ParameterValuePair> params = instance.getParameters();
             RenderContextBuilder builder = RenderContextBuilder.newBuilder();
             if(instance instanceof CmsModuleInstance) {
                 builder.addModuleParams(params);
@@ -37,9 +37,9 @@ public class UniversalParameterContextProvider implements ContextProvider {
     }
 
     @Override
-    public RenderContext createFormContext(Object instance, HttpServletRequest request) {
-        if (instance instanceof ParameterSupportModel) {
-            List<ParameterValuePair> params = ((ParameterSupportModel) instance).getParameters();
+    public RenderContext createFormContext(BaseCmsInstance instance, HttpServletRequest request) {
+        if (null != instance) {
+            List<ParameterValuePair> params = instance.getParameters();
             RenderContextBuilder builder = RenderContextBuilder.newBuilder();
             if(instance instanceof CmsModuleInstance) {
                 builder.addModuleParams(params);
@@ -56,7 +56,7 @@ public class UniversalParameterContextProvider implements ContextProvider {
     }
 
     @Override
-    public boolean support(Object instance) {
+    public boolean support(BaseCmsInstance instance) {
         return true;
     }
 

@@ -1,5 +1,5 @@
 <div class="form_box module_form">
-    <form  action="$link.relative('cms/design/save-module-params.html').param('dbId', $moduleInstance.dbId)" id="_module_form_${moduleInstance.dbId}">
+    <form  action="$link.relative('cms/design/save-module-params.html').param('dbId', $moduleInstance.dbId)" id="_comp_form_${moduleInstance.dbId}">
         <ul>
             <li class="portal-form-row">
                 <label>标题</label>

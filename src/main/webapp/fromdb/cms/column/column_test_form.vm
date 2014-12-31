@@ -1,13 +1,13 @@
 <div class="form_box column_form">
-    <form  action="$link.relative('cms/design/save-column-params.html').param('dbId', $moduleInstance.dbId)" id="_module_form_${moduleInstance.dbId}">
+    <form  action="$link.relative('cms/design/save-column-params.html').param('dbId', $columnInstance.dbId)" id="_comp_form_${columnInstance.dbId}">
         <ul>
             <li class="portal-form-row">
                 <label>宽度</label>
-                <input class="width320" type="text" name="width" value="$!{moduleParams.width}">
+                <input class="width320" type="text" name="width" value="$!{columnInstance.width}">
             </li>
             <li class="portal-form-row">
                 <label>高度</label>
-                <input class="width320" type="text" name="height" value="$!{moduleParams.height}">
+                <input class="width320" type="text" name="height" value="$!{columnInstance.height}">
             </li>
             <li class="portal-form-row">
                 <label>布局</label>

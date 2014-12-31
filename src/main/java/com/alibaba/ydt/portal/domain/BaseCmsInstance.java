@@ -12,10 +12,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 实例基类
@@ -32,11 +29,26 @@ abstract public class BaseCmsInstance extends BaseModel implements ParameterSupp
     private Log logger = LogFactory.getLog(getClass());
 
     /**
+     * 原型 ID
+     */
+    @Basic
+    @Column(name = "PROTOTYPE_ID")
+    protected long prototypeId;
+
+    /**
      * 模块参数
      */
     @Basic
     @Column(name = "PARAMS_4_STORE")
-    private String params4Store;
+    protected String params4Store;
+
+    public long getPrototypeId() {
+        return prototypeId;
+    }
+
+    public void setPrototypeId(long prototypeId) {
+        this.prototypeId = prototypeId;
+    }
 
     public String getParams4Store() {
         return params4Store;
@@ -77,7 +89,7 @@ abstract public class BaseCmsInstance extends BaseModel implements ParameterSupp
 
     @Transient
     @Override
-    public void setParamsWithList(List<ParameterValuePair> paramList) {
+    public void setParamsWithList(Collection<ParameterValuePair> paramList) {
         if (paramList == null || paramList.isEmpty()) {
             params4Store = null;
             return;
