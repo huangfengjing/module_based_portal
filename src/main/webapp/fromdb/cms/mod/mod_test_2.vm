@@ -1,0 +1,4 @@
+<div class="module_box"#{if}($env.renderMode == 'design') data-proto-id="${modulePrototype.dbId}" data-inst-id="${moduleInstance.dbId}"#{end}>
+    <div class="module_box_hd">$stringUtils.defaultIfEmpty($moduleParams.title, $modulePrototype.name)</div>
+    <div class="module_box_bd">第二个测试模块，该模块没有可编辑的参数，主要用于 DEMO 演示</div>
+</div>

@@ -1,6 +1,7 @@
 package com.alibaba.ydt.portal.domain;
 
 import com.alibaba.ydt.portal.util.CmsUtils;
+import com.alibaba.ydt.portal.util.JsonUtils;
 import com.alibaba.ydt.portal.util.StringUtils;
 import com.google.common.base.MoreObjects;
 
@@ -77,6 +78,14 @@ public class CmsPageInstance extends BaseCmsInstance {
             this.layouts = CmsUtils.parsePage(xmlContent).getLayouts();
         }
         return layouts;
+    }
+
+    @Transient
+    public void setLayouts(List<CmsLayoutInstance> layouts) {
+        if(null == layouts) {
+            return;
+        }
+        xmlContent = JsonUtils.toCompatibleJSONString(layouts);
     }
 
     @Override

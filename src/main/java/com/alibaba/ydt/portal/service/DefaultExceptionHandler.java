@@ -3,6 +3,8 @@ package com.alibaba.ydt.portal.service;
 import com.alibaba.ydt.portal.domain.ParameterSupportModel;
 import com.alibaba.ydt.portal.domain.RenderResult;
 import com.alibaba.ydt.portal.exception.RenderException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,8 +17,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class DefaultExceptionHandler implements RenderExceptionHandler {
 
-    @Override
+    private Log logger = LogFactory.getLog(getClass());
+
     public RenderResult handleException(Object instance, RenderContext context, RenderException e) {
+        logger.error("渲染出现异常", e);
         String type = (instance instanceof ParameterSupportModel) ? ((ParameterSupportModel) instance).getInstanceTypeTag() : "";
         return new RenderResult("<!-- " + type +" Render Exception: " + e.getMessage() + ", instance: " + instance + " -->", RenderResult.RESULT_TYPE_HANDLE_ERROR);
     }

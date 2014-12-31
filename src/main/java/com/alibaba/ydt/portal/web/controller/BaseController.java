@@ -1,9 +1,14 @@
 package com.alibaba.ydt.portal.web.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.ydt.portal.common.SpringUtils;
+import com.alibaba.ydt.portal.domain.CmsColumnInstance;
+import com.alibaba.ydt.portal.domain.CmsLayoutInstance;
+import com.alibaba.ydt.portal.domain.CmsModuleInstance;
 import com.alibaba.ydt.portal.service.RenderContext;
 import com.alibaba.ydt.portal.service.RenderContextBuilder;
 import com.alibaba.ydt.portal.service.RenderEngine;
+import com.alibaba.ydt.portal.util.StringUtils;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.tools.Scope;
 import org.apache.velocity.tools.Toolbox;
@@ -20,6 +25,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * CMS 控制器基类
@@ -88,6 +94,76 @@ abstract public class BaseController implements ServletContextAware {
             logger.error("创建 velocity context 失败", e);
             return null;
         }
+    }
+
+    /**
+     * 将 JSON 结构的布局转换为布局对象
+     * JSON 结构：{
+     *              "布局原型ID,布局实例ID":
+     *              {
+     *                  "列原型ID,列实例ID":"模块原型ID,模块实例ID|模块原型ID,模块实例ID|模块原型ID,模块实例ID",
+     *                  "列原型ID,列实例ID":"模块原型ID,模块实例ID|模块原型ID,模块实例ID|模块原型ID,模块实例ID"
+     *              }
+     *           }
+     * 实例如下所求：{
+     *              "1,1":
+     *              {
+     *                  "1,1":"1,1|1,1|1,1",
+     *                  "1,2":"1,1|1,1|2,0"
+     *              }
+     *            }
+     *
+     * @param layoutIdentifier 标识
+     * @param jsonLayout       布局内容
+     * @return 布局对象
+     */
+    protected CmsLayoutInstance parseJsonLayout(String layoutIdentifier, JSONObject jsonLayout) {
+        CmsLayoutInstance layout = new CmsLayoutInstance();
+        String[] idPairStrArray = layoutIdentifier.split(",");
+        if(!validIdPair(idPairStrArray)) {
+            return null;
+        }
+        layout.setPrototypeId(Long.valueOf(idPairStrArray[0]));
+        layout.setPrototypeId(Long.valueOf(idPairStrArray[1]));
+        for (Object tmp : jsonLayout.keySet()) {
+            CmsColumnInstance column = new CmsColumnInstance();
+            String colIdentifier = tmp.toString();
+            idPairStrArray = colIdentifier.split(",");
+            if(!validIdPair(idPairStrArray)) {
+                logger.error("错误的列标识：" + colIdentifier);
+                continue;
+            }
+            column.setPrototypeId(Long.valueOf(idPairStrArray[0]));
+            column.setPrototypeId(Long.valueOf(idPairStrArray[1]));
+
+            String[] moduleIdentifiers = jsonLayout.getString(colIdentifier).split("\\|");
+            for (String moduleIdentifier : moduleIdentifiers) {
+                idPairStrArray = moduleIdentifier.split(",");
+                if(!validIdPair(idPairStrArray)) {
+                    logger.error("错误的列标识：" + moduleIdentifier);
+                    continue;
+                }
+                CmsModuleInstance instance = new CmsModuleInstance();
+                instance.setPrototypeId(Long.valueOf(idPairStrArray[0]));
+                instance.setDbId(Long.valueOf(idPairStrArray[1]));
+                column.getModules().add(instance);
+            }
+            layout.getColumns().add(column);
+        }
+        return layout;
+    }
+
+    private boolean validIdPair(String[] idPairStrArray) {
+        if(null == idPairStrArray || idPairStrArray.length != 2) {
+            return false;
+        }
+        if(StringUtils.isBlank(idPairStrArray[0]) || !StringUtils.isNumeric(idPairStrArray[0])) {
+            return Long.valueOf(idPairStrArray[0]) >= 0;
+        }
+        if(StringUtils.isBlank(idPairStrArray[1]) || !StringUtils.isNumeric(idPairStrArray[1])) {
+            return Long.valueOf(idPairStrArray[1]) >= 0;
+        }
+        return true;
     }
 
     @Override

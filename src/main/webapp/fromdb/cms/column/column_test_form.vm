@@ -1,2 +1,22 @@
 <div class="form_box column_form">
+    <form  action="$link.relative('cms/design/save-column-params.html').param('dbId', $moduleInstance.dbId)" id="_module_form_${moduleInstance.dbId}">
+        <ul>
+            <li class="portal-form-row">
+                <label>宽度</label>
+                <input class="width320" type="text" name="width" value="$!{moduleParams.width}">
+            </li>
+            <li class="portal-form-row">
+                <label>高度</label>
+                <input class="width320" type="text" name="height" value="$!{moduleParams.height}">
+            </li>
+            <li class="portal-form-row">
+                <label>布局</label>
+                <select name="layout">
+                    <option value="vbox"#if(${columnParams.layout} == "vbox") selected="selected" #end>VBox</option>
+                    <option value="hbox"#if(${columnParams.layout} == "hbox") selected="selected" #end>HBox</option>
+                    <option value="tab"#if(${columnParams.layout} == "tab") selected="selected" #end>Tab</option>
+                </select>
+            </li>
+        </ul>
+    </form>
 </div>

@@ -9,7 +9,7 @@
                 <span class="item_desc">$!module.description</span>
             </div>
             <div class="item_opt_wrap">
-                <a href="$link.relative('shop/design/render-module.html').param('prototypeId', $module.dbId)" class="j-add-module-btn btn btn-green">添加</a>
+                <a href="$link.relative('cms/design/render-module.html').param('prototypeId', $module.dbId)" class="j-add-module-btn btn btn-green">添加</a>
             </div>
         </li>
         #end

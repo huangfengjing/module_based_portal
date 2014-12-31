@@ -65,4 +65,9 @@ abstract public class BaseDataService<T> implements DataService<T> {
     public void save(T t) {
         genericDao.save(t);
     }
+
+    @Override
+    public Long create(T t) {
+        return (Long) genericDao.create(t);
+    }
 }

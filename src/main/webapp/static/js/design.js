@@ -9,14 +9,16 @@ $().ready(function () {
         $(".module_box").live('hover', function () {
             var mask = $(".module_edit_mask");
             if (mask.length == 0) {
-                mask = $('<div class="module_edit_mask" title="双击编辑模块"><div class="module_mask_bd"></div> <a class="module_edit_remove" title="删除">×</a></div>');
-                mask.dblclick(function () {
+                mask = $('<div class="module_edit_mask" title="双击编辑模块"><div class="module_mask_bd"></div><a class="mod_opt_btn mod_opt_remove icon-font" title="删除">&#xe602;</a><a class="mod_opt_btn mod_opt_edit icon-font" title="编辑">&#xe603;</a></div>');
+
+                // 编辑模块
+                $(".mod_opt_edit", mask).click(function () {
                     $.editModuleParams($(this).parents(".module_box"));
                     return false;
                 });
 
                 // 删除模块
-                $(".module_edit_remove", mask).click(function () {
+                $(".mod_opt_remove", mask).click(function () {
                     var _this = $(this);
                     if(_this.attr('data-removable') == '0') {
                         $.showBox({
@@ -33,6 +35,7 @@ $().ready(function () {
                         $.layoutChanged(module.parents(".layout_box"));
                         module.remove();
                     }
+                    return false;
                 });
             }
 
@@ -224,13 +227,14 @@ $().ready(function () {
         var page = {};
         $(".layout_box").each(function (index, layout) {
             if(!$(layout).hasClass('layout_ignore')) {
-                var layoutPrototypeId = $(layout).attr('data-prototype-id');
+                var layoutPrototypeId = $(layout).attr('data-proto-id');
                 var layoutInstId = $(layout).attr('data-inst-id');
                 var columnData = {};
                 $(".column_box", $(layout)).each(function (index, column) {
                     if(!$(column).hasClass('column_ignore')) {
+                        var colProtoId = $(column).attr('data-proto-id');
                         var colInstId = $(column).attr('data-inst-id');
-                        columnData[colInstId] = $(".module_box", $(column)).map($.mapModuleData).get().join("|");
+                        columnData[colProtoId + ',' + colInstId] = $(".module_box", $(column)).map($.mapModuleData).get().join("|");
                     }
                 });
                 page[layoutPrototypeId + ',' + layoutInstId] = columnData;
@@ -246,7 +250,7 @@ $().ready(function () {
     };
 
     $.mapModuleData = function(modElem) {
-        return $(this).attr('data-prototype-id') + "," + $(this).attr('data-inst-id');
+        return $(this).attr('data-proto-id') + "," + $(this).attr('data-inst-id');
     };
 
     $.enableModuleEdit();

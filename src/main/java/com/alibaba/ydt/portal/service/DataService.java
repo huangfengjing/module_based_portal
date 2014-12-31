@@ -57,4 +57,10 @@ public interface DataService<T> {
      * @param t 数据对象
      */
     public void save(T t);
+
+    /**
+     * 创建数据对象
+     * @param t 数据对象
+     */
+    public Long create(T t);
 }

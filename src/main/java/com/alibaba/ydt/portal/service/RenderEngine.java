@@ -331,14 +331,16 @@ public class RenderEngine implements InitializingBean {
             if (null == prototype) {
                 throw new RenderException("没找到模块原型");
             }
-            if(StringUtils.isBlank(module.getParams4Store())) {
-                module = cmsModuleInstanceService.getById(module.getDbId());
+            if(StringUtils.isBlank(module.getParams4Store()) && module.getDbId() > 0) {
+                CmsModuleInstance fromDb = cmsModuleInstanceService.getById(module.getDbId());
+                module.setParams4Store(fromDb.getParams4Store());
             }
 
             // 查看缓存
-            String cacheKey = CmsUtils.generateCacheKey(RENDER_CACHE_TYPE_FOR_MODULE, module.getDbId(), context);
+            String cacheKey = null;
+            cacheKey = CmsUtils.generateCacheKey(RENDER_CACHE_TYPE_FOR_MODULE, module.getDbId(), context);
             Cache.ValueWrapper tmp = renderCache.get(cacheKey);
-            if(null != tmp && null != tmp.get()) {
+            if (null != tmp && null != tmp.get()) {
                 RenderResult cached = (RenderResult) tmp.get();
                 long delta = new Date().getTime() - cached.getRenderTime().getTime();
                 if (delta < prototype.getInstanceExpiredSeconds() * 1000) {
@@ -369,7 +371,9 @@ public class RenderEngine implements InitializingBean {
             }
 
             // put 缓存
-            renderCache.put(cacheKey, result);
+            if(StringUtils.isNotBlank(cacheKey)) {
+                renderCache.put(cacheKey, result);
+            }
 
             return result;
         } catch (Exception e) {
@@ -510,6 +514,9 @@ public class RenderEngine implements InitializingBean {
      * @param builder  渲染环境 builder
      */
     public void injectProvidersContext(Object instance, HttpServletRequest request, RenderContextBuilder builder) {
+        if(null == instance) {
+            return;
+        }
         List<ContextProvider> supportedProvider = new ArrayList<ContextProvider>();
         for (ContextProvider provider : contextProviders) {
             if (provider.support(instance)) {
