@@ -26,5 +26,6 @@
     <input type="hidden" name="isFooterChanged" value="false" id="j-footer-changed-holder">
 </form>
 #end
+<div class="module_edit_mask hidden"><div class="module_mask_bd"></div><a class="mod_opt_btn j-remove-module icon-font" title="删除">&#xe602;</a><a class="mod_opt_btn j-edit-module icon-font" title="编辑">&#xe603;</a></div>
 </body>
 </html>

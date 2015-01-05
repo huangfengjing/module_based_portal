@@ -103,7 +103,8 @@ public class CmsDesignController extends BaseController {
     public AjaxResult renderCompForm(long pageId, long instanceId, String instanceTypeTag, HttpServletRequest request, HttpServletResponse response) {
         RenderContext context = getCommonContext(request, response);
         context.setMode(RenderContext.RenderMode.design);
-        return AjaxResult.rawResult(renderEngine.renderModuleForm(instanceTypeTag, instanceId, context));
+        String formHtml = renderEngine.renderModuleForm(instanceTypeTag, instanceId, context);
+        return AjaxResult.rawResult(StringUtils.defaultIfEmpty(formHtml, "该组件没有可编辑的参数"));
     }
 
     /**

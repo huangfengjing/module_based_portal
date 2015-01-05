@@ -2,41 +2,10 @@ $().ready(function () {
 
     var _pageId = $('#j-page-dbId').val();
     var _columns = $('.column_box');
+    var _pageBox = $('.page_box');
+    var mask = $(".module_edit_mask");
 
-    /**
-     * 开启模块编辑功能，目前只是示例，并不真正支持编辑功能
-     */
-    $(".module_box").live('hover', function () {
-        var mask = $(".module_edit_mask");
-        if (mask.length == 0) {
-            mask = $('<div class="module_edit_mask" title="双击编辑模块"><div class="module_mask_bd"></div><a class="mod_opt_btn j-remove-module icon-font" title="删除">&#xe602;</a><a class="mod_opt_btn j-edit-module icon-font" title="编辑">&#xe603;</a></div>');
-
-            // 编辑模块
-            $('.j-edit-module', mask).click(function () {
-                $.editCompParams($(this).parents(".module_box"));
-                return false;
-            });
-            // 删除模块
-            $(".j-remove-module", mask).click(function () {
-                var _this = $(this);
-                if (_this.attr('data-removable') == '0') {
-                    $.showBox({
-                        icon: 'error',
-                        title: '删除模块',
-                        content: '对不起，该模块不能被删除！'
-                    });
-                    return false;
-                }
-                if (window.confirm('您确定要删除该模块吗')) {
-                    var module = _this.parents(".module_box");
-                    var delModHolder = $("#j-del-modules-holder");
-                    delModHolder.val(delModHolder.val() + ',' + module.attr('data-inst-id'));
-                    $.layoutChanged(module.parents(".layout_box"));
-                    module.remove();
-                }
-                return false;
-            });
-        }
+    _pageBox.on('hover', '.module_box', function () {
         if ($(this).attr('data-removable') == '0') {
             $(".j-remove-module", mask).hide();
         } else {
@@ -44,6 +13,32 @@ $().ready(function () {
         }
 
         mask.width($(this).width() - 2).height($(this).height() - 2).appendTo($(this)).show();
+    });
+
+    // 编辑模块
+    mask.on('click', '.j-edit-module', function () {
+        $.editCompParams($(this).parents(".module_box"));
+        return false;
+    });
+    // 删除模块
+    mask.on('click', '.j-remove-module', function () {
+        var _this = $(this);
+        if (_this.attr('data-removable') == '0') {
+            $.showBox({
+                icon: 'error',
+                title: '删除模块',
+                content: '对不起，该模块不能被删除！'
+            });
+            return false;
+        }
+        if (window.confirm('您确定要删除该模块吗')) {
+            var module = _this.parents(".module_box");
+            var delModHolder = $("#j-del-modules-holder");
+            delModHolder.val(delModHolder.val() + ',' + module.attr('data-inst-id'));
+            $.layoutChanged(module.parents(".layout_box"));
+            module.remove();
+        }
+        return false;
     });
 
     // 模块拖拽
@@ -62,7 +57,7 @@ $().ready(function () {
             $(layout).append('<div class="item_settings_wrap column_add_wrap"><a href="#" class="j-add-column"><div class="item_add_content">新增一列</div></a></div>');
         }
     });
-    $('.j-add-column').click(function () {
+    _pageBox.on('click', '.j-add-column', function () {
         currAddColTrigWrap = $(this).parents(".column_add_wrap");
         currAddColTrigWrap.before('<div class="column_box width25p" data-inst-id="0"><div class="item_settings_wrap"><a href="#" class="j-add-module btn btn-primary mr10">添加模块</a><a href="#" class="j-column-edit btn btn-blue">编辑列</a></div>');
 
@@ -100,11 +95,11 @@ $().ready(function () {
             $(column).append('<div class="item_settings_wrap"><a href="#" class="j-add-module btn btn-primary mr10">添加模块</a><a href="#" class="j-column-edit btn btn-blue">编辑列</a></div>');
         }
     });
-    $('.j-column-edit').live('click', function () {
+    _pageBox.on('click', '.j-column-edit', function () {
         $.editCompParams($(this).parents(".column_box"));
         return false;
     });
-    $(".j-add-module").live('click', function () {
+    _pageBox.on('click', '.j-add-module', function () {
         currAddModTrigWrap = $(this).parents(".item_settings_wrap");
         $.showBox({
             title: '新增模块列表',
@@ -170,12 +165,7 @@ $().ready(function () {
                         doSuccess: function (data) {
                             var _wrap = $(data.data.compContent);
                             if (instanceTypeTag == 'column' || instanceTypeTag == 'layout') {
-                                var _tmp = comp.html();
-                                if (instanceTypeTag == 'column') {
-                                    $('column_box', _wrap).html(_tmp);
-                                } else {
-                                    $('layout_box', _wrap).html(_tmp);
-                                }
+                                _wrap.html(comp.html())
                             }
                             comp.before(_wrap);
                             comp.remove();
