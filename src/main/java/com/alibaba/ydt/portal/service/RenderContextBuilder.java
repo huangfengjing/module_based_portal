@@ -84,6 +84,16 @@ public class RenderContextBuilder {
     }
 
     /**
+     * 设置当前登录用户信息
+     * @param appUser 当前登录用户信息
+     * @return 当前登录用户信息
+     */
+    public RenderContextBuilder setAppUser(AppUser appUser) {
+        renderContext.put(RenderContext.APP_USER_KEY, appUser);
+        return this;
+    }
+
+    /**
      * 设置 request
      * @param request request
      * @return this

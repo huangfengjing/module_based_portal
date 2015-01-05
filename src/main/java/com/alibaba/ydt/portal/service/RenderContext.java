@@ -1,5 +1,6 @@
 package com.alibaba.ydt.portal.service;
 
+import com.alibaba.ydt.portal.domain.AppUser;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -19,6 +20,8 @@ import java.util.*;
 public class RenderContext extends HashMap<String, Object> implements Map<String, Object>, Cloneable, Serializable {
 
     private Log logger = LogFactory.getLog(getClass());
+
+    public static final String APP_USER_KEY = "appUser";
 
     public static final String PAGE_HEADER_CONTENT_KEY = "cms_header";
     public static final String PAGE_BODY_CONTENT_KEY = "cms_body";
@@ -159,6 +162,10 @@ public class RenderContext extends HashMap<String, Object> implements Map<String
      */
     final public void setMode(RenderMode mode) {
         ((Map<String, Object>) get(RENDER_ENV_KEY)).put(RENDER_MOD_KEY, mode);
+    }
+
+    final public void setAppUser(AppUser appUser) {
+        put(APP_USER_KEY, appUser);
     }
 
     @Override

@@ -146,12 +146,11 @@ public class CmsDesignController extends BaseController {
      * }
      * }
      *
-     * @param delModules 删除的模块实例 ID 列表
      * @param pageLayout 页面布局
      * @return JSON 数据
      */
     @RequestMapping("/save-page.html")
-    public AjaxResult savePage(long pageId, String delModules, String pageLayout) {
+    public AjaxResult savePage(long pageId, String pageLayout) {
 
         JSONObject jsonLayout = JSON.parseObject(pageLayout);
         List<CmsLayoutInstance> layouts = new ArrayList<CmsLayoutInstance>();
@@ -159,20 +158,13 @@ public class CmsDesignController extends BaseController {
             String layoutIdentifier = key.toString();
             layouts.add(parseJsonLayout(layoutIdentifier, jsonLayout.getJSONObject(layoutIdentifier)));
         }
-        // 删除的模块列表
-        List<Long> delModuleIds = new ArrayList<Long>();
-        for (String tmp : delModules.split(",")) {
-            if (StringUtils.isNotBlank(tmp) && StringUtils.isNumeric(tmp)) {
-                delModuleIds.add(Long.valueOf(tmp));
-            }
-        }
 
         CmsPageInstance page = pageId >= 0 ? cmsPageInstanceService.getById(pageId) : new CmsPageInstance();
         if (null == page) {
             return AjaxResult.errorResult("找不到您要编辑的页面！");
         }
         page.setLayouts(layouts);
-        return cmsPageInstanceService.savePageLayout(page, delModuleIds) ? AjaxResult.successResult() : AjaxResult.errorResult();
+        return cmsPageInstanceService.savePageLayout(page) ? AjaxResult.successResult() : AjaxResult.errorResult();
     }
 
 
@@ -220,6 +212,8 @@ public class CmsDesignController extends BaseController {
 
             instance.setParamsWithList(paramMap.values());
 
+            RenderContext context = getCommonContext(request, response);
+            context.setMode(RenderContext.RenderMode.design);
             if (CmsPageInstance.TYPE_TAG.equals(instanceTypeTag) && instance instanceof CmsPageInstance) {
                 cmsPageInstanceService.save((CmsPageInstance) instance);
             } else if (CmsLayoutInstance.TYPE_TAG.equals(instanceTypeTag) && instance instanceof CmsLayoutInstance) {
@@ -229,10 +223,11 @@ public class CmsDesignController extends BaseController {
             } else if (CmsModuleInstance.TYPE_TAG.equals(instanceTypeTag) && instance instanceof CmsModuleInstance) {
                 cmsModuleInstanceService.save((CmsModuleInstance) instance);
             }
+            evictCache(instance, context);
 
             AjaxResult renderResult = renderComp(prototype.getDbId(), instanceTypeTag, instanceId, request, response);
             if (renderResult.isSuccess()) {
-                return AjaxResult.successResult().addData("comContent", renderResult.getRawData());
+                return AjaxResult.successResult().addData("compContent", renderResult.getRawData());
             } else {
                 return AjaxResult.errorResult();
             }

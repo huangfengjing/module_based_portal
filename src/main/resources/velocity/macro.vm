@@ -1,0 +1,14 @@
+## 宽高尺寸样式
+#macro (dimension $params)
+#{if}($moduleTool.isNotNull($params) && ($stringUtils.isNotBlank($params.weight) || $stringUtils.isNotBlank($params.height))) style="height: $stringUtils.defaultIfEmpty($!{params.height}, "200")px;#{if}($stringUtils.isNotBlank($params.width))width: $!{params.width}px;#{end}"#{end}
+#end
+
+## 编辑模式下的参数
+#macro (designId $env $prototype $instance)
+#{if}($env.renderMode == 'design') data-proto-id="${prototype.dbId}" data-inst-id="${instance.dbId}" data-editable="$!{prototype.getFeatureValue('editable')}" data-removable="$!{prototype.getFeatureValue('removable')}"#{end}
+#end
+
+## Comp Form Tag
+#macro (compFormTag $instance)
+<form action="$link.relative('cms/design/save-comp-params.html').param('instanceTypeTag', $instance.instanceTypeTag).param('dbId', $instance.dbId)" id="_comp_form_${instance.dbId}">
+#end

@@ -1,4 +1,7 @@
 #* @implicitly included *#
+#* @vtlvariable name="prototype" type="com.alibaba.ydt.portal.domain.BaseCmsPrototype" *#
+#* @vtlvariable name="instance" type="com.alibaba.ydt.portal.domain.BaseCmsInstance" *#
+#* @vtlmacrolibrary path="../resources/velocity/macro.vm" *#
 #* @vtlvariable name="moduleTool" type="com.alibaba.ydt.portal.util.ModuleTool" *#
 #* @vtlvariable name="math" type="java.lang.Math" *#
 #* @vtlvariable name="link" type="org.apache.velocity.tools.generic.LinkTool" *#

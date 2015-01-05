@@ -122,17 +122,23 @@ public class GenericDaoImpl extends HibernateDaoSupport implements GenericDao, A
     }
 
     public <T> int removeWithIds(Class<T> cls, List<Long> ids) {
-        try {
-            Map<String, Object> params = new HashMap<String, Object>();
-            params.put("idList", ids);
-            this.executeCustomUpdate("delete from " + cls.getName() + " where dbId in (:idList)", params);
+        if (null == ids || ids.isEmpty()) {
             return RET_CODE_OK;
-        } catch (DataIntegrityViolationException dive) {
-            return RET_CODE_ERR_CVE;
-        } catch (Exception e) {
-            logger.error("Error occurs when removing data, data id: " + ids, e);
-            return RET_CODE_ERR;
         }
+        /*
+           * the following statements has a high performance but the defect is hard code the "id" as the identifier
+           *
+           * StringBuilder sb = new StringBuilder("delete from ");
+           * sb.append(clzz.getName()).append(" where id in (:idList)");
+           * Map<String, Object> params = new HashMap<String, Object>();
+           * params.put("idList", ids);
+           * executeCustomUpdate(sb.toString(), params);
+           */
+
+        for (Serializable id : ids) {
+            this.remove(id);
+        }
+        return RET_CODE_OK;
     }
 
     public List<Object> executeCustomQuery(final String queryString, final Map<String, Object> paramValues) {

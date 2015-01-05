@@ -2,6 +2,7 @@ package com.alibaba.ydt.portal.service;
 
 import com.alibaba.ydt.portal.dao.GenericDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -14,6 +15,7 @@ import java.util.List;
  * @version 1.0
  *          Created on 14-11-24 上午10:54.
  */
+@Transactional
 abstract public class BaseDataService<T> implements DataService<T> {
 
     protected Class<T> entityClass;
@@ -51,21 +53,25 @@ abstract public class BaseDataService<T> implements DataService<T> {
         return genericDao.getUniqueByProperty(entityClass, propName, propVal);
     }
 
+    @Transactional
     @Override
     public void removeById(Long id) {
         genericDao.remove(entityClass, id);
     }
 
+    @Transactional
     @Override
     public void removeById(List<Long> idList) {
         genericDao.removeWithIds(entityClass, idList);
     }
 
+    @Transactional
     @Override
     public void save(T t) {
         genericDao.save(t);
     }
 
+    @Transactional
     @Override
     public Long create(T t) {
         return (Long) genericDao.create(t);

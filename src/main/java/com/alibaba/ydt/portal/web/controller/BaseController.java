@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.ydt.portal.common.SpringUtils;
 import com.alibaba.ydt.portal.domain.*;
 import com.alibaba.ydt.portal.service.*;
+import com.alibaba.ydt.portal.util.CmsUtils;
 import com.alibaba.ydt.portal.util.StringUtils;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.tools.Scope;
@@ -14,7 +15,11 @@ import org.apache.velocity.tools.config.XmlFactoryConfiguration;
 import org.apache.velocity.tools.view.ViewToolContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanCreationException;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.web.context.ServletContextAware;
 
 import javax.servlet.ServletContext;
@@ -29,7 +34,12 @@ import java.io.IOException;
  * @version 1.0
  *          Created on 14-12-30 下午4:49.
  */
-abstract public class BaseController implements ServletContextAware {
+abstract public class BaseController implements ServletContextAware, InitializingBean {
+
+    @Autowired
+    private CacheManager cacheManager;
+
+    private Cache renderCache;
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -131,7 +141,7 @@ abstract public class BaseController implements ServletContextAware {
             return null;
         }
         layout.setPrototypeId(Long.valueOf(idPairStrArray[0]));
-        layout.setPrototypeId(Long.valueOf(idPairStrArray[1]));
+        layout.setDbId(Long.valueOf(idPairStrArray[1]));
         for (Object tmp : jsonLayout.keySet()) {
             CmsColumnInstance column = new CmsColumnInstance();
             String colIdentifier = tmp.toString();
@@ -141,7 +151,7 @@ abstract public class BaseController implements ServletContextAware {
                 continue;
             }
             column.setPrototypeId(Long.valueOf(idPairStrArray[0]));
-            column.setPrototypeId(Long.valueOf(idPairStrArray[1]));
+            column.setDbId(Long.valueOf(idPairStrArray[1]));
 
             String[] moduleIdentifiers = jsonLayout.getString(colIdentifier).split("\\|");
             for (String moduleIdentifier : moduleIdentifiers) {
@@ -173,6 +183,12 @@ abstract public class BaseController implements ServletContextAware {
         return true;
     }
 
+    /**
+     * 获取实例对象
+     * @param instanceTypeTag 实例类型
+     * @param instanceId 实例 ID
+     * @return 实例对象
+     */
     protected BaseCmsInstance getInstance(String instanceTypeTag, long instanceId) {
         BaseCmsInstance instance = null;
         if(CmsPageInstance.TYPE_TAG.equals(instanceTypeTag)) {
@@ -203,8 +219,28 @@ abstract public class BaseController implements ServletContextAware {
         return CmsPageInstance.TYPE_TAG.equals(instanceTypeTag);
     }
 
+    /**
+     * 清除缓存
+     * @param instance 实例对象
+     * @param context 上下文环境
+     */
+    protected void evictCache(BaseCmsInstance instance, RenderContext context) {
+        String cacheKey = CmsUtils.generateCacheKey(RenderEngine.RENDER_CACHE_TYPE_FOR_MODULE, instance.getDbId(), context);
+        renderCache.evict(cacheKey);
+    }
+
     @Override
     public void setServletContext(ServletContext servletContext) {
         this.servletContext = servletContext;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        if(null != cacheManager) {
+            renderCache = cacheManager.getCache(RenderEngine.RENDER_CACHE_NAME);
+            if (null == renderCache) {
+                throw new BeanCreationException("创建 CmsCacheSupportService 失败，找不到缓存，请检查缓存配置项！");
+            }
+        }
     }
 }

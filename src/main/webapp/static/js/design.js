@@ -138,8 +138,15 @@ $().ready(function () {
             : (comp.hasClass('column_box') ? "column"
             : (comp.hasClass('layout_box') ? "layout"
             : (comp.hasClass('page_box' ? "page" : ""))));
-        if(instanceId == '0') {
-            $.showBox({icon:'ask', title:'操作提示', content:'该模块为新添加的模块，未保存页面结构前不可编辑，现在保存页面结构吗？', ok:'保存', okCallback: $.savePageLayout, cancel:'取消'});
+        if (instanceId == '0') {
+            $.showBox({
+                icon: 'ask',
+                title: '操作提示',
+                content: '该模块为新添加的模块，未保存页面结构前不可编辑，现在保存页面结构吗？',
+                ok: '保存',
+                okCallback: $.savePageLayout,
+                cancel: '取消'
+            });
             return false;
         }
         $.showBox({
@@ -161,7 +168,16 @@ $().ready(function () {
                         url: _form.attr('action'),
                         data: _form.serialize(),
                         doSuccess: function (data) {
-                            comp.before(data.moduleContent);
+                            var _wrap = $(data.data.compContent);
+                            if (instanceTypeTag == 'column' || instanceTypeTag == 'layout') {
+                                var _tmp = comp.html();
+                                if (instanceTypeTag == 'column') {
+                                    $('column_box', _wrap).html(_tmp);
+                                } else {
+                                    $('layout_box', _wrap).html(_tmp);
+                                }
+                            }
+                            comp.before(_wrap);
                             comp.remove();
                             $.hideBox();
                         },

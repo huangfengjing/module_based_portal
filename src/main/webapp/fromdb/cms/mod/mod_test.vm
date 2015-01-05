@@ -1,4 +1,4 @@
-<div class="module_box"#{if}($env.renderMode == 'design') data-proto-id="${modulePrototype.dbId}" data-inst-id="${moduleInstance.dbId}"#{end}>
+<div class="module_box"#dimension($moduleParams) #designId($env $modulePrototype $moduleInstance)>
     <div class="module_box_hd">$stringUtils.defaultIfEmpty($moduleParams.title, $modulePrototype.name)</div>
-    <div class="module_box_bd">${moduleParams.content}，这是一个测试模块，包含一个链接：<a href="$link.relative('/link-url.html')">Link</a></div>
+    <div class="module_box_bd">${moduleParams.content}</div>
 </div>

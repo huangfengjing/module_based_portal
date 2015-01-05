@@ -88,6 +88,24 @@ public abstract class JsonUtils {
     }
 
     /**
+     * 将 JSONArray 中的对象转换为指定类型的对象列表
+     * @param array JSON 数组
+     * @param cls 指定类型
+     * @param <T> 泛型
+     * @return 对象列表
+     */
+    public static <T> List<T> parseJsonArray(JSONArray array, Class<T> cls) {
+        List<T> result = new ArrayList<T>();
+        if(null == array) {
+            return result;
+        }
+        for(int i = 0; i < array.size(); i ++) {
+            result.add(array.getObject(i, cls));
+        }
+        return result;
+    }
+
+    /**
      * 创建一个新的 json config，统一处理默认过滤的字段，日期格式等
      *
      * @return json config

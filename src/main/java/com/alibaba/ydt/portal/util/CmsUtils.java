@@ -1,9 +1,6 @@
 package com.alibaba.ydt.portal.util;
 
-import com.alibaba.ydt.portal.domain.CmsColumnInstance;
-import com.alibaba.ydt.portal.domain.CmsLayoutInstance;
-import com.alibaba.ydt.portal.domain.CmsModuleInstance;
-import com.alibaba.ydt.portal.domain.CmsPageInstance;
+import com.alibaba.ydt.portal.domain.*;
 import com.alibaba.ydt.portal.service.RenderContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -133,12 +130,12 @@ public abstract class CmsUtils {
         pageElem.addAttribute("prototype-id", String.valueOf(page.getPrototypeId()));
         for(CmsLayoutInstance layout : page.getLayouts()) {
             Element layoutElem = DocumentHelper.createElement("layout");
-            pageElem.addAttribute("instance-id", String.valueOf(layout.getDbId()));
-            pageElem.addAttribute("prototype-id", String.valueOf(layout.getPrototypeId()));
+            layoutElem.addAttribute("instance-id", String.valueOf(layout.getDbId()));
+            layoutElem.addAttribute("prototype-id", String.valueOf(layout.getPrototypeId()));
             for (CmsColumnInstance column : layout.getColumns()) {
                 Element columnElem = DocumentHelper.createElement("column");
-                pageElem.addAttribute("instance-id", String.valueOf(column.getDbId()));
-                pageElem.addAttribute("prototype-id", String.valueOf(column.getPrototypeId()));
+                columnElem.addAttribute("instance-id", String.valueOf(column.getDbId()));
+                columnElem.addAttribute("prototype-id", String.valueOf(column.getPrototypeId()));
                 for (CmsModuleInstance module : column.getModules()) {
                     Element modElem = DocumentHelper.createElement("module");
                     modElem.addAttribute("instance-id", String.valueOf(module.getDbId()));
@@ -154,7 +151,7 @@ public abstract class CmsUtils {
     }
 
     /**
-     * 生成缓存的 KEY，目前的 KEY 生成仅依赖 RenderContext 里面的 render mode 和 env 数据，其它值将过滤掉
+     * 生成缓存的 KEY，目前的 KEY 生成仅依赖 RenderContext 里面的 app user, render mode 和 env 数据，其它值将过滤掉
      * @param targetType 缓存的对象类型
      * @param targetId 缓存的实例 ID
      * @param context 渲染上下文环境
@@ -169,14 +166,19 @@ public abstract class CmsUtils {
                 .append(";").append("id=").append(targetId)
                 .append(";").append("mode=").append(context.get(RenderContext.RENDER_MOD_KEY));
 
-        // 环境变量按 KEY 排序，并获取键值的 hash code 作为缓存KEY组成部分
-        List<String> keys = new ArrayList<String>(((Map<String, String>)context.get(RenderContext.RENDER_ENV_KEY)).keySet());
-        Collections.sort(keys);
-        StringBuilder envSb = new StringBuilder();
-        for(String key : keys) {
-            envSb.append(key).append("=").append(context.get(key)).append(";");
+        AppUser appUser = (AppUser) context.get(RenderContext.APP_USER_KEY);
+        if(null != appUser) {
+            sb.append(";").append("user=").append(appUser.getIdentifier());
         }
-        sb.append(";env=").append(envSb.toString().hashCode());
+
+        // 环境变量按 KEY 排序，并获取键值的 hash code 作为缓存KEY组成部分
+//        List<String> keys = new ArrayList<String>(((Map<String, String>)context.get(RenderContext.RENDER_ENV_KEY)).keySet());
+//        Collections.sort(keys);
+//        StringBuilder envSb = new StringBuilder();
+//        for(String key : keys) {
+//            envSb.append(key).append("=").append(context.get(key)).append(";");
+//        }
+//        sb.append(";env=").append(envSb.toString().hashCode());
         return sb.toString();
     }
 }

@@ -69,7 +69,8 @@ public class CmsPageInstance extends BaseCmsInstance {
         if(null == layouts) {
             return;
         }
-        xmlContent = JsonUtils.toCompatibleJSONString(layouts);
+        this.layouts = layouts;
+        xmlContent = CmsUtils.pageToXmlString(this);
     }
 
     @Override

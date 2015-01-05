@@ -25,6 +25,8 @@ public class CommonParameterGather implements ParameterGather {
 
     public Set<String> ignoredParamNames = new HashSet<String>() {
         {
+            add("dbId");
+            add("instanceTypeTag");
             add("pageId");
             add("layoutId");
             add("columnId");

@@ -1,0 +1,5 @@
+<div class="column_box width50p"#dimension($columnParams) #designId($env $columnPrototype $columnInstance)>
+    #foreach($cmsModule in $_cms_modules)
+    $cmsModule
+    #end
+</div>

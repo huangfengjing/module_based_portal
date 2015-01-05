@@ -67,19 +67,23 @@ abstract public class BaseCmsInstance extends BaseModel implements ParameterSupp
         }
         List<ParameterValuePair> parameters = new ArrayList<ParameterValuePair>();
         try {
-            JSONObject params = JSONObject.parseObject(params4Store);
-            for (Object paramKey : params.keySet()) {
-                ParameterValuePair parameter = new ParameterValuePair();
-                parameter.setName(paramKey.toString());
-                Object valueObject = params.get(paramKey.toString());
-                if (valueObject instanceof JSONObject) {
-                    parameter.setValue(JsonUtils.processObject((JSONObject) valueObject));
-                } else if (valueObject instanceof JSONArray) {
-                    parameter.setValue(JsonUtils.processArray((JSONArray) valueObject));
-                } else {
-                    parameter.setValue(valueObject);
+            if(params4Store.startsWith("[")) {
+                parameters = JSONArray.parseArray(params4Store, ParameterValuePair.class);
+            } else {
+                JSONObject params = JSONObject.parseObject(params4Store);
+                for (Object paramKey : params.keySet()) {
+                    ParameterValuePair parameter = new ParameterValuePair();
+                    parameter.setName(paramKey.toString());
+                    Object valueObject = params.get(paramKey.toString());
+                    if (valueObject instanceof JSONObject) {
+                        parameter.setValue(JsonUtils.processObject((JSONObject) valueObject));
+                    } else if (valueObject instanceof JSONArray) {
+                        parameter.setValue(JsonUtils.processArray((JSONArray) valueObject));
+                    } else {
+                        parameter.setValue(valueObject);
+                    }
+                    parameters.add(parameter);
                 }
-                parameters.add(parameter);
             }
         } catch (Exception e) {
             logger.error("解析模块参数失败", e);

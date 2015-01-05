@@ -18,7 +18,7 @@
     $screen_content
     #parse('/include/footer.vm')
 #if($env.renderMode == "design")
-<form id="j-page-form" action="/shop/design/save-page.html" method="post">
+<form id="j-page-form" action="/cms/design/save-page.html" method="post">
     <input type="hidden" name="pageId" value="1" id="j-page-dbId">
     <input type="hidden" name="pageLayout" id="j-page-layout-holder">
     <input type="hidden" name="delModules" id="j-del-modules-holder">

@@ -9,8 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * 页面服务
@@ -35,21 +34,35 @@ public class CmsPageInstanceService extends BaseDataService<CmsPageInstance> {
      * 保存页面布局
      *
      * @param page         页面
-     * @param delModuleIds 删除的模块 ID 列表
      * @return 是否保存成功的标识
      */
     @Transactional
-    public boolean savePageLayout(CmsPageInstance page, List<Long> delModuleIds) {
+    public boolean savePageLayout(CmsPageInstance page) {
 
-        // 删除模块
-        if(!delModuleIds.isEmpty()) {
-            cmsModuleInstanceService.removeById(delModuleIds);
+        // 删除被用户去掉的模块实例数据
+        Map<String, List<Long>> removedInstIds = diffInstanceIds(page);
+        List<Long> layoutIds = removedInstIds.get(CmsLayoutInstance.TYPE_TAG);
+        if(null != layoutIds && !layoutIds.isEmpty()) {
+            cmsLayoutInstanceService.removeById(layoutIds);
+        }
+        List<Long> columnIds = removedInstIds.get(CmsColumnInstance.TYPE_TAG);
+        if(null != columnIds && !columnIds.isEmpty()) {
+            cmsColumnInstanceService.removeById(columnIds);
+        }
+        List<Long> moduleIds = removedInstIds.get(CmsModuleInstance.TYPE_TAG);
+        if(null != moduleIds && !moduleIds.isEmpty()) {
+            cmsLayoutInstanceService.removeById(moduleIds);
         }
 
         // 初始化那些新建的组件
         createNewComponentInstance(page);
         save(page);
         return true;
+    }
+
+    // TODO 分析被用户删除的模块
+    private Map<String, List<Long>> diffInstanceIds(CmsPageInstance page) {
+        return Collections.emptyMap();
     }
 
     /**
