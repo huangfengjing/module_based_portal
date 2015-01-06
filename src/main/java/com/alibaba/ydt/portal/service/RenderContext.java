@@ -22,6 +22,7 @@ public class RenderContext extends HashMap<String, Object> implements Map<String
     private Log logger = LogFactory.getLog(getClass());
 
     public static final String APP_USER_KEY = "appUser";
+    public static final String CMS_PAGE_ID = "pageId";
 
     public static final String PAGE_HEADER_CONTENT_KEY = "cms_header";
     public static final String PAGE_BODY_CONTENT_KEY = "cms_body";
@@ -166,6 +167,10 @@ public class RenderContext extends HashMap<String, Object> implements Map<String
 
     final public void setAppUser(AppUser appUser) {
         put(APP_USER_KEY, appUser);
+    }
+
+    final public void setPageId(long pageId) {
+        put(CMS_PAGE_ID, pageId);
     }
 
     @Override

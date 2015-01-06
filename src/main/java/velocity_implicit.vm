@@ -1,4 +1,6 @@
 #* @implicitly included *#
+#* @vtlvariable name="moduleInstance" type="com.alibaba.ydt.portal.domain.CmsModuleInstance" *#
+#* @vtlvariable name="columnInstance" type="com.alibaba.ydt.portal.domain.CmsColumnInstance" *#
 #* @vtlvariable name="prototype" type="com.alibaba.ydt.portal.domain.BaseCmsPrototype" *#
 #* @vtlvariable name="instance" type="com.alibaba.ydt.portal.domain.BaseCmsInstance" *#
 #* @vtlmacrolibrary path="../resources/velocity/macro.vm" *#

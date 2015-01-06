@@ -39,6 +39,10 @@ public class CmsPageInstanceService extends BaseDataService<CmsPageInstance> {
     @Transactional
     public boolean savePageLayout(CmsPageInstance page) {
 
+        // 初始化那些新建的组件
+        createNewComponentInstance(page);
+        save(page);
+
         // 删除被用户去掉的模块实例数据
         Map<String, List<Long>> removedInstIds = diffInstanceIds(page);
         List<Long> layoutIds = removedInstIds.get(CmsLayoutInstance.TYPE_TAG);
@@ -53,16 +57,60 @@ public class CmsPageInstanceService extends BaseDataService<CmsPageInstance> {
         if(null != moduleIds && !moduleIds.isEmpty()) {
             cmsLayoutInstanceService.removeById(moduleIds);
         }
-
-        // 初始化那些新建的组件
-        createNewComponentInstance(page);
-        save(page);
         return true;
     }
 
-    // TODO 分析被用户删除的模块
+    /**
+     * 分析被用户删除的组件 ID
+     * @param page 新的页面对象
+     * @return 被删除的组件 ID 映射
+     */
     private Map<String, List<Long>> diffInstanceIds(CmsPageInstance page) {
-        return Collections.emptyMap();
+        if(null == page || page.getDbId() == 0) {
+            return Collections.emptyMap();
+        }
+        CmsPageInstance fromDb = getById(page.getDbId());
+        if(null == fromDb) {
+            return Collections.emptyMap();
+        }
+        Set<Long> allLayoutIds = new HashSet<Long>();
+        Set<Long> allColumnIds = new HashSet<Long>();
+        Set<Long> allModuleIds = new HashSet<Long>();
+        for(CmsLayoutInstance layout : fromDb.getLayouts()) {
+            allLayoutIds.add(layout.getDbId());
+            for(CmsColumnInstance column : layout.getColumns()) {
+                allColumnIds.add(column.getDbId());
+                for(CmsModuleInstance module : column.getModules()) {
+                    allModuleIds.add(module.getDbId());
+                }
+            }
+        }
+
+        List<Long> diffLayoutIds = new ArrayList<Long>();
+        List<Long> diffColumnIds = new ArrayList<Long>();
+        List<Long> diffModuleIds = new ArrayList<Long>();
+        for(CmsLayoutInstance layout : page.getLayouts()) {
+            if(!allLayoutIds.contains(layout.getDbId())) {
+                diffLayoutIds.add(layout.getDbId());
+            }
+            for(CmsColumnInstance column : layout.getColumns()) {
+                if(!allColumnIds.contains(column.getDbId())) {
+                    diffColumnIds.add(column.getDbId());
+                }
+                for(CmsModuleInstance module : column.getModules()) {
+                    if(!allModuleIds.contains(module.getDbId())) {
+                        diffModuleIds.add(module.getDbId());
+                    }
+                }
+            }
+        }
+
+        Map<String, List<Long>> diff = new HashMap<String, List<Long>>();
+        diff.put(CmsLayoutInstance.TYPE_TAG, diffLayoutIds);
+        diff.put(CmsColumnInstance.TYPE_TAG, diffColumnIds);
+        diff.put(CmsModuleInstance.TYPE_TAG, diffModuleIds);
+
+        return diff;
     }
 
     /**

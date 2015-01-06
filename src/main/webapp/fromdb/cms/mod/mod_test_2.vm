@@ -1,4 +1,6 @@
-<div class="module_box"#dimension($moduleParams) #designId($env $modulePrototype $moduleInstance)>
+<div id="col_${columnInstance.dbId}_mod_${moduleInstance.dbId}" class="module_box" #dimension($moduleParams) #designId($env $modulePrototype $moduleInstance)>
+    #if($columnInstance.paramsMap.layout != 'tab')
     <div class="module_box_hd">$stringUtils.defaultIfEmpty($moduleParams.title, $modulePrototype.name)</div>
+    #end
     <div class="module_box_bd">第二个测试模块，该模块没有可编辑的参数，主要用于 DEMO 演示</div>
 </div>

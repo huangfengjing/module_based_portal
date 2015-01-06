@@ -21,7 +21,16 @@ import javax.servlet.http.HttpServletResponse;
 public class PortletController extends BaseController {
 
     @RequestMapping(value = "/index.html")
-    public String portlet(ModelMap modelMap, HttpServletRequest request, HttpServletResponse response) {
+    public String index(ModelMap modelMap, HttpServletRequest request, HttpServletResponse response) {
+        RenderContext context = getCommonContext(request, response);
+        context.setMode(RenderContext.RenderMode.product);
+        modelMap.put("cmsPageBody", renderEngine.renderPage(1L, context).getRenderContent());
+        modelMap.putAll(context);
+        return "template/portlet";
+    }
+
+    @RequestMapping(value = "/design.html")
+    public String design(ModelMap modelMap, HttpServletRequest request, HttpServletResponse response) {
         RenderContext context = getCommonContext(request, response);
         context.setMode(RenderContext.RenderMode.design);
         modelMap.put("cmsPageBody", renderEngine.renderPage(1L, context).getRenderContent());

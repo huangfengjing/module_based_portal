@@ -16,12 +16,10 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.Servlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Simple hello world controller.
@@ -93,16 +91,16 @@ public class CmsDesignController extends BaseController {
     /**
      * 渲染模块表单
      *
-     * @param pageId     模块所在的页面 ID
      * @param instanceId 模块实例 ID
      * @param request    请求
      * @param response   响应
      * @return 模块表单页面
      */
     @RequestMapping("/render-comp-form.html")
-    public AjaxResult renderCompForm(long pageId, long instanceId, String instanceTypeTag, HttpServletRequest request, HttpServletResponse response) {
+    public AjaxResult renderCompForm(long instanceId, String instanceTypeTag, HttpServletRequest request, HttpServletResponse response) {
         RenderContext context = getCommonContext(request, response);
         context.setMode(RenderContext.RenderMode.design);
+        context.setPageId(ServletRequestUtils.getLongParameter(request, "pageId", 0));
         String formHtml = renderEngine.renderModuleForm(instanceTypeTag, instanceId, context);
         return AjaxResult.rawResult(StringUtils.defaultIfEmpty(formHtml, "该组件没有可编辑的参数"));
     }
@@ -159,6 +157,18 @@ public class CmsDesignController extends BaseController {
             String layoutIdentifier = key.toString();
             layouts.add(parseJsonLayout(layoutIdentifier, jsonLayout.getJSONObject(layoutIdentifier)));
         }
+        Collections.sort(layouts, new Comparator<CmsLayoutInstance>() {
+            @Override
+            public int compare(CmsLayoutInstance o1, CmsLayoutInstance o2) {
+                if(o1.getDbId() == 0) {
+                    return 1;
+                }
+                if(o2.getDbId() == 0) {
+                    return -1;
+                }
+                return 0;
+            }
+        });
 
         CmsPageInstance page = pageId >= 0 ? cmsPageInstanceService.getById(pageId) : new CmsPageInstance();
         if (null == page) {
@@ -212,6 +222,15 @@ public class CmsDesignController extends BaseController {
             }
 
             instance.setParamsWithList(paramMap.values());
+            
+            CmsPageInstance page = null;
+            long pageId = ServletRequestUtils.getLongParameter(request, "pageId", 0);
+            if(pageId > 0) {
+                page = cmsPageInstanceService.getById(pageId);
+            }
+            if(null == page) {
+                return AjaxResult.errorResult("要编辑的页面不存在");
+            }
 
             RenderContext context = getCommonContext(request, response);
             context.setMode(RenderContext.RenderMode.design);
@@ -224,7 +243,7 @@ public class CmsDesignController extends BaseController {
             } else if (CmsModuleInstance.TYPE_TAG.equals(instanceTypeTag) && instance instanceof CmsModuleInstance) {
                 cmsModuleInstanceService.save((CmsModuleInstance) instance);
             }
-            evictCache(instance, context);
+            evictCache(page, instance, context);
 
             AjaxResult renderResult = renderComp(prototype.getDbId(), instanceTypeTag, instanceId, request, response);
             if (renderResult.isSuccess()) {

@@ -33,8 +33,6 @@ $().ready(function () {
         }
         if (window.confirm('您确定要删除该模块吗')) {
             var module = _this.parents(".module_box");
-            var delModHolder = $("#j-del-modules-holder");
-            delModHolder.val(delModHolder.val() + ',' + module.attr('data-inst-id'));
             $.layoutChanged(module.parents(".layout_box"));
             module.remove();
         }
@@ -59,7 +57,7 @@ $().ready(function () {
     });
     _pageBox.on('click', '.j-add-column', function () {
         currAddColTrigWrap = $(this).parents(".column_add_wrap");
-        currAddColTrigWrap.before('<div class="column_box width25p" data-inst-id="0"><div class="item_settings_wrap"><a href="#" class="j-add-module btn btn-primary mr10">添加模块</a><a href="#" class="j-column-edit btn btn-blue">编辑列</a></div>');
+        currAddColTrigWrap.before('<div class="column_box width25p" data-inst-id="0" data-proto-id="1"><div class="item_settings_wrap"><a href="#" class="j-add-module btn btn-primary mr10">添加模块</a><a href="#" class="j-column-edit btn btn-blue mr10">编辑列</a><a href="#" class="j-column-remove btn btn-darkLight">删除列</a></div>');
 
         var _cols = $('.column_box');
         _cols.removeClass('width50p');
@@ -86,13 +84,14 @@ $().ready(function () {
             dragEnd: $.pageChanged,
             placeHolderTemplate: "<div class='module_box module_placeholder'></div>"
         });
+        $.pageChanged();
     });
 
-    // 添加模块
+    // 列操作
     var currAddModTrigWrap;
     _columns.each(function (index, column) {
         if (!$(column).hasClass('column_ignore')) {
-            $(column).append('<div class="item_settings_wrap"><a href="#" class="j-add-module btn btn-primary mr10">添加模块</a><a href="#" class="j-column-edit btn btn-blue">编辑列</a></div>');
+            $(column).append('<div class="item_settings_wrap"><a href="#" class="j-add-module btn btn-primary mr10">添加模块</a><a href="#" class="j-column-edit btn btn-blue mr10">编辑列</a><a href="#" class="j-column-remove btn btn-darkLight">删除列</a></div>');
         }
     });
     _pageBox.on('click', '.j-column-edit', function () {
@@ -123,6 +122,24 @@ $().ready(function () {
                 });
             }
         });
+        return false;
+    });
+    // 删除模块
+    _pageBox.on('click', '.j-column-remove', function () {
+        var _this = $(this);
+        if (_this.attr('data-removable') == '0') {
+            $.showBox({
+                icon: 'error',
+                title: '删除列',
+                content: '对不起，该列不能被删除！'
+            });
+            return false;
+        }
+        if (window.confirm('您确定要删除该列吗')) {
+            var column = _this.parents(".column_box");
+            $.layoutChanged(column.parents(".layout_box"));
+            column.remove();
+        }
         return false;
     });
 
@@ -240,9 +257,34 @@ $().ready(function () {
         });
         $("#j-page-layout-holder").val($.json2String(page));
         var _saveForm = $("#j-page-form");
-        $.post(_saveForm.attr('action'), _saveForm.serialize(), function (data) {
-            console.log(data);
+        _saveForm.submit(function () {
+            var _form = $(this);
+            $.iAjax({
+                loadingTitle: '保存参数',
+                loadingContent: '正在保存模块参数，请稍候……',
+                url: _form.attr('action'),
+                data: _form.serialize(),
+                doSuccess: function (data) {
+                    $.showBox({
+                        icon: 'success',
+                        title: '提示',
+                        content: '页面保存成功，可以刷新页面查看效果',
+                        ok: '刷新',
+                        okCallback: function() {
+                            window.location.reload();
+                        }
+                    });
+                },
+                doFailure: function (data) {
+                    $.showBoxTip({
+                        extCls: 'error',
+                        tipMsg: data.message
+                    });
+                }
+            });
+            return false;
         });
+        _saveForm.submit();
 
         return false;
     };

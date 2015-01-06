@@ -26,7 +26,7 @@
 .layout_box, .module_box {
     min-width: 50px;
     min-height: 50px;
-    margin-top: 10px;
+    margin-bottom: 10px;
     clear: both;
     position: relative;
 }
@@ -75,7 +75,9 @@
     position: relative;
     padding: 10px;
 }
-
+.page_box {
+    padding: 10px;
+}
 .edit_mod .page_box,.edit_mod .layout_box,.edit_mod .column_box {
     border: 1px dashed #CCCCCC;
     padding: 10px;

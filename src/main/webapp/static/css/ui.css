@@ -43,7 +43,7 @@ a {
     border-radius: 5px;
     color: #656d78;
     padding: 0;
-    width: 140px
+    width: 120px
 }
 
 .btn:hover, .btn:focus {
@@ -273,3 +273,13 @@ a {
     height: 24px;
     line-height: 24px;
 }
+
+/**
+ * TAB
+ */
+.etabs { margin: 0; padding: 0; border-bottom: 1px solid #dadada}
+.tab { display: inline-block; zoom:1; *display:inline; background: #E7DFDF; border: solid 1px #DADADA; border-bottom: none;}
+.tab a { font-size: 14px; line-height: 2em; display: block; padding: 0 10px; outline: none; }
+.tab.active { background: #fff; position: relative; top: 1px; padding-top: 1px; border-color: #dadada; }
+.tab a.active { font-weight: bold; }
+.tab-container .panel-container { background: #fff; border: solid #666 1px; padding: 10px; -moz-border-radius: 0 4px 4px 4px; -webkit-border-radius: 0 4px 4px 4px; }

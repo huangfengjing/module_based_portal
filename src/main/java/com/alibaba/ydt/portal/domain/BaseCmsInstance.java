@@ -102,12 +102,15 @@ abstract public class BaseCmsInstance extends BaseModel implements ParameterSupp
     }
 
     @Transient
-    public void setParamsWithMap(Map<String, Object> params) {
-        if (params == null || params.isEmpty()) {
-            params4Store = null;
-            return;
+    public Map<String, Object> getParamsMap() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<ParameterValuePair> params = getParameters();
+        if(null != params && !params.isEmpty()) {
+            for(ParameterValuePair pair : params) {
+                map.put(pair.getName(), pair.getValue());
+            }
         }
-        params4Store = JsonUtils.toCompatibleJSONString(params);
+        return map;
     }
 
     @Override

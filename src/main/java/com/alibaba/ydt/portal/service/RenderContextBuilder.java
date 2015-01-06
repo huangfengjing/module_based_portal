@@ -94,6 +94,16 @@ public class RenderContextBuilder {
     }
 
     /**
+     * 设置当前页面ID
+     * @param pageId 当前页面ID
+     * @return 当前页面ID
+     */
+    public RenderContextBuilder setPageId(long pageId) {
+        renderContext.put(RenderContext.CMS_PAGE_ID, pageId);
+        return this;
+    }
+
+    /**
      * 设置 request
      * @param request request
      * @return this

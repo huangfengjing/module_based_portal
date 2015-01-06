@@ -205,6 +205,11 @@ public class RenderEngine implements InitializingBean {
                     .setLayoutInstance(layout).setLayoutPrototype(prototype);
             List<String> columnRenderResult = new ArrayList<String>(layout.getColumns().size());
             for (CmsColumnInstance column : layout.getColumns()) {
+                if(StringUtils.isBlank(column.getParams4Store()) && column.getDbId() > 0) {
+                    CmsColumnInstance fromDb = cmsColumnInstanceService.getById(column.getDbId());
+                    column.setTitle(fromDb.getTitle());
+                    column.setParams4Store(fromDb.getParams4Store());
+                }
                 RenderContext localContext = RenderContextBuilder.newBuilder().cloneFrom(layoutContextBuilder.build()).build();
                 columnRenderResult.add(renderColumn(column, localContext).getRenderContent());
             }
@@ -255,10 +260,10 @@ public class RenderEngine implements InitializingBean {
             if (null == prototype) {
                 throw new RenderException("列原型未找到");
             }
-            if(StringUtils.isBlank(column.getParams4Store())) {
-                List<CmsModuleInstance> mods = column.getModules();
-                column = cmsColumnInstanceService.getById(column.getDbId());
-                column.setModules(mods);
+            if(StringUtils.isBlank(column.getParams4Store()) && column.getDbId() > 0) {
+                CmsColumnInstance fromDb = cmsColumnInstanceService.getById(column.getDbId());
+                column.setTitle(fromDb.getTitle());
+                column.setParams4Store(fromDb.getParams4Store());
             }
 
             // 查看缓存
@@ -282,6 +287,11 @@ public class RenderEngine implements InitializingBean {
             List<String> moduleRenderResult = new ArrayList<String>(column.getModules().size());
             for (CmsModuleInstance module : column.getModules()) {
                 RenderContext localContext = RenderContextBuilder.newBuilder().cloneFrom(columnContextBuilder.build()).build();
+                if(StringUtils.isBlank(module.getParams4Store()) && module.getDbId() > 0) {
+                    CmsModuleInstance fromDb = cmsModuleInstanceService.getById(module.getDbId());
+                    module.setParams4Store(fromDb.getParams4Store());
+                    module.setTitle(fromDb.getTitle());
+                }
                 moduleRenderResult.add(renderModule(module, localContext).getRenderContent());
             }
 
@@ -334,6 +344,7 @@ public class RenderEngine implements InitializingBean {
             if(StringUtils.isBlank(module.getParams4Store()) && module.getDbId() > 0) {
                 CmsModuleInstance fromDb = cmsModuleInstanceService.getById(module.getDbId());
                 module.setParams4Store(fromDb.getParams4Store());
+                module.setTitle(fromDb.getTitle());
             }
 
             // 查看缓存
@@ -412,13 +423,13 @@ public class RenderEngine implements InitializingBean {
 
             BaseCmsPrototype prototype = null;
             if(CmsPageInstance.TYPE_TAG.equals(instanceTypeTag)) {
-                prototype = cmsPagePrototypeService.getById(instanceId);
+                prototype = cmsPagePrototypeService.getById(instance.getPrototypeId());
             } else if (CmsLayoutInstance.TYPE_TAG.equals(instanceTypeTag)) {
-                prototype = cmsLayoutPrototypeService.getById(instanceId);
+                prototype = cmsLayoutPrototypeService.getById(instance.getPrototypeId());
             } else if (CmsColumnInstance.TYPE_TAG.equals(instanceTypeTag)) {
-                prototype = cmsColumnPrototypeService.getById(instanceId);
+                prototype = cmsColumnPrototypeService.getById(instance.getPrototypeId());
             } else if (CmsModuleInstance.TYPE_TAG.equals(instanceTypeTag)) {
-                prototype = cmsModulePrototypeService.getById(instanceId);
+                prototype = cmsModulePrototypeService.getById(instance.getPrototypeId());
             }
             if (null == prototype) {
                 return null;
@@ -466,38 +477,6 @@ public class RenderEngine implements InitializingBean {
         } catch (Exception e) {
             throw new RenderException(e);
         }
-    }
-
-    public void setCmsPagePrototypeService(CmsPagePrototypeService cmsPagePrototypeService) {
-        this.cmsPagePrototypeService = cmsPagePrototypeService;
-    }
-
-    public void setCmsPageInstanceService(CmsPageInstanceService cmsPageInstanceService) {
-        this.cmsPageInstanceService = cmsPageInstanceService;
-    }
-
-    public void setCmsLayoutPrototypeService(CmsLayoutPrototypeService cmsLayoutPrototypeService) {
-        this.cmsLayoutPrototypeService = cmsLayoutPrototypeService;
-    }
-
-    public void setCmsLayoutInstanceService(CmsLayoutInstanceService cmsLayoutInstanceService) {
-        this.cmsLayoutInstanceService = cmsLayoutInstanceService;
-    }
-
-    public void setCmsColumnPrototypeService(CmsColumnPrototypeService cmsColumnPrototypeService) {
-        this.cmsColumnPrototypeService = cmsColumnPrototypeService;
-    }
-
-    public void setCmsColumnInstanceService(CmsColumnInstanceService cmsColumnInstanceService) {
-        this.cmsColumnInstanceService = cmsColumnInstanceService;
-    }
-
-    public void setCmsModulePrototypeService(CmsModulePrototypeService cmsModulePrototypeService) {
-        this.cmsModulePrototypeService = cmsModulePrototypeService;
-    }
-
-    public void setCmsModuleInstanceService(CmsModuleInstanceService cmsModuleInstanceService) {
-        this.cmsModuleInstanceService = cmsModuleInstanceService;
     }
 
 

@@ -26,6 +26,10 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * CMS 控制器基类
@@ -142,6 +146,7 @@ abstract public class BaseController implements ServletContextAware, Initializin
         }
         layout.setPrototypeId(Long.valueOf(idPairStrArray[0]));
         layout.setDbId(Long.valueOf(idPairStrArray[1]));
+        List<CmsColumnInstance> columns = new ArrayList<CmsColumnInstance>();
         for (Object tmp : jsonLayout.keySet()) {
             CmsColumnInstance column = new CmsColumnInstance();
             String colIdentifier = tmp.toString();
@@ -165,8 +170,21 @@ abstract public class BaseController implements ServletContextAware, Initializin
                 instance.setDbId(Long.valueOf(idPairStrArray[1]));
                 column.getModules().add(instance);
             }
-            layout.getColumns().add(column);
+            columns.add(column);
         }
+        Collections.sort(columns, new Comparator<CmsColumnInstance>() {
+            @Override
+            public int compare(CmsColumnInstance o1, CmsColumnInstance o2) {
+                if (o1.getDbId() == 0) {
+                    return 1;
+                }
+                if (o2.getDbId() == 0) {
+                    return -1;
+                }
+                return 0;
+            }
+        });
+        layout.getColumns().addAll(columns);
         return layout;
     }
 
@@ -185,13 +203,14 @@ abstract public class BaseController implements ServletContextAware, Initializin
 
     /**
      * 获取实例对象
+     *
      * @param instanceTypeTag 实例类型
-     * @param instanceId 实例 ID
+     * @param instanceId      实例 ID
      * @return 实例对象
      */
     protected BaseCmsInstance getInstance(String instanceTypeTag, long instanceId) {
         BaseCmsInstance instance = null;
-        if(CmsPageInstance.TYPE_TAG.equals(instanceTypeTag)) {
+        if (CmsPageInstance.TYPE_TAG.equals(instanceTypeTag)) {
             instance = cmsPageInstanceService.getById(instanceId);
         } else if (CmsLayoutInstance.TYPE_TAG.equals(instanceTypeTag)) {
             instance = cmsLayoutInstanceService.getById(instanceId);
@@ -221,12 +240,62 @@ abstract public class BaseController implements ServletContextAware, Initializin
 
     /**
      * 清除缓存
+     *
+     * @param page     页面对象
      * @param instance 实例对象
-     * @param context 上下文环境
+     * @param context  上下文环境
      */
-    protected void evictCache(BaseCmsInstance instance, RenderContext context) {
-        String cacheKey = CmsUtils.generateCacheKey(RenderEngine.RENDER_CACHE_TYPE_FOR_MODULE, instance.getDbId(), context);
-        renderCache.evict(cacheKey);
+    protected void evictCache(CmsPageInstance page, BaseCmsInstance instance, RenderContext context) {
+        boolean find = false;
+        if (instance instanceof CmsModuleInstance) {
+            for (CmsLayoutInstance layout : page.getLayouts()) {
+                for (CmsColumnInstance column : layout.getColumns()) {
+                    for (CmsModuleInstance module : column.getModules()) {
+                        if (module.getDbId() == instance.getDbId()) {
+                            evictCache(column, context);
+                            evictCache(layout, context);
+                            find = true;
+                            break;
+                        }
+                    }
+                    if (find) {
+                        break;
+                    }
+                }
+                if (find) {
+                    break;
+                }
+            }
+        } else if (instance instanceof CmsColumnInstance) {
+            for (CmsLayoutInstance layout : page.getLayouts()) {
+                for (CmsColumnInstance column : layout.getColumns()) {
+                    if (column.getDbId() == instance.getDbId()) {
+                        evictCache(layout, context);
+                        find = true;
+                        break;
+                    }
+                }
+                if (find) {
+                    break;
+                }
+            }
+        }
+        evictCache(instance, context);
+    }
+
+    private void evictCache(BaseCmsInstance instance, RenderContext context) {
+        String tag = instance.getInstanceTypeTag();
+        String cacheType = isModuleTag(tag) ? RenderEngine.RENDER_CACHE_TYPE_FOR_MODULE
+                : (isColumnTag(tag) ? RenderEngine.RENDER_CACHE_TYPE_FOR_COLUMN
+                : (isLayoutTag(tag) ? RenderEngine.RENDER_CACHE_TYPE_FOR_LAYOUT : RenderEngine.RENDER_CACHE_TYPE_FOR_PAGE));
+        // 删除各个模式下的缓存
+        RenderContext tmp = context.clone();
+        tmp.setMode(RenderContext.RenderMode.design);
+        renderCache.evict(CmsUtils.generateCacheKey(cacheType, instance.getDbId(), tmp));
+        tmp.setMode(RenderContext.RenderMode.preview);
+        renderCache.evict(CmsUtils.generateCacheKey(cacheType, instance.getDbId(), tmp));
+        tmp.setMode(RenderContext.RenderMode.product);
+        renderCache.evict(CmsUtils.generateCacheKey(cacheType, instance.getDbId(), tmp));
     }
 
     @Override
@@ -236,7 +305,7 @@ abstract public class BaseController implements ServletContextAware, Initializin
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        if(null != cacheManager) {
+        if (null != cacheManager) {
             renderCache = cacheManager.getCache(RenderEngine.RENDER_CACHE_NAME);
             if (null == renderCache) {
                 throw new BeanCreationException("创建 CmsCacheSupportService 失败，找不到缓存，请检查缓存配置项！");
