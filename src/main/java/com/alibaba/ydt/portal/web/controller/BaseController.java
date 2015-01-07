@@ -65,6 +65,18 @@ abstract public class BaseController implements ServletContextAware, Initializin
     @Autowired
     protected CmsColumnInstanceService cmsColumnInstanceService;
 
+    @Autowired
+    protected CmsModulePrototypeService cmsModulePrototypeService;
+
+    @Autowired
+    protected CmsPagePrototypeService cmsPagePrototypeService;
+
+    @Autowired
+    protected CmsLayoutPrototypeService cmsLayoutPrototypeService;
+
+    @Autowired
+    protected CmsColumnPrototypeService cmsColumnPrototypeService;
+
     private static ToolboxFactory toolboxFactory = null;
     private static Toolbox globalToolbox = null;
 
@@ -220,6 +232,27 @@ abstract public class BaseController implements ServletContextAware, Initializin
             instance = cmsModuleInstanceService.getById(instanceId);
         }
         return instance;
+    }
+
+    /**
+     * 获取实例对象
+     *
+     * @param instanceTypeTag 实例类型
+     * @param prototypeId      实例 ID
+     * @return 实例对象
+     */
+    protected BaseCmsPrototype getPrototype(String instanceTypeTag, long prototypeId) {
+        BaseCmsPrototype prototype = null;
+        if (CmsPageInstance.TYPE_TAG.equals(instanceTypeTag)) {
+            prototype = cmsPagePrototypeService.getById(prototypeId);
+        } else if (CmsLayoutInstance.TYPE_TAG.equals(instanceTypeTag)) {
+            prototype = cmsLayoutPrototypeService.getById(prototypeId);
+        } else if (CmsColumnInstance.TYPE_TAG.equals(instanceTypeTag)) {
+            prototype = cmsColumnPrototypeService.getById(prototypeId);
+        } else if (CmsModuleInstance.TYPE_TAG.equals(instanceTypeTag)) {
+            prototype = cmsModulePrototypeService.getById(prototypeId);
+        }
+        return prototype;
     }
 
     protected boolean isModuleTag(String instanceTypeTag) {

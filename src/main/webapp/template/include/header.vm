@@ -1,16 +1,22 @@
 <div class="portlet-header">
     Hello World !
+    #if($env.renderMode == 'design')
     <div class="opt" style="float: left;">
         <a href="$link.relative('cms/design/page-prototype-list.html')" class="btn btn-purple j-add-page mr10">添加页面</a>
         <a href="$link.relative('/cms/design/render-comp-form.html').param('instanceId', $curPage.dbId).param('instanceTypeTag', 'page')" class="btn btn-green j-edit-page mr10">页面设置</a>
     </div>
+    #end
     <div class="page-list" style="float: right;">
         #foreach($page in $allPageList)
-        #set($btnCls = 'btn-darkLight')
-        #if($curPage.dbId == $page.dbId)
-            #set($btnCls = 'btn-dark')
-        #end
-        <a href="$link.relative('portal/design.html').param('pageId', $page.dbId)" class="btn $btnCls mr10">$stringUtils.defaultIfEmpty($!{page.paramsMap.title}, $!{page.title})</a>
+            #set($btnCls = 'btn-darkLight')
+            #if($curPage.dbId == $page.dbId)
+                #set($btnCls = 'btn-dark')
+            #end
+            #if($env.renderMode == 'design')
+                <a href="$link.relative('portal/design.html').param('pageId', $page.dbId)" class="btn $btnCls mr10">$stringUtils.defaultIfEmpty($!{page.paramsMap.title}, $!{page.title})</a>
+            #else
+                <a href="$link.relative('portal/view.html').param('pageId', $page.dbId)" class="btn $btnCls mr10">$stringUtils.defaultIfEmpty($!{page.paramsMap.title}, $!{page.title})</a>
+            #end
         #end
     </div>
 </div>

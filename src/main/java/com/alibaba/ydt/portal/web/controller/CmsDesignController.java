@@ -244,7 +244,7 @@ public class CmsDesignController extends BaseController {
             }
 
 
-            CmsModulePrototype prototype = cmsModulePrototypeService.getById(instance.getPrototypeId());
+            BaseCmsPrototype prototype = getPrototype(instanceTypeTag, instance.getPrototypeId());
             if (null == prototype) {
                 return AjaxResult.errorResult("找不到您要编辑的组件原型");
             }
