@@ -1,0 +1,14 @@
+<div class="form_box module_form">
+    #compFormTag($moduleInstance)
+        <ul>
+            <li class="portal-form-row">
+                <label>前缀</label>
+                <input class="width320" type="text" name="prefix" value="$stringUtils.defaultIfEmpty($!{moduleParams.prefix}, 'I')">
+            </li>
+            <li class="portal-form-row">
+                <label>后缀</label>
+                <input class="width320" type="text" name="suffix" value="$stringUtils.defaultIfEmpty($!{moduleParams.suffix}, 'Blur')">
+            </li>
+        </ul>
+    </form>
+</div>

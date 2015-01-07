@@ -6,7 +6,7 @@ import com.alibaba.ydt.portal.domain.RenderResult;
 import com.alibaba.ydt.portal.service.ContextProvider;
 import com.alibaba.ydt.portal.service.RenderContext;
 import com.alibaba.ydt.portal.service.RenderContextBuilder;
-import com.alibaba.ydt.portal.service.UniversalParameterContextProvider;
+import com.alibaba.ydt.portal.provider.UniversalParameterContextProvider;
 import com.doleje.portlet.base.BaseRenderTestCase;
 import com.doleje.portlet.mock.MockHttpServletRequest;
 import com.doleje.portlet.mock.MockHttpServletResponse;

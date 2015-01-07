@@ -63,7 +63,7 @@ abstract public class BaseCmsInstance extends BaseModel implements ParameterSupp
     @Override
     public List<ParameterValuePair> getParameters() {
         if (StringUtils.isBlank(params4Store)) {
-            return Collections.emptyList();
+            return new ArrayList<ParameterValuePair>();
         }
         List<ParameterValuePair> parameters = new ArrayList<ParameterValuePair>();
         try {

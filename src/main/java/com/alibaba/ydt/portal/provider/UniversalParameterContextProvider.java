@@ -1,6 +1,9 @@
-package com.alibaba.ydt.portal.service;
+package com.alibaba.ydt.portal.provider;
 
 import com.alibaba.ydt.portal.domain.*;
+import com.alibaba.ydt.portal.service.ContextProvider;
+import com.alibaba.ydt.portal.service.RenderContext;
+import com.alibaba.ydt.portal.service.RenderContextBuilder;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 

@@ -23,8 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("portal/")
 public class PortletController extends BaseController {
 
-    @RequestMapping(value = "/index.html")
-    public String index(ModelMap modelMap, HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping(value = "/view.html")
+    public String view(ModelMap modelMap, HttpServletRequest request, HttpServletResponse response) {
         long pageId = ServletRequestUtils.getLongParameter(request, "pageId", 1);
         CmsPageInstance page = cmsPageInstanceService.getById(pageId);
         RenderContext context = getCommonContext(request, response);

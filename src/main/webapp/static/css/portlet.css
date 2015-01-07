@@ -94,3 +94,10 @@
 .edit_mod .column_box {
     border-color: #e36c1c;
 }
+
+.naked, .naked .module_box_hd , .naked .module_box_bd {
+    border: none !important;
+}
+.naked .module_box_hd {
+    display: none !important;
+}

@@ -50,4 +50,24 @@ public class ParameterValuePair implements Serializable {
     public String toString() {
         return MoreObjects.toStringHelper(this).add("name", name).add("value", value).toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ParameterValuePair)) return false;
+
+        ParameterValuePair that = (ParameterValuePair) o;
+
+        if (!name.equals(that.name)) return false;
+        if (!value.equals(that.value)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + value.hashCode();
+        return result;
+    }
 }
