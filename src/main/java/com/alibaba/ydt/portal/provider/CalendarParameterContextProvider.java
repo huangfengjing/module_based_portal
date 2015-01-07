@@ -26,7 +26,7 @@ public class CalendarParameterContextProvider extends UniversalParameterContextP
             return null;
         }
         List<ParameterValuePair> params = instance.getParameters();
-        params.add(new ParameterValuePair("naked", true));
+//        params.add(new ParameterValuePair("naked", true));
         RenderContextBuilder builder = RenderContextBuilder.newBuilder();
         builder.addModuleParams(params);
         return builder.build();

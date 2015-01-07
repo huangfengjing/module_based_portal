@@ -514,6 +514,9 @@ public class RenderEngine implements InitializingBean {
      * @throws com.alibaba.ydt.portal.exception.RenderException 模块渲染异常
      */
     private String render(String vmContent, RenderContext context) throws RenderException {
+        if(StringUtils.isBlank(vmContent)) {
+            return "";
+        }
         if (null == context) {
             context = new RenderContext();
         }

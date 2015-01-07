@@ -78,6 +78,9 @@
 }
 .page_box {
     padding: 10px;
+    margin-bottom: 50px;
+    float: left;
+    width: 100%;
 }
 .edit_mod .page_box,.edit_mod .layout_box,.edit_mod .column_box {
     border: 1px dashed #CCCCCC;
@@ -85,8 +88,6 @@
 }
 .edit_mod .page_box {
     border-color: #004444;
-    float: left;
-    width: 100%;
 }
 .edit_mod .page_layout {
     border-color: #a0c552;
