@@ -47,6 +47,23 @@
 .portlet-header {
     border-bottom: 1px solid #666;
     clear: both;
+    position: relative;
+}
+.portlet-header span.title {
+    width: 200px;
+    text-align: center;
+    display: inline-block;
+    margin: 0 auto;
+}
+.portlet-header .page-list, .portlet-header .page-opt {
+    position: absolute;
+    top: 12px;
+}
+.portlet-header .page-list {
+    right: 20px;
+}
+.portlet-header .page-opt {
+    left: 20px;
 }
 .portlet-footer {
     position: fixed;

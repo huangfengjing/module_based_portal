@@ -18,10 +18,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
- * Simple hello world controller.
- * Presents basic usage of SpringMVC and Velocity.
+ * Design Controller 负责页面编辑的请求处理
  *
- * @author pmendelski
+ * @author <a href="mailto:huangfengjing@gmail.com">Ivan</a>
+ * @version 1.0
+ *          Created on 15/1/7 下午5:18.
  */
 @Controller
 @RequestMapping("cms/design")
@@ -83,7 +84,7 @@ public class CmsDesignController extends BaseController {
         RenderContext context = getCommonContext(request, response);
         context.setMode(RenderContext.RenderMode.design);
         RenderContextBuilder builder = RenderContextBuilder.newBuilder().mergeContext(context);
-        if(null != page) {
+        if (null != page) {
             builder.setPageInstance(page);
         }
 

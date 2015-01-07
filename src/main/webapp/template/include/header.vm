@@ -1,7 +1,7 @@
 <div class="portlet-header">
-    Hello World !
+    <span class="title">页头内容区</span>
     #if($env.renderMode == 'design')
-    <div class="opt" style="float: left;">
+    <div class="page-opt">
         <a href="$link.relative('cms/design/page-prototype-list.html')" class="btn btn-purple j-add-page mr10">添加页面</a>
         <a href="$link.relative('/cms/design/render-comp-form.html').param('instanceId', $curPage.dbId).param('instanceTypeTag', 'page')" class="btn btn-green j-edit-page mr10">页面设置</a>
     </div>
