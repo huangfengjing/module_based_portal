@@ -99,10 +99,19 @@ public class RenderEngine implements InitializingBean {
      * @throws RenderException 渲染异常
      */
     public RenderResult renderPage(long pageId, RenderContext context) throws RenderException {
-        CmsPageInstance page = null;
-        try {
+        return renderPage(cmsPageInstanceService.getById(pageId), context);
+    }
 
-            page = cmsPageInstanceService.getById(pageId);
+    /**
+     * 渲染页面
+     *
+     * @param page  页面实例
+     * @param context 渲染上下文
+     * @return 渲染结果
+     * @throws RenderException 渲染异常
+     */
+    public RenderResult renderPage(CmsPageInstance page, RenderContext context) throws RenderException {
+        try {
             if (null == page) {
                 throw new RenderException("页面实例未找到");
             }
@@ -119,7 +128,7 @@ public class RenderEngine implements InitializingBean {
             }
 
             // 查看缓存
-            String cacheKey = CmsUtils.generateCacheKey(RENDER_CACHE_TYPE_FOR_PAGE, pageId, context);
+            String cacheKey = CmsUtils.generateCacheKey(RENDER_CACHE_TYPE_FOR_PAGE, page.getDbId(), context);
             Cache.ValueWrapper tmp = renderCache.get(cacheKey);
             if(null != tmp && null != tmp.get()) {
                 RenderResult cached = (RenderResult) tmp.get();
@@ -143,7 +152,8 @@ public class RenderEngine implements InitializingBean {
             }
             pageContextBuilder.setPageLayoutList(layoutRenderResult);
             injectProvidersContext(page, (HttpServletRequest) context.get(RenderContext.RENDER_REQUEST_KEY), pageContextBuilder);
-            String content = render(prototype.getTemplate(), pageContextBuilder.build());
+//            String content = render(prototype.getTemplate(), pageContextBuilder.build());
+            String content = StringUtils.join(layoutRenderResult, "");
             RenderResult result = new RenderResult(content);
             for(RenderInterceptor interceptor : renderInterceptors) {
                 result = interceptor.after(page, result);
@@ -157,8 +167,8 @@ public class RenderEngine implements InitializingBean {
             if (null != renderExceptionHandler) {
                 return renderExceptionHandler.handleException(page, context, new RenderException(e));
             }
-            logger.error("<!-- 页面渲染失败，layoutId=" + pageId + " -->", e);
-            return new RenderResult("<!-- 页面渲染失败，layoutId=" + pageId + " -->", RenderResult.RESULT_TYPE_HANDLE_ERROR);
+            logger.error("<!-- 页面渲染失败，page=" + page + " -->", e);
+            return new RenderResult("<!-- 页面渲染失败，page=" + page + " -->", RenderResult.RESULT_TYPE_HANDLE_ERROR);
         }
     }
 
@@ -373,6 +383,43 @@ public class RenderEngine implements InitializingBean {
 
             RenderContextBuilder moduleContextBuilder = RenderContextBuilder.newBuilder().cloneFrom(context)
                     .setModuleInstance(module).setModulePrototype(prototype);
+
+            // 注入父容器信息
+            CmsColumnInstance column = (CmsColumnInstance) context.get(RenderContext.COLUMN_INSTANCE_KEY);
+            if(null == column) {
+                CmsPageInstance page = (CmsPageInstance) context.get(RenderContext.PAGE_INSTANCE_KEY);
+                if (null != page) {
+                    boolean injected = false;
+                    for(CmsLayoutInstance layoutInstance : page.getLayouts()) {
+                        for(CmsColumnInstance columnInstance : layoutInstance.getColumns()) {
+                            for(CmsModuleInstance moduleInstance : columnInstance.getModules()) {
+                                if(moduleInstance.getDbId() == module.getDbId()) {
+                                    // 暂时不支持 Layout 参数编辑，所以不需要处理参数，增强性能
+//                                    if(StringUtils.isBlank(layoutInstance.getParams4Store())) {
+//                                        CmsLayoutInstance layoutFromDb = cmsLayoutInstanceService.getById(layoutInstance.getDbId());
+//                                        layoutInstance.setParams4Store(layoutFromDb.getParams4Store());
+//                                    }
+                                    if(StringUtils.isBlank(columnInstance.getParams4Store())) {
+                                        CmsColumnInstance columnFromDb = cmsColumnInstanceService.getById(columnInstance.getDbId());
+                                        columnInstance.setParams4Store(columnFromDb.getParams4Store());
+                                    }
+                                    moduleContextBuilder.setLayoutInstance(layoutInstance);
+                                    moduleContextBuilder.setColumnInstance(columnInstance);
+                                    injected = true;
+                                    break;
+                                }
+                            }
+                            if(injected) {
+                                break;
+                            }
+                        }
+                        if(injected) {
+                            break;
+                        }
+                    }
+                }
+            }
+
             injectProvidersContext(module, (HttpServletRequest) context.get(RenderContext.RENDER_REQUEST_KEY), moduleContextBuilder);
             RenderResult result = new RenderResult(render(prototype.getTemplate(), moduleContextBuilder.build()));
 
@@ -405,7 +452,7 @@ public class RenderEngine implements InitializingBean {
      * @return 渲染结果
      * @throws RenderException 渲染异常
      */
-    public String renderModuleForm(String instanceTypeTag, long instanceId, RenderContext context) throws RenderException {
+    public String renderCompForm(String instanceTypeTag, long instanceId, RenderContext context) throws RenderException {
         BaseCmsInstance instance = null;
         try {
             if(CmsPageInstance.TYPE_TAG.equals(instanceTypeTag)) {

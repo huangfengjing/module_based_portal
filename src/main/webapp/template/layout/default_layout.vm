@@ -20,14 +20,23 @@
     <script src="$link.relative('/static/js/jquery.easytabs.min.js')"></script>
     <script src="$link.relative('/static/js/base.js')"></script>
     <script src="$link.relative('/static/js/app.js')"></script>
+
+    <script type="text/javascript">
+        var Portal = {
+            base:"$link.relative('/')"
+        };
+        var ctx = "$link.relative('')";
+    </script>
 </head>
 <body#if($env.renderMode == "design") class="edit_mod" #end>
     #parse('/include/header.vm')
+    <div class="page_box" data-inst-id="$curPage.dbId">
     $screen_content
+    </div>
     #parse('/include/footer.vm')
 #if($env.renderMode == "design")
 <form id="j-page-form" action="/cms/design/save-page.html" method="post">
-    <input type="hidden" name="pageId" value="1" id="j-page-dbId">
+    <input type="hidden" name="pageId" value="$!{curPage.dbId}" id="j-page-dbId">
     <input type="hidden" name="pageLayout" id="j-page-layout-holder">
     <input type="hidden" name="isHeaderChanged" value="false" id="j-header-changed-holder">
     <input type="hidden" name="isFooterChanged" value="false" id="j-footer-changed-holder">

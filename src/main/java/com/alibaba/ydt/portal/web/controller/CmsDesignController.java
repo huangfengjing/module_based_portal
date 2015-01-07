@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.ydt.portal.domain.*;
 import com.alibaba.ydt.portal.domain.common.AjaxResult;
-import com.alibaba.ydt.portal.service.CmsModulePrototypeService;
-import com.alibaba.ydt.portal.service.ParameterGather;
-import com.alibaba.ydt.portal.service.RenderContext;
-import com.alibaba.ydt.portal.service.RenderContextBuilder;
+import com.alibaba.ydt.portal.service.*;
 import com.alibaba.ydt.portal.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,7 +13,6 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.Servlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -36,6 +32,9 @@ public class CmsDesignController extends BaseController {
     @Autowired
     private List<ParameterGather> parameterGathers = new ArrayList<ParameterGather>();
 
+    @Autowired
+    private CmsPagePrototypeService cmsPagePrototypeService;
+
     /**
      * 浏览前台页面
      *
@@ -44,8 +43,11 @@ public class CmsDesignController extends BaseController {
      * @return 页面 VM
      */
     @RequestMapping("/render-comp.html")
-    public AjaxResult renderComp(long prototypeId, String instanceTypeTag,
-                                 @RequestParam(value = "instanceId", defaultValue = "0") long instanceId, HttpServletRequest request, HttpServletResponse response) {
+    public AjaxResult renderComp(@RequestParam(value = "pageId", defaultValue = "0") long pageId,
+                                 String instanceTypeTag,
+                                 long prototypeId,
+                                 @RequestParam(value = "instanceId", defaultValue = "0") long instanceId,
+                                 HttpServletRequest request, HttpServletResponse response) {
         if (prototypeId <= 0) {
             return AjaxResult.rawResult("<!-- 请先指定模块原型 -->");
         }
@@ -60,7 +62,7 @@ public class CmsDesignController extends BaseController {
             } else if (isPageTag(instanceTypeTag)) {
                 instance = new CmsPageInstance();
             }
-            if(null != instance) {
+            if (null != instance) {
                 instance.setPrototypeId(prototypeId);
             }
         } else {
@@ -69,9 +71,22 @@ public class CmsDesignController extends BaseController {
         if (null == instance) {
             return AjaxResult.rawResult("<!-- 找不到您要渲染的模块 -->");
         }
+
+        CmsPageInstance page = null;
+        if (pageId > 0) {
+            page = cmsPageInstanceService.getById(pageId);
+            if (null == page) {
+                return AjaxResult.errorResult("要编辑的页面不存在");
+            }
+        }
+
         RenderContext context = getCommonContext(request, response);
         context.setMode(RenderContext.RenderMode.design);
         RenderContextBuilder builder = RenderContextBuilder.newBuilder().mergeContext(context);
+        if(null != page) {
+            builder.setPageInstance(page);
+        }
+
         if (isModuleTag(instanceTypeTag) && instance instanceof CmsModuleInstance) {
             builder.setModuleInstance((CmsModuleInstance) instance);
             return AjaxResult.rawResult(renderEngine.renderModule((CmsModuleInstance) instance, builder.build()).getRenderContent());
@@ -101,7 +116,7 @@ public class CmsDesignController extends BaseController {
         RenderContext context = getCommonContext(request, response);
         context.setMode(RenderContext.RenderMode.design);
         context.setPageId(ServletRequestUtils.getLongParameter(request, "pageId", 0));
-        String formHtml = renderEngine.renderModuleForm(instanceTypeTag, instanceId, context);
+        String formHtml = renderEngine.renderCompForm(instanceTypeTag, instanceId, context);
         return AjaxResult.rawResult(StringUtils.defaultIfEmpty(formHtml, "该组件没有可编辑的参数"));
     }
 
@@ -113,8 +128,36 @@ public class CmsDesignController extends BaseController {
      */
     @RequestMapping("/module-prototype-list.html")
     public String modulePrototypeList(ModelMap modelMap) {
-        modelMap.put("cmsModuleList", cmsModulePrototypeService.getAll());
+        modelMap.put("cmsModulePrototypeList", cmsModulePrototypeService.getAll());
         return "cms/module_prototype_list";
+    }
+
+    /**
+     * 模块原型列表
+     *
+     * @param modelMap 模型 HOLDER
+     * @return 模块原型列表页
+     */
+    @RequestMapping("/page-prototype-list.html")
+    public String pagePrototypeList(ModelMap modelMap) {
+        modelMap.put("cmsPagePrototypeList", cmsPagePrototypeService.getAll());
+        return "cms/page_prototype_list";
+    }
+
+    @RequestMapping("/create-page.html")
+    public AjaxResult createPage(long prototypeId) {
+        if (prototypeId <= 0) {
+            return AjaxResult.errorResult("请指定一个页面原型！");
+        }
+        CmsPagePrototype prototype = cmsPagePrototypeService.getById(prototypeId);
+        if (null == prototype) {
+            return AjaxResult.errorResult("找不到您要创建的页面原型！");
+        }
+        CmsPageInstance page = new CmsPageInstance();
+        page.setPrototypeId(prototypeId);
+        page.setTitle(prototype.getName());
+        page.setXmlContent(prototype.getTemplate());
+        return cmsPageInstanceService.savePageLayout(page) ? AjaxResult.successResult().addData("pageId", page.getDbId()) : AjaxResult.errorResult();
     }
 
 
@@ -160,10 +203,10 @@ public class CmsDesignController extends BaseController {
         Collections.sort(layouts, new Comparator<CmsLayoutInstance>() {
             @Override
             public int compare(CmsLayoutInstance o1, CmsLayoutInstance o2) {
-                if(o1.getDbId() == 0) {
+                if (o1.getDbId() == 0) {
                     return 1;
                 }
-                if(o2.getDbId() == 0) {
+                if (o2.getDbId() == 0) {
                     return -1;
                 }
                 return 0;
@@ -222,13 +265,13 @@ public class CmsDesignController extends BaseController {
             }
 
             instance.setParamsWithList(paramMap.values());
-            
+
             CmsPageInstance page = null;
             long pageId = ServletRequestUtils.getLongParameter(request, "pageId", 0);
-            if(pageId > 0) {
+            if (pageId > 0) {
                 page = cmsPageInstanceService.getById(pageId);
             }
-            if(null == page) {
+            if (null == page) {
                 return AjaxResult.errorResult("要编辑的页面不存在");
             }
 
@@ -245,7 +288,7 @@ public class CmsDesignController extends BaseController {
             }
             evictCache(page, instance, context);
 
-            AjaxResult renderResult = renderComp(prototype.getDbId(), instanceTypeTag, instanceId, request, response);
+            AjaxResult renderResult = renderComp(pageId, instanceTypeTag, prototype.getDbId(), instanceId, request, response);
             if (renderResult.isSuccess()) {
                 return AjaxResult.successResult().addData("compContent", renderResult.getRawData());
             } else {

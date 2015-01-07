@@ -252,6 +252,7 @@ abstract public class BaseController implements ServletContextAware, Initializin
                 for (CmsColumnInstance column : layout.getColumns()) {
                     for (CmsModuleInstance module : column.getModules()) {
                         if (module.getDbId() == instance.getDbId()) {
+                            // 清除列、布局的缓存
                             evictCache(column, context);
                             evictCache(layout, context);
                             find = true;
@@ -270,8 +271,15 @@ abstract public class BaseController implements ServletContextAware, Initializin
             for (CmsLayoutInstance layout : page.getLayouts()) {
                 for (CmsColumnInstance column : layout.getColumns()) {
                     if (column.getDbId() == instance.getDbId()) {
+                        // 清除布局的缓存
                         evictCache(layout, context);
                         find = true;
+
+                        // 清除模块的缓存
+                        for (CmsModuleInstance module : column.getModules()) {
+                            evictCache(module, context);
+                        }
+
                         break;
                     }
                 }

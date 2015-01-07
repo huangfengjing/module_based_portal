@@ -12,9 +12,9 @@
             <li class="portal-form-row">
                 <label>布局</label>
                 <select name="layout">
-                    <option value="vbox"#if(${columnParams.layout} == "vbox") selected="selected" #end>VBox</option>
-                    <option value="hbox"#if(${columnParams.layout} == "hbox") selected="selected" #end>HBox</option>
-                    <option value="tab"#if(${columnParams.layout} == "tab") selected="selected" #end>Tab</option>
+                    <option value="vbox"#if(${columnParams.layout} == "vbox") selected="selected" #end>垂直布局</option>
+                    <option value="accordion"#if(${columnParams.layout} == "accordion") selected="selected" #end>手风琴</option>
+                    <option value="tab"#if(${columnParams.layout} == "tab") selected="selected" #end>Tab标签</option>
                 </select>
             </li>
         </ul>

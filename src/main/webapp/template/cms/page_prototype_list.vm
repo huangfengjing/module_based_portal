@@ -1,0 +1,17 @@
+#set($layout = "layout_empty.vm")
+<div class="modal_list_wrap">
+    <ul class="modal_list">
+        #foreach($pagePrototype in $cmsPagePrototypeList)
+        <li class="modal_list_item">
+            <img src="$link.relative('static/images/64x64.png')">
+            <div class="item_desc_wrap">
+                <span class="item_name">$!pagePrototype.name</span>
+                <span class="item_desc">$!pagePrototype.description</span>
+            </div>
+            <div class="item_opt_wrap">
+                <a href="$link.relative('cms/design/create-page.html').param('prototypeId', $pagePrototype.dbId)" class="j-create-page-btn btn btn-green">创建</a>
+            </div>
+        </li>
+        #end
+    </ul>
+</div>

@@ -1,5 +1,6 @@
 package com.alibaba.ydt.portal.service;
 
+import com.alibaba.ydt.portal.cache.ThreadLocalCacheable;
 import com.alibaba.ydt.portal.dao.GenericDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,21 +34,25 @@ abstract public class BaseDataService<T> implements DataService<T> {
         }
     }
 
+    @ThreadLocalCacheable
     @Override
     public T getById(Long id) {
         return genericDao.get(entityClass, id);
     }
 
+    @ThreadLocalCacheable
     @Override
     public List<T> getAll() {
         return genericDao.getAll(entityClass);
     }
 
+    @ThreadLocalCacheable
     @Override
     public List<T> getByProperty(String propName, Object propVal) {
         return genericDao.getByProperty(entityClass, propName, propVal);
     }
 
+    @ThreadLocalCacheable
     @Override
     public T getUniqueByProperty(String propName, Object propVal) {
         return genericDao.getUniqueByProperty(entityClass, propName, propVal);

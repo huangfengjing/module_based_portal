@@ -1,7 +1,7 @@
 #set($layout = "layout_empty.vm")
 <div class="modal_list_wrap">
     <ul class="modal_list">
-        #foreach($module in $cmsModuleList)
+        #foreach($module in $cmsModulePrototypeList)
         <li class="modal_list_item">
             <img src="$link.relative($stringUtils.defaultIfEmpty($module.iconLink, "static/images/64x64.png"))">
             <div class="item_desc_wrap">

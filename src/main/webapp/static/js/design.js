@@ -149,7 +149,7 @@ $().ready(function () {
         var instanceTypeTag = comp.hasClass('module_box') ? "module"
             : (comp.hasClass('column_box') ? "column"
             : (comp.hasClass('layout_box') ? "layout"
-            : (comp.hasClass('page_box' ? "page" : ""))));
+            : (comp.hasClass('page_box') ? "page" : "")));
         if (instanceId == '0') {
             $.showBox({
                 icon: 'ask',
@@ -180,13 +180,22 @@ $().ready(function () {
                         url: _form.attr('action'),
                         data: _form.serialize(),
                         doSuccess: function (data) {
+                            $.hideBox();
                             var _wrap = $(data.data.compContent);
-                            if (instanceTypeTag == 'column' || instanceTypeTag == 'layout') {
-                                _wrap.html(comp.html())
+                            if (instanceTypeTag == 'column' || instanceTypeTag == 'layout' || instanceTypeTag == 'page') {
+                                _wrap.html(comp.html());
+                                $.showBox({
+                                    icon: 'success',
+                                    title: '保存成功',
+                                    content: '容器类组件的编辑通常会改变页面布局的变化，最好刷新页面来查看效果！',
+                                    ok: '刷新',
+                                    okCallback: function() {
+                                        window.location.reload();
+                                    }
+                                });
                             }
                             comp.before(_wrap);
                             comp.remove();
-                            $.hideBox();
                         },
                         doFailure: function (data) {
                             $.showBoxTip({
@@ -213,7 +222,7 @@ $().ready(function () {
             $(document.body).append(saveTipWrap);
             $(".save_tip_btn", saveTipWrap).click($.savePageLayout);
             $(".cancel_tip_btn", saveTipWrap).click(function () {
-                if (window.confirm('您确定要撤销所有的页面修改吗？')) {
+                if (window.confirm('您确定要撤销页面布局的修改吗（组件参数的保存不在撤销范围）？')) {
                     window.location.reload();
                 }
                 return false;
@@ -292,4 +301,42 @@ $().ready(function () {
     $.mapModuleData = function (modElem) {
         return $(this).attr('data-proto-id') + "," + $(this).attr('data-inst-id');
     };
+
+    $('.j-add-page').click(function() {
+        var _btn = $(this);
+        $.showBox({
+            title: '创建页面',
+            ajax: _btn.attr('href'),
+            onLoad: function () {
+                $(".modal_list_item .j-create-page-btn").click(function () {
+                    $.showBox({
+                        title: '正在创建页面',
+                        icon: 'load'
+                    });
+                    $.iAjax({
+                        url: $(this).attr('href'),
+                        doSuccess: function (data) {
+                            $.showBox({
+                                icon: 'success',
+                                title: '创建成功',
+                                content: '页面创建成功，现在去编辑新的页面吗？',
+                                ok: '去编辑',
+                                okCallback: function() {
+                                    window.location.href = Portal.base + 'portal/design.html?pageId=' + data.data.pageId;
+                                }
+                            });
+                        }
+                    });
+                    return false;
+                });
+            }
+        });
+        return false;
+    });
+
+    // 页面编辑
+    $('.j-edit-page').click(function() {
+        $.editCompParams($('.page_box'));
+        return false;
+    });
 });

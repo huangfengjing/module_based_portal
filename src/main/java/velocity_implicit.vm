@@ -1,4 +1,6 @@
 #* @implicitly included *#
+#* @vtlvariable name="allPageList" type="java.util.List<com.alibaba.ydt.portal.domain.CmsPageInstance>" *#
+#* @vtlvariable name="cmsPagePrototypeList" type="java.util.List<com.alibaba.ydt.portal.domain.CmsPagePrototype>" *#
 #* @vtlvariable name="moduleInstance" type="com.alibaba.ydt.portal.domain.CmsModuleInstance" *#
 #* @vtlvariable name="columnInstance" type="com.alibaba.ydt.portal.domain.CmsColumnInstance" *#
 #* @vtlvariable name="prototype" type="com.alibaba.ydt.portal.domain.BaseCmsPrototype" *#

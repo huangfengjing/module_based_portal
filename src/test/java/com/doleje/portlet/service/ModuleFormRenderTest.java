@@ -15,7 +15,7 @@ public class ModuleFormRenderTest extends BaseRenderTestCase {
 
     @Test
     public void testModuleFormRender() throws Exception {
-        String formHtml = renderEngine.renderModuleForm("module", 1L, mockRenderContext());
+        String formHtml = renderEngine.renderCompForm("module", 1L, mockRenderContext());
         System.out.println(formHtml);
         Assert.isTrue(formHtml.contains("form"));
     }
