@@ -26,12 +26,12 @@ public class RenderExceptionHandlerTest extends BaseRenderTestCase {
     @Before
     public void changePageDemo() throws Exception {
 
-        renderEngine.setRenderExceptionHandler(new RenderExceptionHandler() {
-            @Override
-            public RenderResult handleException(Object instance, RenderContext context, RenderException e) {
-                return new RenderResult("<!-- " + getInstanceType(instance) +" Render Exception: " + e.getMessage() + ", instance: " + instance + " -->", RenderResult.RESULT_TYPE_HANDLE_ERROR);
-            }
-        });
+//        renderEngine.setRenderExceptionHandler(new RenderExceptionHandler() {
+//            @Override
+//            public RenderResult handleException(Object instance, RenderContext context, RenderException e) {
+//                return new RenderResult("<!-- " + getInstanceType(instance) +" Render Exception: " + e.getMessage() + ", instance: " + instance + " -->", RenderResult.RESULT_TYPE_HANDLE_ERROR);
+//            }
+//        });
     }
 
     @Test

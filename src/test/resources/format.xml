@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page instance-id="0" prototype-id="1">
+    <layout instance-id="0" prototype-id="1">
+        <column instance-id="0" prototype-id="1">
+            <module instance-id="0" prototype-id="1"/>
+        </column>
+        <column instance-id="0" prototype-id="2">
+            <module instance-id="0" prototype-id="2"/>
+        </column>
+    </layout>
+</page>

@@ -165,6 +165,11 @@ public class RenderContext extends HashMap<String, Object> implements Map<String
         ((Map<String, Object>) get(RENDER_ENV_KEY)).put(RENDER_MOD_KEY, mode);
     }
 
+    public String getMode() {
+        Object mode = ((Map<String, Object>) get(RENDER_ENV_KEY)).get(RENDER_MOD_KEY);
+        return null == mode ? "" : mode.toString();
+    }
+
     final public void setAppUser(AppUser appUser) {
         put(APP_USER_KEY, appUser);
     }

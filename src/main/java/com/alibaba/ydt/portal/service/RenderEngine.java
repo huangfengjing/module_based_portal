@@ -52,6 +52,7 @@ public class RenderEngine implements InitializingBean {
     @Autowired
     private List<ContextProvider> contextProviders = new ArrayList<ContextProvider>();
 
+    @Autowired
     private List<RenderInterceptor> renderInterceptors = new ArrayList<RenderInterceptor>();
 
     @Autowired
@@ -358,14 +359,19 @@ public class RenderEngine implements InitializingBean {
             }
 
             // 查看缓存
-            String cacheKey = null;
-            cacheKey = CmsUtils.generateCacheKey(RENDER_CACHE_TYPE_FOR_MODULE, module.getDbId(), context);
+            String cacheKey = CmsUtils.generateCacheKey(RENDER_CACHE_TYPE_FOR_MODULE, module.getDbId(), context);
             Cache.ValueWrapper tmp = renderCache.get(cacheKey);
             if (null != tmp && null != tmp.get()) {
                 RenderResult cached = (RenderResult) tmp.get();
                 long delta = new Date().getTime() - cached.getRenderTime().getTime();
                 if (delta < prototype.getInstanceExpiredSeconds() * 1000) {
                     cached.setResultType(RenderResult.RESULT_TYPE_FROM_CACHE);
+
+                    // 后置拦截器处理
+                    for(RenderInterceptor interceptor : renderInterceptors) {
+                        cached = interceptor.after(module, cached);
+                    }
+
                     return cached;
                 }
             }
@@ -613,19 +619,6 @@ public class RenderEngine implements InitializingBean {
         for (ContextProvider provider : supportedProvider) {
             builder.mergeContext(provider.createFormContext(instance, request));
         }
-    }
-
-
-    public void setContextProviders(List<ContextProvider> contextProviders) {
-        this.contextProviders = contextProviders;
-    }
-
-    public void setRenderInterceptors(List<RenderInterceptor> renderInterceptors) {
-        this.renderInterceptors = renderInterceptors;
-    }
-
-    public void setRenderExceptionHandler(RenderExceptionHandler renderExceptionHandler) {
-        this.renderExceptionHandler = renderExceptionHandler;
     }
 
     public void setToolboxConfigLocation(Resource toolboxConfigLocation) {

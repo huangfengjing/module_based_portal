@@ -11,10 +11,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -43,7 +40,10 @@ public abstract class CmsUtils {
             Element pageElem = doc.getRootElement();
             CmsPageInstance page = new CmsPageInstance();
             page.setPrototypeId(Long.valueOf(pageElem.attributeValue("prototype-id")));
-            page.setDbId(Long.valueOf(pageElem.attributeValue("prototype-id")));
+            String instId = pageElem.attributeValue("instance-id");
+            if(StringUtils.isNotBlank(instId) && StringUtils.isNumeric(instId)) {
+                page.setDbId(Long.valueOf(instId));
+            }
             for (Element layoutElem : (List<Element>) pageElem.elements("layout")) {
                 page.getLayouts().add(parseLayout(layoutElem));
             }
@@ -126,7 +126,9 @@ public abstract class CmsUtils {
     public static String pageToXmlString(CmsPageInstance page) {
         Document doc = DocumentHelper.createDocument();
         Element pageElem = DocumentHelper.createElement("page");
-        pageElem.addAttribute("instance-id", String.valueOf(page.getDbId()));
+        if(page.getDbId() > 0) {
+            pageElem.addAttribute("instance-id", String.valueOf(page.getDbId()));
+        }
         pageElem.addAttribute("prototype-id", String.valueOf(page.getPrototypeId()));
         for(CmsLayoutInstance layout : page.getLayouts()) {
             Element layoutElem = DocumentHelper.createElement("layout");
@@ -164,7 +166,7 @@ public abstract class CmsUtils {
         StringBuilder sb = new StringBuilder("_CACHE");
         sb.append("_").append(targetType)
                 .append(";").append("id=").append(targetId)
-                .append(";").append("mode=").append(context.get(RenderContext.RENDER_MOD_KEY));
+                .append(";").append("mode=").append(context.getMode());
 
         AppUser appUser = (AppUser) context.get(RenderContext.APP_USER_KEY);
         if(null != appUser) {

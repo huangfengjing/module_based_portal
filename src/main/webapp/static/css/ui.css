@@ -13,9 +13,11 @@
 }
 body, button, input, select, textarea {
     font: 12px/1.5 Arial, \5b8b\4f53, sans-serif;
+    color: #333;
 }
 a {
     text-decoration: none;
+    color: #333;
 }
 .mr10 {
     margin-right: 10px;
@@ -279,7 +281,6 @@ a {
  */
 .etabs { margin: 0; padding: 0; border-bottom: 1px solid #dadada}
 .tab { display: inline-block; zoom:1; *display:inline; background: #E7DFDF; border: solid 1px #DADADA; border-bottom: none;}
-.tab a { font-size: 14px; line-height: 2em; display: block; padding: 0 10px; outline: none; }
+.tab a { line-height: 2em; display: block; padding: 0 10px; outline: none; }
 .tab.active { background: #fff; position: relative; top: 1px; padding-top: 1px; border-color: #dadada; }
-.tab a.active { font-weight: bold; }
-.tab-container .panel-container { background: #fff; border: solid #666 1px; padding: 10px; -moz-border-radius: 0 4px 4px 4px; -webkit-border-radius: 0 4px 4px 4px; }
+.tab a.active { font-weight: bold;}

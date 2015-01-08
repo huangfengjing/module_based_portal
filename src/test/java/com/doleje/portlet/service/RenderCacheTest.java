@@ -40,7 +40,7 @@ public class RenderCacheTest extends BaseRenderTestCase {
             if(provider instanceof UniversalParameterContextProvider) {
             }
         }
-        renderEngine.setContextProviders(contextProviders);
+//        renderEngine.setContextProviders(contextProviders);
     }
 
     @Test

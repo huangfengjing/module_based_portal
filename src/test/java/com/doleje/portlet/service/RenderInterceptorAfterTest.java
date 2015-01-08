@@ -42,7 +42,7 @@ public class RenderInterceptorAfterTest extends BaseRenderTestCase {
                 return result;
             }
         });
-        renderEngine.setRenderInterceptors(interceptors);
+//        renderEngine.setRenderInterceptors(interceptors);
 
         RenderContext context = RenderContextBuilder.newBuilder().setMode(RenderContext.RenderMode.product)
                 .setRequest(new MockHttpServletRequest())

@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -18,6 +19,7 @@ import java.util.WeakHashMap;
  * @author <a href="mailto:huangfengjing@gmail.com">Ivan</a>
  */
 @Aspect
+@Component
 public class ThreadLocalCacheAspect {
 
     private static final Log logger = LogFactory.getLog(ThreadLocalCacheAspect.class);
@@ -30,7 +32,7 @@ public class ThreadLocalCacheAspect {
             threadLocalCache.set(new WeakHashMap<String, Object>());
         }
         Map<String, Object> cached = threadLocalCache.get();
-        String key = genKey(pjp.getArgs());
+        String key = genKey(pjp.getTarget(), pjp.getArgs());
         if(cached.containsKey(key)) {
             logger.debug("Thread local cache hit, return cached result");
             return cached.get(key);
@@ -41,9 +43,9 @@ public class ThreadLocalCacheAspect {
         return result;
     }
 
-    private String genKey(Object[] args) {
+    private String genKey(Object target, Object[] args) {
         StringBuilder sb = new StringBuilder();
-        sb.append("_ThreadLocal_cache_key_");
+        sb.append("_t_cache_key_").append(target.getClass().getName()).append("_");
         for(Object arg : args) {
             sb.append(arg.getClass().hashCode()).append("_").append(arg.hashCode());
         }

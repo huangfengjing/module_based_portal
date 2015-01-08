@@ -32,7 +32,7 @@ public class RenderContextProviderTest extends BaseRenderTestCase {
 
     @Before
     public void setupContextProvider() {
-        renderEngine.setContextProviders(contextProviders);
+//        renderEngine.setContextProviders(contextProviders);
     }
 
     @Test
