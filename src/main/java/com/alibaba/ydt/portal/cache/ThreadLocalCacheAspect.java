@@ -47,8 +47,12 @@ public class ThreadLocalCacheAspect {
         StringBuilder sb = new StringBuilder();
         sb.append("_t_cache_key_").append(target.getClass().getName()).append("_");
         for(Object arg : args) {
-            sb.append(arg.getClass().hashCode()).append("_").append(arg.hashCode());
+            sb.append(arg.getClass().getName().hashCode()).append("_").append(arg.hashCode());
         }
         return sb.toString();
+    }
+
+    public static void clearCache() {
+        threadLocalCache.set(null);
     }
 }

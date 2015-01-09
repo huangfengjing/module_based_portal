@@ -339,4 +339,19 @@ $().ready(function () {
         $.editCompParams($('.page_box'));
         return false;
     });
+
+    // 页面编辑
+    $('.j-remove-page').click(function() {
+        if(window.confirm('您确定要删除该页面吗？此操作不可恢复！')) {
+            $.iAjax({
+                loadingTitle: '删除页面',
+                loadingContent: '正在删除页面，请稍候……',
+                url: $(this).attr('href'),
+                doSuccess: function() {
+                    window.location.href = Portal.base + 'portal/view.html';
+                }
+            });
+        }
+        return false;
+    });
 });
