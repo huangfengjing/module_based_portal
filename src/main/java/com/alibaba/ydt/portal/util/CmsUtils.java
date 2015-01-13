@@ -183,4 +183,22 @@ public abstract class CmsUtils {
 //        sb.append(";env=").append(envSb.toString().hashCode());
         return sb.toString();
     }
+
+
+    public static boolean isModuleTag(String instanceTypeTag) {
+        return CmsModuleInstance.TYPE_TAG.equals(instanceTypeTag);
+    }
+
+    public static boolean isColumnTag(String instanceTypeTag) {
+        return CmsColumnInstance.TYPE_TAG.equals(instanceTypeTag);
+    }
+
+    public static boolean isLayoutTag(String instanceTypeTag) {
+        return CmsLayoutInstance.TYPE_TAG.equals(instanceTypeTag);
+    }
+
+    public static boolean isPageTag(String instanceTypeTag) {
+        return CmsPageInstance.TYPE_TAG.equals(instanceTypeTag);
+    }
+
 }

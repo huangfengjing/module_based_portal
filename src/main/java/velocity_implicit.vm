@@ -1,4 +1,5 @@
 #* @implicitly included *#
+#* @vtlvariable name="renderTool" type="com.alibaba.ydt.portal.util.RenderTool" *#
 #* @vtlvariable name="allPageList" type="java.util.List<com.alibaba.ydt.portal.domain.CmsPageInstance>" *#
 #* @vtlvariable name="cmsPagePrototypeList" type="java.util.List<com.alibaba.ydt.portal.domain.CmsPagePrototype>" *#
 #* @vtlvariable name="moduleInstance" type="com.alibaba.ydt.portal.domain.CmsModuleInstance" *#
@@ -6,7 +7,7 @@
 #* @vtlvariable name="prototype" type="com.alibaba.ydt.portal.domain.BaseCmsPrototype" *#
 #* @vtlvariable name="instance" type="com.alibaba.ydt.portal.domain.BaseCmsInstance" *#
 #* @vtlmacrolibrary path="../resources/velocity/macro.vm" *#
-#* @vtlvariable name="moduleTool" type="com.alibaba.ydt.portal.util.ModuleTool" *#
+#* @vtlvariable name="commonTool" type="com.alibaba.ydt.portal.util.CommonTool" *#
 #* @vtlvariable name="math" type="java.lang.Math" *#
 #* @vtlvariable name="link" type="org.apache.velocity.tools.generic.LinkTool" *#
 #* @vtlvariable name="stringUtils" type="org.apache.commons.lang.StringUtils" *#

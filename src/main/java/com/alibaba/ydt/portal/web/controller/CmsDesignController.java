@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.ydt.portal.domain.*;
 import com.alibaba.ydt.portal.domain.common.AjaxResult;
 import com.alibaba.ydt.portal.service.*;
+import com.alibaba.ydt.portal.util.CmsUtils;
 import com.alibaba.ydt.portal.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -54,13 +55,13 @@ public class CmsDesignController extends BaseController {
         }
         BaseCmsInstance instance = null;
         if (instanceId <= 0) {
-            if (isModuleTag(instanceTypeTag)) {
+            if (CmsUtils.isModuleTag(instanceTypeTag)) {
                 instance = new CmsModuleInstance();
-            } else if (isColumnTag(instanceTypeTag)) {
+            } else if (CmsUtils.isColumnTag(instanceTypeTag)) {
                 instance = new CmsColumnInstance();
-            } else if (isLayoutTag(instanceTypeTag)) {
+            } else if (CmsUtils.isLayoutTag(instanceTypeTag)) {
                 instance = new CmsLayoutInstance();
-            } else if (isPageTag(instanceTypeTag)) {
+            } else if (CmsUtils.isPageTag(instanceTypeTag)) {
                 instance = new CmsPageInstance();
             }
             if (null != instance) {
@@ -88,16 +89,16 @@ public class CmsDesignController extends BaseController {
             builder.setPageInstance(page);
         }
 
-        if (isModuleTag(instanceTypeTag) && instance instanceof CmsModuleInstance) {
+        if (CmsUtils.isModuleTag(instanceTypeTag) && instance instanceof CmsModuleInstance) {
             builder.setModuleInstance((CmsModuleInstance) instance);
             return AjaxResult.rawResult(renderEngine.renderModule((CmsModuleInstance) instance, builder.build()).getRenderContent());
-        } else if (isColumnTag(instanceTypeTag) && instance instanceof CmsColumnInstance) {
+        } else if (CmsUtils.isColumnTag(instanceTypeTag) && instance instanceof CmsColumnInstance) {
             builder.setColumnInstance((CmsColumnInstance) instance);
             return AjaxResult.rawResult(renderEngine.renderColumn((CmsColumnInstance) instance, builder.build()).getRenderContent());
-        } else if (isLayoutTag(instanceTypeTag) && instance instanceof CmsLayoutInstance) {
+        } else if (CmsUtils.isLayoutTag(instanceTypeTag) && instance instanceof CmsLayoutInstance) {
             builder.setLayoutInstance((CmsLayoutInstance) instance);
             return AjaxResult.rawResult(renderEngine.renderLayout((CmsLayoutInstance) instance, builder.build()).getRenderContent());
-        } else if (isPageTag(instanceTypeTag) && instance instanceof CmsPageInstance) {
+        } else if (CmsUtils.isPageTag(instanceTypeTag) && instance instanceof CmsPageInstance) {
             builder.setPageInstance((CmsPageInstance) instance);
             return AjaxResult.rawResult(renderEngine.renderPage(instance.getInstanceId(), builder.build()).getRenderContent());
         }
@@ -129,7 +130,14 @@ public class CmsDesignController extends BaseController {
      */
     @RequestMapping("/module-prototype-list.html")
     public String modulePrototypeList(ModelMap modelMap) {
-        modelMap.put("cmsModulePrototypeList", cmsModulePrototypeService.getAll());
+        List<CmsModulePrototype> addablePrototypeList = new ArrayList<CmsModulePrototype>();
+        for(CmsModulePrototype prototype : cmsModulePrototypeService.getAll()) {
+            if(!prototype.isAddable()) {
+                continue;
+            }
+            addablePrototypeList.add(prototype);
+        }
+        modelMap.put("cmsModulePrototypeList", addablePrototypeList);
         return "cms/module_prototype_list";
     }
 

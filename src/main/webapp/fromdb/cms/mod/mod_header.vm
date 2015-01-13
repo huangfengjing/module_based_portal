@@ -1,0 +1,6 @@
+<div id="col_${columnInstance.dbId}_mod_${moduleInstance.dbId}" class="module_box" #dimension($moduleParams) #designId($env $modulePrototype $moduleInstance)>
+    #if($columnInstance.paramsMap.layout != 'tab')
+        <div class="module_box_hd">$stringUtils.defaultIfEmpty($moduleParams.title, $modulePrototype.name)</div>
+    #end
+    <div class="module_box_bd">$!{moduleParams.content}</div>
+</div>

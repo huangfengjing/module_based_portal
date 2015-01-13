@@ -20,6 +20,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.context.ServletContextAware;
 
 import javax.servlet.ServletContext;
@@ -108,7 +109,7 @@ abstract public class BaseController implements ServletContextAware, Initializin
         try {
             if (null == toolboxFactory) {
                 FileFactoryConfiguration cfg = new XmlFactoryConfiguration(true);
-                cfg.read(SpringUtils.getApplicationContext().getResource("/WEB-INF/velocity_toolbox.xml").getInputStream());
+                cfg.read(new ClassPathResource("velocity/velocity_toolbox.xml").getInputStream());
                 toolboxFactory = cfg.createFactory();
                 globalToolbox = toolboxFactory.createToolbox(Scope.APPLICATION);
             }
@@ -123,9 +124,9 @@ abstract public class BaseController implements ServletContextAware, Initializin
                 context.put(key, velocityContext.get(key));
             }
             return context;
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error("创建 velocity context 失败", e);
-            return null;
+            return new RenderContext();
         }
     }
 
@@ -255,22 +256,6 @@ abstract public class BaseController implements ServletContextAware, Initializin
         return prototype;
     }
 
-    protected boolean isModuleTag(String instanceTypeTag) {
-        return CmsModuleInstance.TYPE_TAG.equals(instanceTypeTag);
-    }
-
-    protected boolean isColumnTag(String instanceTypeTag) {
-        return CmsColumnInstance.TYPE_TAG.equals(instanceTypeTag);
-    }
-
-    protected boolean isLayoutTag(String instanceTypeTag) {
-        return CmsLayoutInstance.TYPE_TAG.equals(instanceTypeTag);
-    }
-
-    protected boolean isPageTag(String instanceTypeTag) {
-        return CmsPageInstance.TYPE_TAG.equals(instanceTypeTag);
-    }
-
     /**
      * 清除缓存
      *
@@ -326,9 +311,9 @@ abstract public class BaseController implements ServletContextAware, Initializin
 
     private void evictCache(BaseCmsInstance instance, RenderContext context) {
         String tag = instance.getInstanceTypeTag();
-        String cacheType = isModuleTag(tag) ? RenderEngine.RENDER_CACHE_TYPE_FOR_MODULE
-                : (isColumnTag(tag) ? RenderEngine.RENDER_CACHE_TYPE_FOR_COLUMN
-                : (isLayoutTag(tag) ? RenderEngine.RENDER_CACHE_TYPE_FOR_LAYOUT : RenderEngine.RENDER_CACHE_TYPE_FOR_PAGE));
+        String cacheType = CmsUtils.isModuleTag(tag) ? RenderEngine.RENDER_CACHE_TYPE_FOR_MODULE
+                : (CmsUtils.isColumnTag(tag) ? RenderEngine.RENDER_CACHE_TYPE_FOR_COLUMN
+                : (CmsUtils.isLayoutTag(tag) ? RenderEngine.RENDER_CACHE_TYPE_FOR_LAYOUT : RenderEngine.RENDER_CACHE_TYPE_FOR_PAGE));
         // 删除各个模式下的缓存
         RenderContext tmp = context.clone();
         tmp.setMode(RenderContext.RenderMode.design);

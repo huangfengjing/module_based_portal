@@ -14,8 +14,10 @@ import java.util.*;
 @MappedSuperclass
 public class BaseFeatureSupport extends BaseModel implements Serializable {
 
+    public static final String ADDABLE_FEATURE_KEY = "addable";
     public static final String REMOVABLE_FEATURE_KEY = "removable";
     public static final String EDITABLE_FEATURE_KEY = "editable";
+    public static final String GLOBAL_FEATURE_KEY = "global";
 
     /**
      * serialVersionUID

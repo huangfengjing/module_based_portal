@@ -33,7 +33,8 @@
     <div class="page_box" data-inst-id="$curPage.dbId">
     $screen_content
     </div>
-    #parse('/include/footer.vm')
+    $renderTool.renderGlobalModule(99)
+##    #parse('/include/footer.vm')
 #if($env.renderMode == "design")
 <form id="j-page-form" action="/cms/design/save-page.html" method="post">
     <input type="hidden" name="pageId" value="$!{curPage.dbId}" id="j-page-dbId">

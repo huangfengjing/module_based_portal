@@ -127,4 +127,36 @@ public class BaseCmsPrototype extends BaseFeatureSupport {
     public String toString() {
         return MoreObjects.toStringHelper(this).add("id", dbId).add("name", name).add("desc", description).toString();
     }
+
+    /**
+     * 是否是全局模块
+     * @return TRUE OR FALSE
+     */
+    public boolean isGlobal() {
+        return "true".equals(getFeatureValue(GLOBAL_FEATURE_KEY));
+    }
+
+    /**
+     * 是否可新增
+     * @return TRUE OR FALSE
+     */
+    public boolean isAddable() {
+        return !("false".equals(getFeatureValue(ADDABLE_FEATURE_KEY)));
+    }
+
+    /**
+     * 是否可编辑
+     * @return TRUE OR FALSE
+     */
+    public boolean isEditable() {
+        return !("false".equals(getFeatureValue(EDITABLE_FEATURE_KEY)));
+    }
+
+    /**
+     * 是否可删除
+     * @return TRUE OR FALSE
+     */
+    public boolean isRemovable() {
+        return !("false".equals(getFeatureValue(REMOVABLE_FEATURE_KEY)));
+    }
 }

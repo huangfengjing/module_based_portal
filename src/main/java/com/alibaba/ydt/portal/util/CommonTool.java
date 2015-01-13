@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * CMS 工具类
+ * 常用工具类，用来判断 true/false, null, empty 等
  *
  * @author <a href="mailto:huangfengjing@gmail.com">Ivan</a>
  * @version 1.0
  *          Created on 14-12-30 下午4:00.
  */
-public class ModuleTool {
+public class CommonTool {
 
 
     /**

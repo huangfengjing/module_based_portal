@@ -7,6 +7,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Collection;
 
 /**
  * <p>
@@ -68,5 +69,17 @@ public class SpringUtils implements ApplicationContextAware {
      */
     public static <T> T getBean(Class<T> cls) throws BeansException {
         return applicationContext.getBean(cls);
+    }
+
+
+    /**
+     * 根据Bean类型获取实例列表
+     *
+     * @param cls Bean类型
+     * @return bean实例
+     * @throws org.springframework.beans.BeansException
+     */
+    public static <T> Collection<T> getBeans(Class<T> cls) throws BeansException {
+        return applicationContext.getBeansOfType(cls).values();
     }
 }

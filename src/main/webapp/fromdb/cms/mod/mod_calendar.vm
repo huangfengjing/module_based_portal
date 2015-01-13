@@ -82,7 +82,7 @@
         width: 8px;
     }
 </style>
-<div id="col_${columnInstance.dbId}_mod_${moduleInstance.dbId}" class="module_box#{if}($moduleTool.isTrue($moduleParams.naked) && $!{env.renderMode} != 'design') naked#{end}" #dimension($moduleParams) #designId($env $modulePrototype $moduleInstance)>
+<div id="col_${columnInstance.dbId}_mod_${moduleInstance.dbId}" class="module_box#{if}($commonTool.isTrue($moduleParams.naked) && $!{env.renderMode} != 'design') naked#{end}" #dimension($moduleParams) #designId($env $modulePrototype $moduleInstance)>
     #if($columnInstance.paramsMap.layout != 'tab')
     <div class="module_box_hd">$stringUtils.defaultIfEmpty($moduleParams.title, $modulePrototype.name)</div>
     #end
