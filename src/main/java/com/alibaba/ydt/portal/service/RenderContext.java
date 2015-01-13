@@ -197,11 +197,14 @@ public class RenderContext extends HashMap<String, Object> implements Map<String
         Map<String, Object> cloned = new HashMap<String, Object>();
         for(String key : keySet()) {
             Object value = get(key);
-            if(value instanceof Serializable) {
-                cloned.put(key, cloneSerializableObject(value));
-            } else {
-                cloned.put(key, value);
-            }
+            cloned.put(key, value);
+
+            // 深度 clone
+//            if(value instanceof Serializable) {
+//                cloned.put(key, cloneSerializableObject(value));
+//            } else {
+//                cloned.put(key, value);
+//            }
         }
         return new RenderContext(cloned);
     }

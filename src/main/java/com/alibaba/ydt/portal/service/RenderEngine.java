@@ -219,7 +219,7 @@ public class RenderEngine implements InitializingBean {
                 if(StringUtils.isBlank(column.getParams4Store()) && column.getDbId() > 0) {
                     CmsColumnInstance fromDb = cmsColumnInstanceService.getById(column.getDbId());
                     column.setTitle(fromDb.getTitle());
-                    column.setParams4Store(fromDb.getParams4Store());
+                    column.setParams4Store(StringUtils.defaultIfEmpty(fromDb.getParams4Store(), ""));
                 }
                 RenderContext localContext = RenderContextBuilder.newBuilder().cloneFrom(layoutContextBuilder.build()).build();
                 columnRenderResult.add(renderColumn(column, localContext).getRenderContent());
@@ -274,7 +274,7 @@ public class RenderEngine implements InitializingBean {
             if(StringUtils.isBlank(column.getParams4Store()) && column.getDbId() > 0) {
                 CmsColumnInstance fromDb = cmsColumnInstanceService.getById(column.getDbId());
                 column.setTitle(fromDb.getTitle());
-                column.setParams4Store(fromDb.getParams4Store());
+                column.setParams4Store(StringUtils.defaultIfEmpty(fromDb.getParams4Store(), ""));
             }
 
             // 查看缓存
@@ -300,7 +300,7 @@ public class RenderEngine implements InitializingBean {
                 RenderContext localContext = RenderContextBuilder.newBuilder().cloneFrom(columnContextBuilder.build()).build();
                 if(StringUtils.isBlank(module.getParams4Store()) && module.getDbId() > 0) {
                     CmsModuleInstance fromDb = cmsModuleInstanceService.getById(module.getDbId());
-                    module.setParams4Store(fromDb.getParams4Store());
+                    module.setParams4Store(StringUtils.defaultIfEmpty(fromDb.getParams4Store(), ""));
                     module.setTitle(fromDb.getTitle());
                 }
                 moduleRenderResult.add(renderModule(module, localContext).getRenderContent());
@@ -354,7 +354,7 @@ public class RenderEngine implements InitializingBean {
             }
             if(StringUtils.isBlank(module.getParams4Store()) && module.getDbId() > 0) {
                 CmsModuleInstance fromDb = cmsModuleInstanceService.getById(module.getDbId());
-                module.setParams4Store(fromDb.getParams4Store());
+                module.setParams4Store(StringUtils.defaultIfEmpty(fromDb.getParams4Store(), ""));
                 module.setTitle(fromDb.getTitle());
             }
 
@@ -407,7 +407,7 @@ public class RenderEngine implements InitializingBean {
 //                                    }
                                     if(StringUtils.isBlank(columnInstance.getParams4Store())) {
                                         CmsColumnInstance columnFromDb = cmsColumnInstanceService.getById(columnInstance.getDbId());
-                                        columnInstance.setParams4Store(columnFromDb.getParams4Store());
+                                        columnInstance.setParams4Store(StringUtils.defaultIfEmpty(columnFromDb.getParams4Store(), ""));
                                     }
                                     moduleContextBuilder.setLayoutInstance(layoutInstance);
                                     moduleContextBuilder.setColumnInstance(columnInstance);
@@ -569,7 +569,7 @@ public class RenderEngine implements InitializingBean {
     }
 
     /**
-     * 注入所有支持的环境变量供应器生成的参数
+     * 注入所有支持的上下文供应器生成的参数
      *
      * @param instance 要渲染的实例
      * @param request  请求
