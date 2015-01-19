@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>测试页面</title>
+    <title>$stringUtils.defaultIfEmpty($!{curPage.paramsMap.title}, "测试页面") - $env.renderMode</title>
     <link href="$link.relative('/static/css/reset.css')" rel="stylesheet" type="text/css" />
     <link href="$link.relative('/static/css/modal.css')" rel="stylesheet" type="text/css" />
     <link href="$link.relative('/static/css/ui.css')" rel="stylesheet" type="text/css" />

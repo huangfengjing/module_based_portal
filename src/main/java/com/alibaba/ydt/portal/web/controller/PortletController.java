@@ -2,8 +2,6 @@ package com.alibaba.ydt.portal.web.controller;
 
 import com.alibaba.ydt.portal.domain.CmsPageInstance;
 import com.alibaba.ydt.portal.service.RenderContext;
-import com.alibaba.ydt.portal.service.RenderEngine;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -22,6 +20,11 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping("portal/")
 public class PortletController extends BaseController {
+
+    @RequestMapping(value = "/demo.html")
+    public String demo(ModelMap modelMap) {
+        return "template/test";
+    }
 
     @RequestMapping(value = "/view.html")
     public String view(ModelMap modelMap, HttpServletRequest request, HttpServletResponse response) {

@@ -31,6 +31,13 @@
     position: relative;
 }
 
+.naked, .naked .module_box_hd , .naked .module_box_bd {
+    border: none !important;
+}
+.naked .module_box_hd {
+    display: none !important;
+}
+
 .column_box {
     float: left;
     margin-right: 10px;
@@ -40,13 +47,13 @@
 .portlet-header, .portlet-footer {
     width: 100%;
     text-align: center;
-    background: #dddddd;
+    background: #F6F7FA;
     line-height: 50px;
     padding: 10px;
     margin: 0 !important;
 }
 .portlet-header {
-    border-bottom: 1px solid #666;
+    border-bottom: 1px solid #E7E6E3;
     clear: both;
     position: relative;
 }
@@ -67,18 +74,15 @@
     left: 20px;
 }
 .portlet-footer {
-    position: fixed;
     bottom: 0;
-    border-top: 1px solid #666;
-    margin-top: 10px;
+    border-top: 1px solid #E7E6E3 !important;
     clear: both;
 }
 .module_box .module_box_hd {
-    background-color: #E7DFDF;
+    background-color: #FAFAF9;
     height: 30px;
     line-height: 30px;
-    border: 1px solid #DADADA;
-    border-bottom: none;
+    border: 1px solid #E7E6E3;
     padding: 5px;
 }
 .module_box .module_box_bd {
@@ -86,17 +90,17 @@
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
     -moz-border-top-colors: none;
-    border: 1px solid #DADADA;
+    border: 1px solid #E7E6E3;
     border-top-style: none;
     border-image: none;
     height: auto;
     overflow: hidden;
     position: relative;
     padding: 10px;
+    min-height: 50px;
 }
 .page_box {
     padding: 10px;
-    margin-bottom: 50px;
     float: left;
     width: 100%;
 }
@@ -112,11 +116,4 @@
 }
 .edit_mod .column_box {
     border-color: #e36c1c;
-}
-
-.naked, .naked .module_box_hd , .naked .module_box_bd {
-    border: none !important;
-}
-.naked .module_box_hd {
-    display: none !important;
 }

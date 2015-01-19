@@ -1,0 +1,18 @@
+<div id="col_${columnInstance.dbId}_mod_${moduleInstance.dbId}"
+     class="module_box" #dimension($moduleParams) #designId($env $modulePrototype $moduleInstance)>
+    #if($columnInstance.paramsMap.layout != 'tab')
+        <div class="module_box_hd">$stringUtils.defaultIfEmpty($moduleParams.title, $modulePrototype.name)</div>
+    #end
+    <div class="module_box_bd">
+        <div id="mod_ajax_content_${moduleInstance.dbId}">
+            #if($commonTool.isNotEmpty($moduleParams.ajaxUrl))正在加载数据……#end
+        </div>
+    </div>
+</div>
+#if($commonTool.isNotEmpty($moduleParams.ajaxUrl))
+<script>
+    jQuery().ready(function () {
+        jQuery('#mod_ajax_content_${moduleInstance.dbId}').load('$!{moduleParams.ajaxUrl}');
+    });
+</script>
+#end

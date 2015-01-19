@@ -1,0 +1,14 @@
+<div class="form_box module_form">
+    #compFormTag($moduleInstance)
+        <ul>
+            <li class="portal-form-row">
+                <label>标题</label>
+                <input class="width320" type="text" name="title" value="$!{moduleParams.title}">
+            </li>
+            <li class="portal-form-row">
+                <label>Ajax Url:</label>
+                <input class="width320" type="text" name="ajaxUrl" value="$!{moduleParams.ajaxUrl}">
+            </li>
+        </ul>
+    </form>
+</div>
