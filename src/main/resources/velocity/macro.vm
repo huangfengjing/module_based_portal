@@ -1,6 +1,6 @@
 ## 宽高尺寸样式
 #macro (dimension $params)
-#{if}($commonTool.isNotNull($params)) style="#if($stringUtils.isNotBlank($params.width))width: $!{params.width}px;#{end}#{if}($stringUtils.isNotBlank($params.height))height: $!{params.height}px;#{end}"#{end}
+#{if}($commonTool.isNotNull($params)) style="#if($stringUtils.isNotBlank($params.width))width: $!{params.width};#{end}#{if}($stringUtils.isNotBlank($params.height))height: $!{params.height};#{end}"#{end}
 #end
 
 ## 编辑模式下的参数

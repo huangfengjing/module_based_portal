@@ -161,16 +161,16 @@
     width: 100px;
 }
 
-.modal .modal_list_item img {
+.modal_list_item img {
     float: left;
 }
 
-.modal .modal_list_item .item_desc_wrap .item_name {
+.modal_list_item .item_desc_wrap .item_name {
     font-weight: bold;
     display: block;
 }
 
-.modal .modal_list_item .item_opt_wrap {
+.modal_list_item .item_opt_wrap {
     position: absolute;
     right: 0;
     top: 20px;

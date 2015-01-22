@@ -169,6 +169,18 @@ public class CmsDesignController extends BaseController {
         return cmsPageInstanceService.savePageLayout(page) ? AjaxResult.successResult().addData("pageId", page.getDbId()) : AjaxResult.errorResult();
     }
 
+    @RequestMapping("/remove-page.html")
+    public AjaxResult removePage(long pageId) {
+        if (pageId <= 0) {
+            return AjaxResult.errorResult("请指定要删除的页面！");
+        }
+        CmsPageInstance page = cmsPageInstanceService.getById(pageId);
+        if(null == page) {
+            return AjaxResult.errorResult("找不到您要删除的页面");
+        }
+        return cmsPageInstanceService.removePage(page) ? AjaxResult.successResult().addData("pageId", page.getDbId()) : AjaxResult.errorResult();
+    }
+
 
     /**
      * 保存页面结构，布局数据结构为：

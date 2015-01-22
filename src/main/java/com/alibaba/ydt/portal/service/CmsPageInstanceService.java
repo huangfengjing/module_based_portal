@@ -5,6 +5,8 @@ import com.alibaba.ydt.portal.domain.CmsLayoutInstance;
 import com.alibaba.ydt.portal.domain.CmsModuleInstance;
 import com.alibaba.ydt.portal.domain.CmsPageInstance;
 import com.alibaba.ydt.portal.util.CmsUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +23,8 @@ import java.util.*;
 @Service
 public class CmsPageInstanceService extends BaseDataService<CmsPageInstance> {
 
-    @Autowired
+    private Log logger = LogFactory.getLog("CmsPageInstanceService");
+
     private CmsModuleInstanceService cmsModuleInstanceService;
 
     @Autowired
@@ -58,6 +61,47 @@ public class CmsPageInstanceService extends BaseDataService<CmsPageInstance> {
             cmsLayoutInstanceService.removeById(moduleIds);
         }
         return true;
+    }
+
+    @Transactional
+    public boolean removePage(long pageId) {
+        return removePage(getById(pageId));
+    }
+
+    @Transactional
+    public boolean removePage(CmsPageInstance page) {
+        try {
+            if(null == page) {
+                return true;
+            }
+            List<Long> layoutIds = new ArrayList<Long>();
+            List<Long> columnIds = new ArrayList<Long>();
+            List<Long> moduleIds = new ArrayList<Long>();
+            for(CmsLayoutInstance layout : page.getLayouts()) {
+                layoutIds.add(layout.getDbId());
+                for(CmsColumnInstance column : layout.getColumns()) {
+                    columnIds.add(column.getDbId());
+                    for(CmsModuleInstance module : column.getModules()) {
+                        moduleIds.add(module.getDbId());
+                    }
+                }
+            }
+
+            if(!layoutIds.isEmpty()) {
+                cmsLayoutInstanceService.removeById(layoutIds);
+            }
+            if(!columnIds.isEmpty()) {
+                cmsColumnInstanceService.removeById(columnIds);
+            }
+            if(!moduleIds.isEmpty()) {
+                cmsLayoutInstanceService.removeById(moduleIds);
+            }
+
+            return true;
+        } catch (Exception e) {
+            logger.error("删除页面出错", e);
+            return false;
+        }
     }
 
     /**
