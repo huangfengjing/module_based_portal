@@ -25,6 +25,7 @@ public class CmsPageInstanceService extends BaseDataService<CmsPageInstance> {
 
     private Log logger = LogFactory.getLog("CmsPageInstanceService");
 
+    @Autowired
     private CmsModuleInstanceService cmsModuleInstanceService;
 
     @Autowired
@@ -96,7 +97,7 @@ public class CmsPageInstanceService extends BaseDataService<CmsPageInstance> {
             if(!moduleIds.isEmpty()) {
                 cmsLayoutInstanceService.removeById(moduleIds);
             }
-
+            removeById(page.getDbId());
             return true;
         } catch (Exception e) {
             logger.error("删除页面出错", e);

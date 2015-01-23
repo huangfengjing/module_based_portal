@@ -20,6 +20,11 @@ import java.util.List;
 public class CmsPageInstance extends BaseCmsInstance {
 
     public static final String TYPE_TAG = "page";
+
+    @Basic
+    @Column(name = "USER_ID")
+    private String userId;
+
     /**
      * 布局名称
      */
@@ -76,6 +81,14 @@ public class CmsPageInstance extends BaseCmsInstance {
     @Override
     public String getInstanceTypeTag() {
         return TYPE_TAG;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @Override

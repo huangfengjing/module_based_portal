@@ -83,6 +83,10 @@ abstract public class BaseController implements ServletContextAware, Initializin
 
     protected ServletContext servletContext;
 
+    public String getUserId() {
+        return "10029";
+    }
+
     /**
      * 获取通用的上下文
      *

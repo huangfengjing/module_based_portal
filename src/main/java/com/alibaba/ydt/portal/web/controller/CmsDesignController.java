@@ -166,6 +166,7 @@ public class CmsDesignController extends BaseController {
         page.setPrototypeId(prototypeId);
         page.setTitle(prototype.getName());
         page.setXmlContent(prototype.getTemplate());
+        page.setUserId(getUserId());
         return cmsPageInstanceService.savePageLayout(page) ? AjaxResult.successResult().addData("pageId", page.getDbId()) : AjaxResult.errorResult();
     }
 
@@ -177,6 +178,13 @@ public class CmsDesignController extends BaseController {
         CmsPageInstance page = cmsPageInstanceService.getById(pageId);
         if(null == page) {
             return AjaxResult.errorResult("找不到您要删除的页面");
+        }
+        if(!page.getUserId().equals(getUserId())) {
+            return AjaxResult.errorResult("您不能删除别人的页面");
+        }
+        List<CmsPageInstance> allPages = cmsPageInstanceService.getByProperty("userId", getUserId());
+        if(allPages.size() <= 1) {
+            return AjaxResult.errorResult("删除失败，请至少保留一个页面");
         }
         return cmsPageInstanceService.removePage(page) ? AjaxResult.successResult().addData("pageId", page.getDbId()) : AjaxResult.errorResult();
     }
@@ -239,6 +247,9 @@ public class CmsDesignController extends BaseController {
             return AjaxResult.errorResult("找不到您要编辑的页面！");
         }
         page.setLayouts(layouts);
+        if(page.getDbId() > 0 && !page.getUserId().equals(getUserId())) {
+            return AjaxResult.errorResult("您不可以编辑别人的页面！");
+        }
         return cmsPageInstanceService.savePageLayout(page) ? AjaxResult.successResult() : AjaxResult.errorResult();
     }
 
@@ -294,6 +305,9 @@ public class CmsDesignController extends BaseController {
             }
             if (null == page) {
                 return AjaxResult.errorResult("要编辑的页面不存在");
+            }
+            if(!page.getUserId().equals(getUserId())) {
+                return AjaxResult.errorResult("您不可以编辑别人的页面！");
             }
 
             RenderContext context = getCommonContext(request, response);

@@ -1,6 +1,7 @@
 package com.alibaba.ydt.portal.web.controller;
 
 import com.alibaba.ydt.portal.domain.CmsPageInstance;
+import com.alibaba.ydt.portal.domain.common.AjaxResult;
 import com.alibaba.ydt.portal.service.RenderContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -43,6 +44,9 @@ public class PortletController extends BaseController {
     public String design(ModelMap modelMap, HttpServletRequest request, HttpServletResponse response) {
         long pageId = ServletRequestUtils.getLongParameter(request, "pageId", 1);
         CmsPageInstance page = cmsPageInstanceService.getById(pageId);
+        if(page.getDbId() > 0 && !page.getUserId().equals(getUserId())) {
+            return view(modelMap, request, response);
+        }
         RenderContext context = getCommonContext(request, response);
         context.setMode(RenderContext.RenderMode.design);
         modelMap.put("cmsPageBody", renderEngine.renderPage(page, context).getRenderContent());

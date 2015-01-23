@@ -136,7 +136,7 @@ public class GenericDaoImpl extends HibernateDaoSupport implements GenericDao, A
            */
 
         for (Serializable id : ids) {
-            this.remove(id);
+            this.remove(get(cls, (Long)id));
         }
         return RET_CODE_OK;
     }

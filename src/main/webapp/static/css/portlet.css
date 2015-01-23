@@ -80,8 +80,8 @@
 }
 .module_box .module_box_hd {
     background-color: #FAFAF9;
-    height: 30px;
-    line-height: 30px;
+    height: 24px;
+    line-height: 24px;
     border: 1px solid #E7E6E3;
     padding: 5px;
 }
@@ -116,4 +116,45 @@
 }
 .edit_mod .column_box {
     border-color: #e36c1c;
+}
+
+.j-switchable-wrap {
+    position: relative;
+    padding-top: 33px !important;
+}
+.j-switchable-wrap .ui-switchable-nav {
+    position: absolute;
+    top: 0;
+    margin: 0;
+    padding: 0;
+    z-index: 99;
+    list-style: none;
+}
+.j-switchable-wrap .ui-switchable-nav li {
+    background: #FAFAF9;
+    float: left;
+    width: 130px;
+    height: 24px;
+    line-height: 18px;
+    text-align: center;
+    border: 1px solid #E7E6E3;
+    border-bottom: none;
+    margin-right: 3px;
+    padding: 8px 0 0 0;
+    cursor: pointer;
+    list-style: none;
+    margin-left: 0;
+}
+.j-switchable-wrap .ui-switchable-nav .ui-switchable-active {
+    background: #FFF;
+    cursor: default;
+    padding-top: 9px;
+    border-bottom: none;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+.j-switchable-wrap .ui-switchable-content {
+    position: relative;
+    width: 100%;
+    border-top: 1px solid #E7E6E3;
 }

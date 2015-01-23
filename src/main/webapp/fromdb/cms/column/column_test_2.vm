@@ -1,12 +1,18 @@
-<div class="column_box width50p#{if}($columnParams.layout == 'tab') j-col-tab#{end}" #dimension($columnParams) #designId($env $columnPrototype $columnInstance)>
+<div class="column_box width50p#{if}($columnParams.layout == 'tab') j-switchable-wrap#{end}" #dimension($columnParams) #designId($env $columnPrototype $columnInstance)>
     #if($columnParams.layout == 'tab')
-        <ul class="etabs">
+        <ul class="ui-switchable-nav">
             #foreach($mod in $columnInstance.modules)
-                <li class="tab"><a href="#col_${columnInstance.dbId}_mod_${mod.dbId}">$stringUtils.defaultIfEmpty($!{mod.paramsMap.title}, '模块标题')</a></li>
+                <li data-role="trigger">$stringUtils.defaultIfEmpty($!{mod.paramsMap.title}, '模块标题')</li>
             #end
         </ul>
     #end
+    #if($columnParams.layout == 'tab')
+    <div class="ui-switchable-content util-clearfix">
+    #end
     #foreach($cmsModule in $_cms_modules)
     $cmsModule
+    #end
+    #if($columnParams.layout == 'tab')
+    </div>
     #end
 </div>

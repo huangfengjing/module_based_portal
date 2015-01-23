@@ -8,32 +8,6 @@
     <link href="$link.relative('/static/css/portlet.css')" rel="stylesheet" type="text/css" />
     <link href="http://i.alicdn.com/sc-boss/20141229220152/portal/v2/design/design.css" rel="stylesheet" type="text/css" />
 
-##    <script src="$link.relative('/static/js/jquery.1.7.min.js')"></script>
-
-##    #if($env.renderMode == "design")
-##        <link href="$link.relative('/static/css/design.css')" rel="stylesheet" type="text/css" />
-##        <script src="$link.relative('/static/js/jquery.dragsort-0.5.1.js')"></script>
-##        <script src="$link.relative('/static/js/jqModal.js')"></script>
-##        <script src="$link.relative('/static/js/design.js')"></script>
-##    #end
-
-##    <script src="$link.relative('/static/js/jquery.hashchange.min.js')"></script>
-##    <script src="$link.relative('/static/js/jquery.easytabs.min.js')"></script>
-##    <script src="$link.relative('/static/js/base.js')"></script>
-##    <script src="$link.relative('/static/js/app.js')"></script>
-
-    <script src="http://i.alicdn.com/sc-boss/20141229220152/coms/alpha-atom/??atom.js"></script>
-##
-##    <script>
-##        seajs.config({
-##            base: "$link.relative('/static/js/')",
-##            alias: {
-##                "jquery": "jquery/jquery/1.10.1/jquery.js"
-##            }
-##        });
-##        seajs.use("app.js");
-##    </script>
-
     <script>
     seajs.iuse("http://i.alicdn.com/sc-boss/20141229220152/portal/v2/app.js")(function (app) {
         app.init();
@@ -41,10 +15,6 @@
     </script>
 
     #if($env.renderMode == "design")
-##        <link href="$link.relative('/static/css/design.css')" rel="stylesheet" type="text/css" />
-##        <script src="$link.relative('/static/js/jquery.dragsort-0.5.1.js')"></script>
-##        <script src="$link.relative('/static/js/jqModal.js')"></script>
-##        <script src="$link.relative('/static/js/design.js')"></script><script type="text/javascript">
         <script>
             seajs.iuse("http://i.alicdn.com/sc-boss/20141229220152/portal/v2/design/design.js")(function (design) {
                 design.init();
