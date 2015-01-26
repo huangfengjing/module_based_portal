@@ -8,6 +8,7 @@
     <link href="$link.relative('/static/css/portlet.css')" rel="stylesheet" type="text/css" />
     <link href="http://i.alicdn.com/sc-boss/20141229220152/portal/v2/design/design.css" rel="stylesheet" type="text/css" />
 
+    <script src="http://i.alicdn.com/sc-boss/20141229220152/coms/alpha-atom/??atom.js"></script>
     <script>
     seajs.iuse("http://i.alicdn.com/sc-boss/20141229220152/portal/v2/app.js")(function (app) {
         app.init();
@@ -26,7 +27,6 @@
         var Portal = {
             base:"$link.relative('/')"
         };
-        var ctx = "$link.relative('')";
     </script>
 </head>
 <body#if($env.renderMode == "design") class="edit_mod" #end>

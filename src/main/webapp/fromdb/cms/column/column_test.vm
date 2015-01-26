@@ -1,4 +1,4 @@
-<div class="column_box width50p#{if}($columnParams.layout == 'tab') j-switchable-wrap#{end}" #dimension($columnParams) #designId($env $columnPrototype $columnInstance)>
+<div id="_column_${columnInstance.dbId}" class="column_box width50p#{if}($columnParams.layout == 'tab') j-switchable-wrap#{end}" #dimension($columnParams) #designId($env $columnPrototype $columnInstance)>
     #if($columnParams.layout == 'tab')
         <ul class="ui-switchable-nav">
             #foreach($mod in $columnInstance.modules)
