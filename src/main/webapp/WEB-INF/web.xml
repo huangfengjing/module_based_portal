@@ -55,7 +55,7 @@
     <!-- clear thread local cache -->
     <filter>
         <filter-name>threadLocalCacheClearFilter</filter-name>
-        <filter-class>com.alibaba.ydt.portal.web.mvc.ThreadLocalCacheClearFilter</filter-class>
+        <filter-class>com.alibaba.ydt.portal.web.mvc.RequestScopeClearFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>threadLocalCacheClearFilter</filter-name>

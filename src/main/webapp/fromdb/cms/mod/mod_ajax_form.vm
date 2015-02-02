@@ -2,6 +2,14 @@
     #compFormTag($moduleInstance)
         <ul>
             <li class="portal-form-row">
+                <label>宽度</label>
+                <input class="width320" type="text" name="width" value="$!{moduleParams.width}">
+            </li>
+            <li class="portal-form-row">
+                <label>高度</label>
+                <input class="width320" type="text" name="height" value="$!{moduleParams.height}">
+            </li>
+            <li class="portal-form-row">
                 <label>标题</label>
                 <input class="width320" type="text" name="title" value="$!{moduleParams.title}">
             </li>

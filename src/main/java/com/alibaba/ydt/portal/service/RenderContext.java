@@ -58,7 +58,7 @@ public class RenderContext extends HashMap<String, Object> implements Map<String
     public static final String TOOL_BOX_INJECTED = "_toolbox_injected";
 
     // 特殊保留的 KEY 值，参数或者环境变量不应该使用这些 KEY
-    private Set<String> SPECIAL_KEY_SET = new HashSet<String>() {{
+    public static final Set<String> SPECIAL_KEY_SET = new HashSet<String>() {{
         add(PAGE_HEADER_CONTENT_KEY);
         add(PAGE_BODY_CONTENT_KEY);
         add(PAGE_FOOTER_CONTENT_KEY);

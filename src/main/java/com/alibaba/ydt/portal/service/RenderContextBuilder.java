@@ -70,6 +70,18 @@ public class RenderContextBuilder {
         if(context.containsKey(RenderContext.PAGE_PARAMS_KEY)) {
             ((Map<String, Object>)renderContext.get(RenderContext.PAGE_PARAMS_KEY)).putAll((Map<String, Object>) context.get(RenderContext.PAGE_PARAMS_KEY));
         }
+        if(context.containsKey(RenderContext.RENDER_REQUEST_KEY)) {
+            renderContext.put(RenderContext.RENDER_REQUEST_KEY, context.get(RenderContext.RENDER_REQUEST_KEY));
+        }
+        if(context.containsKey(RenderContext.RENDER_REQUEST_KEY)) {
+            renderContext.put(RenderContext.RENDER_REQUEST_KEY, context.get(RenderContext.RENDER_REQUEST_KEY));
+        }
+        if(context.containsKey(RenderContext.RENDER_RESPONSE_KEY)) {
+            renderContext.put(RenderContext.RENDER_RESPONSE_KEY, context.get(RenderContext.RENDER_RESPONSE_KEY));
+        }
+        if(context.containsKey(RenderContext.RENDER_SERVLET_CONTEXT_KEY)) {
+            renderContext.put(RenderContext.RENDER_SERVLET_CONTEXT_KEY, context.get(RenderContext.RENDER_SERVLET_CONTEXT_KEY));
+        }
         return this;
     }
 

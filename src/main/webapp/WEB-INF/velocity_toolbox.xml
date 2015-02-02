@@ -23,4 +23,9 @@
         <scope>request</scope>
         <class>com.alibaba.ydt.portal.util.RenderTool</class>
     </tool>
+    <tool>
+        <key>webTool</key>
+        <scope>request</scope>
+        <class>com.alibaba.ydt.portal.util.WebResourceTool</class>
+    </tool>
 </toolbox>

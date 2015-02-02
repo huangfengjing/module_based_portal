@@ -1,0 +1,45 @@
+$webTool.addCss('http://i.alicdn.com/sc-boss/20141229220152/portal/category-config/??index.css')
+<div id="col_${columnInstance.dbId}_mod_${moduleInstance.dbId}"
+     class="module_box" #dimension($moduleParams) #designId($env $modulePrototype $moduleInstance)>
+    #if($columnInstance.paramsMap.layout != 'tab')
+        <div class="module_box_hd">$stringUtils.defaultIfEmpty($moduleParams.title, $modulePrototype.name)</div>
+    #end
+    <div class="module_box_bd">
+        $webTool.addJs('http://i.alicdn.com/sc-boss/20141229220152/portal/category-config/??index.css')
+        <div class="nb-table-list" id="user-data-grid">
+            <div class="nb-row ui-toolbar">
+                <div class="nb-col-8">
+                    <div class="ui-filter">
+                        <form id="queryForm" name="queryName" class="ui-form">
+                            <div class="ui-form-item">
+                                <input type="text" name="name" placeholder="请输入显示名称" class="ui-textfield ui-textfield-system ui-control-s" />
+                                <input type="text" name="user_id" placeholder="请输入用户Id" class="ui-textfield ui-textfield-system ui-control-s" />
+                                <input type="text" id="txtQueryRoleName" name="role_name" placeholder="请输入角色名称" class="ui-textfield ui-textfield-system ui-control-s" />
+                                <input type="button" id="query-btn" value="查询"class="ui-button ui-button-primary ui-button-medium"/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="nb-col-4">
+                    <div class="ui-options">
+                        <button class="ui-button ui-button-normal ui-button-medium" id="create-user">添加</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table">
+            </div>
+            <div class="util-clearfix" id="user-pagiation">
+            </div>
+        </div>
+
+        <script type="text/javascript">
+        seajs.iuse("http://i.alicdn.com/sc-boss/20141229220152/portal/category-config/index.js")(function(run) {
+            var config = {
+                dataSource: "DrawerAuditor,apollo_admin,onetouchCustomerService,role_for_admin,role_test".split(",")
+            };
+            run(config);
+        });
+        </script>
+    </div>
+</div>

@@ -20,8 +20,9 @@
     width: 100%;
 }
 .layout_box {
-    float: left;
-    width: 100%;
+    width: 98%;
+    height: 100%;
+    margin: 0 auto;
 }
 .layout_box, .module_box {
     min-width: 50px;
@@ -49,13 +50,13 @@
     text-align: center;
     background: #F6F7FA;
     line-height: 50px;
-    padding: 10px;
-    margin: 0 !important;
+    padding: 10px 0;
 }
 .portlet-header {
     border-bottom: 1px solid #E7E6E3;
     clear: both;
     position: relative;
+    margin-bottom: 10px;
 }
 .portlet-header span.title {
     width: 200px;
@@ -77,6 +78,7 @@
     bottom: 0;
     border-top: 1px solid #E7E6E3 !important;
     clear: both;
+    margin-top: 10px;
 }
 .module_box .module_box_hd {
     background-color: #FAFAF9;
@@ -93,29 +95,29 @@
     border: 1px solid #E7E6E3;
     border-top-style: none;
     border-image: none;
-    height: auto;
     overflow: hidden;
     position: relative;
     padding: 10px;
     min-height: 50px;
+    height: 100%;
 }
 .page_box {
-    padding: 10px;
     float: left;
     width: 100%;
 }
-.edit_mod .page_box,.edit_mod .layout_box,.edit_mod .column_box {
+.edit_mod .column_box {
     border: 1px dashed #CCCCCC;
     padding: 10px;
-}
-.edit_mod .page_box {
-    border-color: #004444;
-}
-.edit_mod .page_layout {
-    border-color: #a0c552;
+    min-width: 132px;
 }
 .edit_mod .column_box {
     border-color: #e36c1c;
+}
+.edit_mod .module_box {
+    max-height: 80% !important;
+}
+.edit_mod .module_box .module_box_bd {
+    max-height: 70% !important;
 }
 
 .j-switchable-wrap {

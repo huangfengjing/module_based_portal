@@ -1,4 +1,5 @@
 #* @implicitly included *#
+#* @vtlvariable name="webTool" type="com.alibaba.ydt.portal.util.WebResourceTool" *#
 #* @vtlvariable name="renderTool" type="com.alibaba.ydt.portal.util.RenderTool" *#
 #* @vtlvariable name="allPageList" type="java.util.List<com.alibaba.ydt.portal.domain.CmsPageInstance>" *#
 #* @vtlvariable name="cmsPagePrototypeList" type="java.util.List<com.alibaba.ydt.portal.domain.CmsPagePrototype>" *#

@@ -540,32 +540,36 @@ public class RenderEngine implements InitializingBean {
      * 注入 toolbox 配置
      */
     protected void injectToolbox(RenderContext context) {
-        try {
-            if (null == toolboxFactory && null != toolboxConfigLocation) {
-                FileFactoryConfiguration cfg = new XmlFactoryConfiguration(true);
-                cfg.read(toolboxConfigLocation.getInputStream());
-                toolboxFactory = cfg.createFactory();
-                globalToolbox = toolboxFactory.createToolbox(Scope.APPLICATION);
-            }
-            for (String key : globalToolbox.getKeys()) {
-                context.put(key, globalToolbox.get(key));
-            }
-
-            HttpServletRequest request = (HttpServletRequest) context.get(RenderContext.RENDER_REQUEST_KEY);
-            HttpServletResponse response = (HttpServletResponse) context.get(RenderContext.RENDER_RESPONSE_KEY);
-            ServletContext servletContext = (ServletContext) context.get(RenderContext.RENDER_SERVLET_CONTEXT_KEY);
-            if (null != request && null != response && null != servletContext) {
-                ViewToolContext velocityContext = new ViewToolContext(velocityEngine, request, response, servletContext);
-                velocityContext.addToolbox(toolboxFactory.createToolbox(Scope.REQUEST));
-                velocityContext.addToolbox(toolboxFactory.createToolbox(Scope.SESSION));
-                for (String key : velocityContext.keySet()) {
-                    context.put(key, velocityContext.get(key));
-                }
-            }
-            context.put(RenderContext.TOOL_BOX_INJECTED, true);
-        } catch (IOException e) {
-            logger.error("创建 velocity context 失败", e);
-        }
+//        try {
+//            if (null == toolboxFactory && null != toolboxConfigLocation) {
+//                FileFactoryConfiguration cfg = new XmlFactoryConfiguration(true);
+//                cfg.read(toolboxConfigLocation.getInputStream());
+//                toolboxFactory = cfg.createFactory();
+//                globalToolbox = toolboxFactory.createToolbox(Scope.APPLICATION);
+//            }
+//            for (String key : globalToolbox.getKeys()) {
+//                if(!context.containsKey(key)) {
+//                    context.put(key, globalToolbox.get(key));
+//                }
+//            }
+//
+//            HttpServletRequest request = (HttpServletRequest) context.get(RenderContext.RENDER_REQUEST_KEY);
+//            HttpServletResponse response = (HttpServletResponse) context.get(RenderContext.RENDER_RESPONSE_KEY);
+//            ServletContext servletContext = (ServletContext) context.get(RenderContext.RENDER_SERVLET_CONTEXT_KEY);
+//            if (null != request && null != response && null != servletContext) {
+//                ViewToolContext velocityContext = new ViewToolContext(velocityEngine, request, response, servletContext);
+//                velocityContext.addToolbox(toolboxFactory.createToolbox(Scope.REQUEST));
+//                velocityContext.addToolbox(toolboxFactory.createToolbox(Scope.SESSION));
+//                for (String key : velocityContext.keySet()) {
+//                    if(!context.containsKey(key)) {
+//                        context.put(key, velocityContext.get(key));
+//                    }
+//                }
+//            }
+//            context.put(RenderContext.TOOL_BOX_INJECTED, true);
+//        } catch (IOException e) {
+//            logger.error("创建 velocity context 失败", e);
+//        }
     }
 
     /**

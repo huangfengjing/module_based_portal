@@ -8,6 +8,10 @@
     <link href="$link.relative('/static/css/portlet.css')" rel="stylesheet" type="text/css" />
     <link href="http://i.alicdn.com/sc-boss/20141229220152/portal/v2/design/design.css" rel="stylesheet" type="text/css" />
 
+    #foreach($css in $webTool.cssResources)
+        <link href="$css" rel="stylesheet" type="text/css" />
+    #end
+
     <script src="http://i.alicdn.com/sc-boss/20141229220152/coms/alpha-atom/??atom.js"></script>
     <script>
     seajs.iuse("http://i.alicdn.com/sc-boss/20141229220152/portal/v2/app.js")(function (app) {
@@ -28,6 +32,11 @@
             base:"$link.relative('/')"
         };
     </script>
+
+    #foreach($js in $webTool.jsResources)
+        <script src="$js"></script>
+    #end
+
 </head>
 <body#if($env.renderMode == "design") class="edit_mod" #end>
     #parse('/include/header.vm')
@@ -42,7 +51,7 @@
     <input type="hidden" name="isHeaderChanged" value="false" id="j-header-changed-holder">
     <input type="hidden" name="isFooterChanged" value="false" id="j-footer-changed-holder">
 </form>
-#end
 <div class="module_edit_mask hidden"><div class="module_mask_bd"></div><a class="mod_opt_btn j-remove-module icon-font" title="删除">&#xe602;</a><a class="mod_opt_btn j-edit-module icon-font" title="编辑">&#xe603;</a></div>
+#end
 </body>
 </html>

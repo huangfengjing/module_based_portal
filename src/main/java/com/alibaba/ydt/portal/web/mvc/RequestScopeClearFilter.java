@@ -1,6 +1,7 @@
 package com.alibaba.ydt.portal.web.mvc;
 
 import com.alibaba.ydt.portal.cache.ThreadLocalCacheAspect;
+import com.alibaba.ydt.portal.util.WebResourceTool;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -16,11 +17,12 @@ import java.io.IOException;
  * @version 1.0
  *          Created on 15/1/9 上午11:43.
  */
-public class ThreadLocalCacheClearFilter extends OncePerRequestFilter {
+public class RequestScopeClearFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         ThreadLocalCacheAspect.clearCache();
+        WebResourceTool.clear();
         filterChain.doFilter(request, response);
     }
 }

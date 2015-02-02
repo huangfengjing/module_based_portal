@@ -159,7 +159,9 @@ public class RenderTool extends BaseRequestTool {
                 .setServletContext(servletContext).build();
         if(null != velocityContext) {
             for (Object key : velocityContext.getKeys()) {
-                context.put(key.toString(), velocityContext.get(key.toString()));
+                if(!RenderContext.SPECIAL_KEY_SET.contains(key.toString())) {
+                    context.put(key.toString(), velocityContext.get(key.toString()));
+                }
             }
         }
         return context;
